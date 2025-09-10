@@ -1,0 +1,23 @@
+# Configuration for portfolio_construction_risk strategy
+
+strategy:
+  name: "portfolio_construction_risk"
+  version: "1.0.0"
+  
+parameters:
+  lookback_period: 20
+  position_size: 1.0
+  max_positions: 10
+  
+risk:
+  stop_loss: 0.02
+  take_profit: 0.05
+  max_drawdown: 0.10
+  
+execution:
+  slippage: 0.0001
+  commission: 0.001
+  
+data:
+  frequency: "1h"
+  history_days: 365

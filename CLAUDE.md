@@ -151,3 +151,51 @@ Before committing strategy changes:
 - Store market data in `/data/` (gitignored)
 - Document data sources and update frequencies in README
 - Consider data compression for tick data storage
+
+## Repository Status
+
+**Note**: This repository currently contains planning documents and architectural designs only. Implementation code is yet to be written. All directories contain README.md files with detailed implementation plans.
+
+## Key Dependencies
+
+The repository uses a comprehensive requirements.txt with the following categories:
+- **Core**: numpy, pandas, scipy, numba
+- **ML/DL**: torch, tensorflow, scikit-learn, xgboost, stable-baselines3
+- **Quant Finance**: QuantLib, zipline-reloaded, vectorbt, cvxpy
+- **Market Data**: yfinance, ccxt, TA-Lib
+- **Testing**: pytest, pytest-benchmark, pytest-asyncio
+- **Code Quality**: black, flake8, mypy, isort, pylint
+
+## Common Development Workflows
+
+### Setting up a new HFT strategy project
+```bash
+cd HFT_strategy_projects/XX_strategy_name/
+python -m venv venv
+source venv/bin/activate
+pip install -r ../../requirements.txt
+# For C++ components
+mkdir build && cd build
+cmake .. && make -j$(nproc)
+```
+
+### Running tests for a specific module
+```bash
+# Python tests
+python -m pytest tests/test_specific.py -v
+python -m pytest tests/test_specific.py::TestClass::test_method  # single test
+
+# C++ tests
+cd build && ctest -R test_name  # run specific test
+```
+
+### Performance profiling for HFT code
+```bash
+# C++ with perf
+perf record ./strategy
+perf report
+
+# Python with cProfile
+python -m cProfile -o profile.stats strategy.py
+python -m pstats profile.stats
+```

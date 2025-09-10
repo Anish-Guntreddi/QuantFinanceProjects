@@ -1,0 +1,32 @@
+# Feed Handler Configuration
+
+feed:
+  multicast_group: "239.1.1.1"
+  port: 12345
+  queue_size: 65536
+  decoder_threads: 2
+  
+router:
+  max_order_size: 10000
+  max_orders_per_second: 1000
+  max_price: 10000
+  enable_risk_checks: true
+  
+venues:
+  - id: "venue1"
+    host: "localhost"
+    port: 8001
+    protocol: "fix"
+  - id: "venue2"
+    host: "localhost"
+    port: 8002
+    protocol: "binary"
+    
+performance:
+  cpu_affinity:
+    receiver: 0
+    decoder: 1
+    processor: 2
+    router: 3
+  use_huge_pages: false
+  busy_poll: true
