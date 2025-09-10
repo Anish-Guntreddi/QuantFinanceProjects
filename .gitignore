@@ -1,0 +1,59 @@
+# Virtual Environment
+quant/bin
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files (usually large)
+data/
+*.csv
+*.parquet
+*.h5
+*.hdf5
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# C++ build files
+*.o
+*.a
+*.so
+*.dylib
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+
+# Temporary files
+*.tmp
+temp/
+tmp/
