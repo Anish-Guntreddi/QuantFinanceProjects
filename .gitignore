@@ -1,5 +1,12 @@
 # Virtual Environment
-quant/bin
+quant/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+.env/
 
 # Python
 __pycache__/
@@ -7,14 +14,49 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
 
-# Jupyter Notebooks
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Jupyter Notebook
 .ipynb_checkpoints/
+*.ipynb_checkpoints
 
 # IDE
 .vscode/
@@ -22,38 +64,155 @@ venv.bak/
 *.swp
 *.swo
 *~
+*.sublime-project
+*.sublime-workspace
+.spyderproject
+.spyproject
+.ropeproject
 
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Data files (usually large)
+# Data files and databases
 data/
 *.csv
 *.parquet
 *.h5
 *.hdf5
+*.npz
+*.npy
+*.pkl
+*.pickle
+*.db
+*.sqlite
+*.sqlite3
+*.feather
+*.msgpack
+*.json.gz
+*.jsonl
+*.tsv
+*.xlsx
+*.xls
 
-# Logs
+# Model files
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.pb
+*.tflite
+models/
+checkpoints/
+saved_models/
+
+# Logs and outputs
 *.log
 logs/
-
-# Build artifacts
-build/
-dist/
-*.egg-info/
-.eggs/
+outputs/
+results/
+reports/*.html
+reports/*.pdf
+runs/
+tensorboard/
 
 # C++ build files
 *.o
 *.a
 *.so
 *.dylib
+*.dll
+*.exe
 cmake-build-*/
 CMakeCache.txt
 CMakeFiles/
+Makefile
+compile_commands.json
+*.dSYM/
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+*.rst~
 
 # Temporary files
 *.tmp
+*.temp
+*.bak
+*.backup
+*.old
 temp/
 tmp/
+cache/
+.cache/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# Package manager
+node_modules/
+yarn.lock
+package-lock.json
+poetry.lock
+Pipfile.lock
+
+# Testing
+htmlcov/
+.hypothesis/
+.benchmarks/
+
+# Security - NEVER commit these
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+credentials/
+config/secrets.yml
+config/database.yml
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Experiment tracking
+wandb/
+.neptune/
+
+# Large files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Mac specific
+.AppleDouble
+.LSOverride
+Icon
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows specific
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
