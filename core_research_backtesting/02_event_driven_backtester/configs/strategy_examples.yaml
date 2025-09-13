@@ -1,0 +1,297 @@
+# Strategy Configuration Examples
+# This file contains example configurations for different strategies
+
+# Conservative Long-Term Strategy
+conservative_long_term:
+  backtest:
+    start_date: "2020-01-01"
+    end_date: "2023-12-31" 
+    initial_capital: 250000
+    
+  strategy:
+    type: "multi_factor"
+    multi_factor:
+      short_ma: 10
+      long_ma: 50
+      bb_period: 20
+      bb_std: 1.8  # Tighter bands for conservative approach
+      rsi_period: 21
+      signal_threshold: 0.7  # Higher threshold for fewer, higher-quality signals
+      position_size: 0.6     # Conservative position sizing
+      min_signal_interval_minutes: 2880  # 2 days minimum
+      
+      factor_weights:
+        trend: 0.40          # Emphasis on trend following
+        mean_reversion: 0.20
+        momentum: 0.25
+        volume: 0.15
+        
+  portfolio:
+    risk:
+      max_position_size: 0.08    # 8% max per position
+      max_leverage: 1.2          # Low leverage
+      max_drawdown: 0.12         # 12% max drawdown
+      
+  execution:
+    slippage:
+      model: "linear"
+      linear:
+        base_slippage_bps: 3.0   # Lower slippage for longer holds
+        
+  data:
+    symbols: ["SPY", "QQQ", "TLT", "VEA", "VWO", "BND"]
+    asset_classes:
+      SPY: "equity"
+      QQQ: "equity"
+      TLT: "bond"
+      VEA: "equity"
+      VWO: "equity"
+      BND: "bond"
+
+---
+
+# Aggressive Short-Term Strategy  
+aggressive_short_term:
+  backtest:
+    start_date: "2022-01-01"
+    end_date: "2023-12-31"
+    initial_capital: 100000
+    
+  strategy:
+    type: "momentum"
+    momentum:
+      rsi_period: 10         # Shorter periods for responsiveness
+      momentum_period: 5
+      rsi_oversold: 25       # More aggressive thresholds
+      rsi_overbought: 75
+      position_size: 1.2     # Larger position sizing
+      volume_threshold: 1.5   # Require strong volume confirmation
+      min_signal_interval_minutes: 15  # High frequency
+      
+  portfolio:
+    risk:
+      max_position_size: 0.25    # 25% max per position
+      max_leverage: 2.0          # Higher leverage
+      max_drawdown: 0.25         # Accept higher drawdown
+      
+  execution:
+    handler_type: "realistic"
+    slippage:
+      model: "square_root"
+      square_root:
+        temporary_impact_coef: 0.15  # Higher impact for aggressive trading
+        permanent_impact_coef: 0.08
+        
+  data:
+    symbols: ["AAPL", "MSFT", "GOOGL", "TSLA", "NVDA"]
+    asset_classes:
+      AAPL: "equity"
+      MSFT: "equity" 
+      GOOGL: "equity"
+      TSLA: "equity"
+      NVDA: "equity"
+
+---
+
+# Mean Reversion Pairs Strategy
+mean_reversion_pairs:
+  backtest:
+    start_date: "2021-01-01"
+    end_date: "2023-12-31"
+    initial_capital: 200000
+    
+  strategy:
+    type: "mean_reversion"
+    mean_reversion:
+      lookback: 30
+      num_std: 2.5           # Wider bands for pairs
+      position_size: 0.8
+      exit_threshold: 0.3     # Exit closer to mean
+      min_signal_interval_minutes: 60
+      
+  portfolio:
+    risk:
+      max_position_size: 0.15
+      max_leverage: 1.5
+      max_drawdown: 0.18
+      max_correlation: 0.6    # Lower correlation limit for pairs
+      
+  execution:
+    slippage:
+      model: "advanced"
+      advanced:
+        temporary_impact_coef: 0.08
+        permanent_impact_coef: 0.04
+        urgency: 0.8            # Less urgent execution
+        
+  data:
+    symbols: ["XLE", "XLF", "XLI", "XLK", "XLP", "XLV"]  # Sector ETFs
+    asset_classes:
+      XLE: "equity"
+      XLF: "equity"
+      XLI: "equity"
+      XLK: "equity"
+      XLP: "equity"
+      XLV: "equity"
+
+---
+
+# Balanced Multi-Asset Strategy
+balanced_multi_asset:
+  backtest:
+    start_date: "2019-01-01" 
+    end_date: "2023-12-31"
+    initial_capital: 500000
+    
+  strategy:
+    type: "multi_factor"
+    multi_factor:
+      short_ma: 8
+      long_ma: 21
+      bb_period: 20
+      bb_std: 2.0
+      rsi_period: 14
+      volume_period: 20
+      signal_threshold: 0.6
+      position_size: 0.7
+      min_signal_interval_minutes: 1440  # Daily rebalancing
+      
+      factor_weights:
+        trend: 0.30
+        mean_reversion: 0.30
+        momentum: 0.25
+        volume: 0.15
+        
+  portfolio:
+    risk:
+      max_position_size: 0.12
+      max_leverage: 1.3
+      max_drawdown: 0.15
+      
+      # Asset class limits for diversification
+      position_limits:
+        equity: 0.10
+        bond: 0.15
+        commodity: 0.08
+        reit: 0.10
+        
+  execution:
+    handler_type: "realistic"
+    commissions:
+      model: "tiered"
+      tiered:
+        tier_type: "value"
+        tiers:
+          0: 0.0008
+          1000000: 0.0005
+          5000000: 0.0003
+          
+  data:
+    symbols: ["SPY", "EFA", "EEM", "TLT", "IEF", "GLD", "DBC", "VNQ"]
+    asset_classes:
+      SPY: "equity"    # US Large Cap
+      EFA: "equity"    # Developed International
+      EEM: "equity"    # Emerging Markets
+      TLT: "bond"      # Long-term Treasury
+      IEF: "bond"      # Intermediate Treasury
+      GLD: "commodity" # Gold
+      DBC: "commodity" # Commodities
+      VNQ: "reit"      # REITs
+
+---
+
+# High-Frequency Momentum Strategy
+high_frequency_momentum:
+  backtest:
+    start_date: "2023-01-01"
+    end_date: "2023-12-31"
+    initial_capital: 50000
+    
+  strategy:
+    type: "momentum"
+    momentum:
+      rsi_period: 5          # Very short periods
+      momentum_period: 3
+      rsi_oversold: 20       # Extreme levels
+      rsi_overbought: 80
+      position_size: 2.0     # Aggressive sizing with margin
+      volume_threshold: 2.0   # Strong volume requirement
+      min_signal_interval_minutes: 5  # Very high frequency
+      
+  portfolio:
+    risk:
+      max_position_size: 0.4     # Large single positions
+      max_leverage: 3.0          # High leverage
+      max_drawdown: 0.35         # Accept high drawdown
+      var_limit: 0.08           # Higher VaR tolerance
+      
+  execution:
+    handler_type: "realistic"
+    realistic:
+      latency_mean_ms: 0.5     # Ultra-low latency
+      latency_std_ms: 0.2
+      market_impact_decay: 0.2  # Fast impact decay
+      
+    slippage:
+      model: "square_root"
+      square_root:
+        temporary_impact_coef: 0.2   # Higher impact for HFT
+        permanent_impact_coef: 0.1
+        
+  data:
+    symbols: ["SPY", "QQQ", "IWM"]  # Liquid ETFs only
+    asset_classes:
+      SPY: "equity"
+      QQQ: "equity" 
+      IWM: "equity"
+
+---
+
+# Low Volatility Defensive Strategy
+low_vol_defensive:
+  backtest:
+    start_date: "2020-01-01"
+    end_date: "2023-12-31"
+    initial_capital: 300000
+    
+  strategy:
+    type: "multi_factor"
+    multi_factor:
+      short_ma: 15
+      long_ma: 60           # Longer periods for stability
+      bb_period: 25
+      bb_std: 1.5          # Tighter bands
+      rsi_period: 20
+      signal_threshold: 0.75  # Very high threshold
+      position_size: 0.5     # Conservative sizing
+      min_signal_interval_minutes: 4320  # 3 days minimum
+      
+      factor_weights:
+        trend: 0.45          # Strong trend bias
+        mean_reversion: 0.15
+        momentum: 0.20
+        volume: 0.20
+        
+  portfolio:
+    risk:
+      max_position_size: 0.06    # 6% max per position
+      max_leverage: 1.0          # No leverage
+      max_drawdown: 0.08         # Very low drawdown tolerance
+      var_limit: 0.03           # Conservative VaR
+      
+  execution:
+    slippage:
+      model: "linear"
+      linear:
+        base_slippage_bps: 2.0   # Lower slippage for patient execution
+        impact_coefficient: 0.05
+        
+  data:
+    symbols: ["USMV", "EEMV", "EFAV", "BND", "VTEB", "BSV"]  # Low vol ETFs
+    asset_classes:
+      USMV: "equity"       # US Min Vol
+      EEMV: "equity"       # EM Min Vol  
+      EFAV: "equity"       # EAFE Min Vol
+      BND: "bond"          # Total Bond
+      VTEB: "bond"         # Tax-Exempt Bond
+      BSV: "bond"          # Short-term Bond

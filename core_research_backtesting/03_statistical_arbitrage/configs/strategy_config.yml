@@ -1,0 +1,123 @@
+# Statistical Arbitrage Strategy Configuration
+
+# Data Configuration
+data:
+  start_date: '2020-01-01'
+  end_date: '2023-12-31' 
+  universe_file: 'configs/universe.yml'
+  price_source: 'yahoo'  # Options: yahoo, csv, sample
+  price_type: 'Close'    # Close, Adj Close
+  
+# Pair Selection Parameters
+pair_selection:
+  min_correlation: 0.6     # Minimum correlation for pair consideration
+  max_correlation: 0.95    # Maximum correlation (avoid perfect correlation)
+  min_half_life: 5         # Minimum half-life in days
+  max_half_life: 60        # Maximum half-life in days
+  significance_level: 0.05 # Statistical significance threshold
+  max_pairs: 20           # Maximum number of pairs to trade
+  cointegration_method: 'engle_granger'  # Options: engle_granger, johansen, all
+  
+# Spread Construction
+spread_construction:
+  method: 'kalman'         # Options: ols, tls, kalman, rolling
+  delta: 1.0e-4           # Kalman filter process noise
+  r_var: 1.0e-3           # Kalman filter measurement noise
+  window: 60              # Window size for rolling methods
+  include_intercept: true  # Include intercept term
+  
+# Z-Score Calculation
+zscore_calculation:
+  method: 'rolling'        # Options: simple, rolling, ewm, robust, adaptive
+  window: 30              # Window size for rolling z-score
+  min_periods: 15         # Minimum periods for calculation
+  robust_method: 'mad'    # Options: mad, iqr (for robust method)
+  
+# Signal Generation
+signal_generation:
+  entry_threshold: 2.0     # Z-score threshold for entry
+  exit_threshold: 0.5      # Z-score threshold for exit
+  stop_loss: 3.0          # Stop loss threshold
+  max_holding_period: 30   # Maximum holding period in days
+  min_holding_period: 1    # Minimum holding period in days
+  regime_filter: true     # Filter signals by regime
+  volatility_adjustment: true  # Adjust thresholds by volatility
+
+# Regime Detection
+regime_detection:
+  n_regimes: 2            # Number of market regimes
+  covariance_type: 'full' # Options: full, diag, spherical
+  n_iter: 100            # Maximum EM iterations
+  method: 'hmm'          # Options: hmm, structural_breaks, volatility
+  
+# Risk Management
+risk_management:
+  target_volatility: 0.15  # Target portfolio volatility
+  max_leverage: 2.0       # Maximum leverage allowed
+  position_size_method: 'risk_parity'  # Options: equal_weight, risk_parity, target_vol
+  risk_lookback: 252      # Days for risk estimation
+  rebalance_threshold: 0.05  # Threshold for rebalancing
+  
+# Execution Parameters
+execution:
+  transaction_costs: 0.001  # Transaction costs (10 bps per trade)
+  slippage: 0.0005         # Market impact slippage (5 bps)
+  rebalance_frequency: 'daily'  # Options: daily, weekly, monthly
+  order_type: 'market'     # Options: market, limit
+  
+# Backtesting Parameters
+backtest:
+  train_ratio: 0.7         # Fraction of data for training
+  walk_forward: true       # Use walk-forward analysis
+  walk_forward_periods: 63 # Retraining frequency (days)
+  out_of_sample_start: null  # Specific OOS start date (optional)
+  benchmark: '^GSPC'       # Benchmark symbol (S&P 500)
+  
+# Performance Analysis
+performance:
+  risk_free_rate: 0.02     # Risk-free rate for Sharpe ratio
+  confidence_intervals: [0.90, 0.95, 0.99]  # Confidence levels
+  rolling_window: 63       # Window for rolling metrics
+  monte_carlo_sims: 1000   # Number of Monte Carlo simulations
+  
+# Optimization Parameters (for parameter tuning)
+optimization:
+  enabled: false           # Enable parameter optimization
+  parameters:
+    entry_threshold:
+      min: 1.5
+      max: 3.0
+      step: 0.1
+    exit_threshold:
+      min: 0.2
+      max: 1.0  
+      step: 0.1
+    max_holding_period:
+      min: 10
+      max: 60
+      step: 5
+  objective: 'sharpe_ratio'  # Options: sharpe_ratio, total_return, max_drawdown
+  method: 'grid_search'     # Options: grid_search, bayesian, genetic
+  
+# Output Configuration
+output:
+  results_dir: 'results/'
+  save_trades: true        # Save individual trade details
+  save_signals: true       # Save signal history
+  generate_plots: true     # Generate performance plots  
+  plot_format: 'png'       # Options: png, pdf, svg
+  save_config: true        # Save configuration with results
+  
+# Logging Configuration  
+logging:
+  level: 'INFO'           # Options: DEBUG, INFO, WARNING, ERROR
+  file: 'logs/statarb.log'  # Log file path
+  console: true           # Log to console
+  
+# Advanced Features
+advanced:
+  regime_dependent_params: false  # Use regime-specific parameters
+  dynamic_hedging: true          # Enable dynamic hedge ratios
+  correlation_filtering: false   # Filter by correlation regimes
+  sector_neutrality: false       # Maintain sector neutrality
+  market_timing: false          # Enable market timing overlay

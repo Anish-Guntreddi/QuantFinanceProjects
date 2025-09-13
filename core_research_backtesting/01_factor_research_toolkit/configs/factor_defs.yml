@@ -1,0 +1,71 @@
+factors:
+  value:
+    - name: book_to_price
+      class: BookToPrice
+      weight: 0.25
+    - name: earnings_yield
+      class: EarningsYield
+      weight: 0.25
+    - name: fcf_yield
+      class: FCFYield
+      weight: 0.25
+    - name: sales_to_price
+      class: SalesToPrice
+      weight: 0.25
+      
+  momentum:
+    - name: price_momentum_12m
+      class: PriceMomentum
+      params:
+        lookback: 252
+        skip: 20
+      weight: 0.5
+    - name: industry_relative_momentum
+      class: IndustryRelativeMomentum
+      params:
+        lookback: 126
+      weight: 0.5
+      
+  quality:
+    - name: roe
+      class: ReturnOnEquity
+      weight: 0.33
+    - name: gross_profitability
+      class: GrossProfitability
+      weight: 0.33
+    - name: accruals
+      class: Accruals
+      weight: 0.34
+      
+  volatility:
+    - name: realized_vol
+      class: RealizedVolatility
+      params:
+        window: 252
+      weight: 0.5
+    - name: market_beta
+      class: MarketBeta
+      params:
+        window: 252
+      weight: 0.5
+
+transforms:
+  - type: winsorize
+    params:
+      lower: 0.01
+      upper: 0.99
+  - type: standardize
+    method: z-score
+  - type: neutralize
+    exposures: [sector, market_cap_decile]
+    
+analytics:
+  ic_periods: [1, 5, 20, 60]
+  turnover_periods: [1, 5, 20]
+  capacity_adv_limit: 0.05
+  
+portfolio:
+  construction: equal_weight
+  rebalance_frequency: monthly
+  n_positions: 30
+  long_only: false

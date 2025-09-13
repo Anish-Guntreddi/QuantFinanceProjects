@@ -1,0 +1,325 @@
+# Event-Driven Backtester Configuration
+# This file contains all configuration parameters for backtesting
+
+# General backtest settings
+backtest:
+  start_date: "2022-01-01"
+  end_date: "2023-12-31"
+  initial_capital: 100000
+  base_currency: "USD"
+  benchmark: "SPY"  # Optional benchmark for comparison
+  
+# Data source configuration
+data:
+  # Data source type: 'csv', 'yahoo', 'multi_asset'
+  source_type: "csv"
+  data_directory: "./data/"
+  
+  # Symbols to trade
+  symbols: ["SPY", "QQQ", "TLT"]
+  
+  # Asset class mapping (for multi-asset strategies)
+  asset_classes:
+    SPY: "equity"
+    QQQ: "equity" 
+    TLT: "bond"
+    GLD: "commodity"
+    VNQ: "reit"
+  
+  # Data validation settings
+  validation:
+    enable: true
+    max_missing_pct: 5.0  # Maximum % of missing data allowed
+    require_volume: true
+    check_ohlc_relationships: true
+
+# Strategy configuration
+strategy:
+  # Strategy type: 'ma_crossover', 'mean_reversion', 'momentum', 'multi_factor'
+  type: "ma_crossover"
+  
+  # Moving Average Crossover parameters
+  ma_crossover:
+    short_window: 10
+    long_window: 20
+    position_size: 0.95
+    min_signal_interval_minutes: 1440  # Daily signals
+  
+  # Mean Reversion parameters
+  mean_reversion:
+    lookback: 20
+    num_std: 2.0
+    position_size: 1.0
+    exit_threshold: 0.5
+    min_signal_interval_minutes: 30
+  
+  # Momentum parameters
+  momentum:
+    rsi_period: 14
+    momentum_period: 10
+    rsi_oversold: 30
+    rsi_overbought: 70
+    position_size: 1.0
+    volume_threshold: 1.2
+    min_signal_interval_minutes: 45
+  
+  # Multi-Factor parameters
+  multi_factor:
+    # Technical indicator periods
+    short_ma: 5
+    long_ma: 20
+    bb_period: 20
+    bb_std: 2.0
+    rsi_period: 14
+    volume_period: 20
+    
+    # Signal generation
+    signal_threshold: 0.6
+    position_size: 0.8
+    min_signal_interval_minutes: 60
+    
+    # Factor weights (must sum to 1.0)
+    factor_weights:
+      trend: 0.30
+      mean_reversion: 0.30
+      momentum: 0.25
+      volume: 0.15
+
+# Portfolio and risk management
+portfolio:
+  initial_capital: 100000
+  
+  # Position sizing
+  position_sizing:
+    method: "fixed_fraction"  # 'fixed_fraction', 'volatility_target', 'kelly'
+    fraction: 0.1  # For fixed fraction method
+    volatility_target: 0.15  # For volatility targeting
+  
+  # Risk management
+  risk:
+    max_position_size: 0.15      # 15% max per position
+    max_leverage: 1.5            # 150% max leverage  
+    max_drawdown: 0.20           # 20% max drawdown stop
+    var_limit: 0.05              # 5% daily VaR limit
+    
+    # Position limits by asset class
+    position_limits:
+      equity: 0.12    # 12% max per equity
+      bond: 0.20      # 20% max per bond
+      commodity: 0.08 # 8% max per commodity
+      reit: 0.10      # 10% max per REIT
+    
+    # Concentration limits
+    max_positions: 10           # Maximum number of positions
+    min_position_value: 1000    # Minimum position value
+    
+    # Correlation limits
+    max_correlation: 0.8        # Maximum correlation between positions
+
+# Execution simulation
+execution:
+  # Execution handler type: 'simulated', 'realistic'
+  handler_type: "simulated"
+  
+  # Fill probability and timing
+  fill_probability: 0.98
+  partial_fill_probability: 0.05
+  execution_delay_seconds: 0.1
+  
+  # Slippage modeling
+  slippage:
+    model: "linear"  # 'linear', 'square_root', 'advanced'
+    
+    # Linear model parameters
+    linear:
+      base_slippage_bps: 5.0
+      impact_coefficient: 0.1
+      volatility_multiplier: 1.0
+    
+    # Square root model parameters  
+    square_root:
+      temporary_impact_coef: 0.1
+      permanent_impact_coef: 0.05
+      volatility_factor: 1.0
+    
+    # Advanced model parameters
+    advanced:
+      temporary_impact_coef: 0.1
+      permanent_impact_coef: 0.05
+      urgency: 1.0
+  
+  # Commission structure
+  commissions:
+    model: "fixed"  # 'fixed', 'percentage', 'tiered'
+    
+    # Fixed commission
+    fixed:
+      commission_per_share: 0.005
+      min_commission: 1.0
+    
+    # Percentage commission
+    percentage:
+      commission_rate: 0.001  # 0.1%
+      min_commission: 1.0
+    
+    # Tiered commission (based on volume or value)
+    tiered:
+      tier_type: "value"  # 'volume' or 'value'
+      min_commission: 1.0
+      tiers:
+        0: 0.0008          # 8 bps for first tier
+        500000: 0.0005     # 5 bps for $500K+
+        2000000: 0.0003    # 3 bps for $2M+
+        5000000: 0.0002    # 2 bps for $5M+
+  
+  # Market realism settings
+  realistic:
+    latency_mean_ms: 1.0      # 1ms mean latency
+    latency_std_ms: 0.5       # 0.5ms standard deviation
+    market_impact_decay: 0.1   # Market impact decay rate
+    liquidity_factor: 1.0      # Overall liquidity factor
+
+# Performance analysis and reporting
+analysis:
+  # Benchmark comparison
+  benchmark_comparison: true
+  benchmark_symbol: "SPY"
+  
+  # Risk-free rate for Sharpe ratio calculation
+  risk_free_rate: 0.02  # 2% annual
+  
+  # Performance metrics to calculate
+  metrics:
+    basic: true      # Total return, Sharpe, volatility
+    risk: true       # Drawdown, VaR, skewness, kurtosis  
+    advanced: true   # Alpha, beta, information ratio
+    trade: true      # Trade-level analysis
+  
+  # Reporting options
+  reporting:
+    generate_plots: true
+    save_trade_log: true
+    save_signal_log: true
+    detailed_attribution: true
+    
+    # Plot settings
+    plots:
+      equity_curve: true
+      drawdown: true
+      returns_distribution: true
+      monthly_heatmap: true
+      rolling_metrics: true
+      underwater_plot: true
+
+# Output and logging
+output:
+  # Results directory
+  results_directory: "./results/"
+  
+  # File formats
+  save_formats: ["csv", "json", "pickle"]
+  
+  # Logging configuration
+  logging:
+    level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+    log_to_file: true
+    log_directory: "./logs/"
+    max_log_files: 10
+    
+    # Component-specific logging
+    components:
+      strategy: "INFO"
+      portfolio: "INFO" 
+      execution: "DEBUG"
+      data_handler: "WARNING"
+      performance: "INFO"
+
+# Optimization and backtesting
+optimization:
+  # Walk-forward analysis
+  walk_forward:
+    enable: false
+    train_period_days: 252  # 1 year training
+    test_period_days: 63    # 3 months testing  
+    step_size_days: 21      # 1 month steps
+  
+  # Monte Carlo simulation
+  monte_carlo:
+    enable: false
+    num_simulations: 1000
+    confidence_levels: [0.95, 0.99]
+  
+  # Parameter optimization
+  parameter_optimization:
+    enable: false
+    method: "grid_search"  # 'grid_search', 'bayesian', 'genetic'
+    
+    # Parameters to optimize (strategy-dependent)
+    parameters:
+      short_window: [5, 10, 15, 20]
+      long_window: [20, 30, 40, 50]
+      position_size: [0.8, 0.9, 1.0]
+    
+    # Optimization objective
+    objective: "sharpe_ratio"  # 'total_return', 'sharpe_ratio', 'calmar_ratio'
+
+# Environment and system settings
+system:
+  # Random seed for reproducibility
+  random_seed: 42
+  
+  # Memory management
+  memory:
+    max_memory_usage_gb: 8.0
+    chunk_size: 10000  # For processing large datasets
+    
+  # Parallel processing
+  parallel:
+    enable: false
+    num_workers: 4
+    
+  # Caching
+  cache:
+    enable: true
+    cache_directory: "./cache/"
+    max_cache_size_gb: 2.0
+    
+# Validation and testing
+testing:
+  # Data quality checks
+  data_quality:
+    enable: true
+    max_price_jump_pct: 50.0    # Flag price jumps > 50%
+    max_volume_ratio: 10.0       # Flag volume > 10x average
+    min_data_coverage: 0.95      # Require 95% data coverage
+  
+  # Strategy validation
+  strategy_validation:
+    enable: true
+    min_trades: 10               # Minimum trades required
+    max_correlation_signal: 0.9  # Check for look-ahead bias
+    
+  # Performance validation
+  performance_validation:
+    enable: true
+    reality_check: true          # Check if results are realistic
+    benchmark_comparison: true    # Compare to benchmark
+    
+# Advanced features
+advanced:
+  # Custom indicators
+  custom_indicators:
+    enable: false
+    indicators: []  # List of custom indicator configurations
+  
+  # Alternative data sources
+  alternative_data:
+    enable: false
+    sources: []  # Alternative data source configurations
+    
+  # Machine learning integration
+  ml_integration:
+    enable: false
+    model_type: "random_forest"
+    feature_engineering: true
+    online_learning: false

@@ -1,0 +1,64 @@
+# Core Data Science and Analytics
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Financial Data and Analysis
+yfinance>=0.2.18
+TA-Lib>=0.4.25
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# Performance and Optimization
+numba>=0.57.0
+
+# Configuration and Serialization
+PyYAML>=6.0
+pickle5>=0.0.11
+
+# Testing Framework
+pytest>=7.4.0
+pytest-benchmark>=4.0.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.0
+
+# Development Tools
+black>=23.0.0
+flake8>=6.0.0
+isort>=5.12.0
+mypy>=1.4.0
+
+# Logging and Monitoring
+psutil>=5.9.0
+
+# Optional: Database Support
+sqlalchemy>=2.0.0  # For database-backed data storage
+sqlite3  # Built-in Python module
+
+# Optional: Advanced Analytics
+scikit-learn>=1.3.0  # For ML features in strategies
+statsmodels>=0.14.0  # For statistical analysis
+
+# Optional: Parallel Processing
+joblib>=1.3.0
+multiprocessing-logging>=0.3.4
+
+# Optional: Web Interface (if building dashboard)
+streamlit>=1.25.0
+dash>=2.12.0
+
+# Optional: Additional Data Sources
+ccxt>=4.0.0  # Cryptocurrency exchange data
+alpha-vantage>=2.3.0  # Alpha Vantage API
+quandl>=3.7.0  # Quandl data
+fredapi>=0.5.0  # Federal Reserve Economic Data
+
+# Optional: Advanced Execution Simulation
+simpy>=4.0.1  # Discrete event simulation
+
+# Documentation (for development)
+sphinx>=7.0.0
+sphinx-rtd-theme>=1.3.0

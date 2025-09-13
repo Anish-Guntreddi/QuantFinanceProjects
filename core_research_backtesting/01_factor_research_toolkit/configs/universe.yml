@@ -1,0 +1,28 @@
+universe:
+  type: sp500  # Options: sp500, russell3000, custom
+  
+  filters:
+    min_market_cap: 1e9  # $1B minimum
+    min_price: 5.0  # $5 minimum
+    min_adv: 1e6  # $1M average daily volume
+    min_history_days: 252  # 1 year of history required
+    
+  exclusions:
+    sectors: []  # Sectors to exclude
+    industries: []  # Industries to exclude
+    
+  custom_universe:  # Used if type is 'custom'
+    symbols:
+      - AAPL
+      - MSFT
+      - GOOGL
+      - AMZN
+      - META
+      
+  sector_constraints:
+    max_per_sector: 0.30  # Maximum 30% in any sector
+    min_per_sector: 0.05  # Minimum 5% in any sector
+    
+  liquidity:
+    adv_participation: 0.05  # Max 5% of ADV
+    min_market_cap_percentile: 20  # Bottom 20% by market cap excluded

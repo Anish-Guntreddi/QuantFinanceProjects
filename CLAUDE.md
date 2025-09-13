@@ -4,198 +4,189 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-A comprehensive Quantitative Finance Projects repository containing HFT strategies, market microstructure implementations, research backtesting frameworks, and risk engineering tools. Projects use hybrid architectures combining C++ for performance-critical components and Python for ML/RL agents and analysis.
-
-## Current Project Structure
-
-```
-.
-├── HFT_strategy_projects/           # High-frequency trading strategies
-│   ├── 01_adaptive_market_making/   # RL-based market making with inventory management
-│   ├── 02_order_book_imbalance_scalper/
-│   ├── 03_queue_position_modeling/
-│   ├── 04_cross_exchange_arbitrage/
-│   ├── 05_short_horizon_trade_imbalance/
-│   ├── 06_iceberg_detection/
-│   ├── 07_latency_arb_simulator/
-│   ├── 08_smart_order_router/
-│   └── 09_rl_market_maker/
-├── research_intraday_strategies/    # Intraday trading strategies
-│   ├── 01_momentum_trend_following/
-│   ├── 02_mean_reversion/
-│   ├── 03_statistical_arbitrage/
-│   ├── 04_momentum_value_long_short/
-│   ├── 05_options_strategy/
-│   ├── 06_execution_tca/
-│   ├── 07_machine_learning_strategy/
-│   ├── 08_regime_detection_allocation/
-│   └── 09_portfolio_construction_risk/
-├── market_microstructure_engines/   # Core market simulation engines
-├── market_microstructure_execution/ # Execution algorithms
-├── risk_engineering/                # Risk management and infrastructure
-│   ├── 01_portfolio_construction_risk/
-│   ├── 02_research_reproducibility_template/
-│   ├── 03_timeseries_storage_query/
-│   └── 04_latency_aware_cpp_utilities/
-├── ai_ml_trading/                   # AI/ML trading models
-└── core_research_backtesting/       # Backtesting frameworks
-```
+Quantitative Finance Projects repository containing HFT strategies, market microstructure implementations, research backtesting frameworks, and risk engineering tools. Projects use hybrid architectures combining C++ for performance-critical components and Python for ML/RL agents and analysis.
 
 ## Development Commands
 
-### Python Projects
+### Python Virtual Environment Setup
 ```bash
-# Virtual environment setup
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
+# Create and activate virtual environment (always check if one exists first)
+python -m venv venv             # Create if not exists
+source venv/bin/activate        # Mac/Linux
+venv\Scripts\activate           # Windows
 
-# Dependencies (check for requirements.txt first)
-pip install -r requirements.txt
-
-# Common packages for quant finance
-pip install numpy pandas scipy scikit-learn torch matplotlib seaborn
-
-# Testing
-pytest                    # if pytest.ini exists
-python -m pytest tests/   # run test directory
-python -m unittest       # alternative
-
-# Code quality
-black . --check          # formatting check
-flake8                   # linting
-mypy .                   # type checking
+# Install dependencies
+pip install -r requirements.txt  # Project-wide requirements at root
+pip install -r ../../requirements.txt  # For subdirectory projects
 ```
 
-### C++ Projects
+### Running Tests
 ```bash
-# Build commands (check for CMakeLists.txt or Makefile first)
-cmake -B build && cmake --build build
-g++ -std=c++17 -O3 -march=native *.cpp -o strategy
+# Python tests - check for run_tests.py first
+python tests/run_tests.py       # If available
+python -m pytest tests/ -v      # Direct pytest
+python -m pytest tests/test_specific.py::TestClass::test_method  # Single test
 
-# For HFT/low-latency code
-g++ -std=c++20 -O3 -march=native -mtune=native -ffast-math
+# Quick test without benchmarks
+python -m pytest tests/ -v --tb=short --durations=10
 
-# Run tests
-./build/tests/test_runner
-ctest --test-dir build
+# With coverage
+python -m pytest tests/ --cov=src --cov-report=html
 ```
 
-### Hybrid C++/Python Projects
+### Code Quality Checks
 ```bash
-# Build Python bindings (pybind11)
-pip install pybind11
-python setup.py build_ext --inplace
+# Format checking
+black . --check --diff
 
-# Or with cmake
-cmake -B build -DPYBIND11_PYTHON_VERSION=3.x
-cmake --build build
+# Linting  
+flake8 src/ tests/
+
+# Type checking
+mypy src/ --ignore-missing-imports
 ```
 
-## Architecture Patterns
+### Running Backtesting Pipelines
+```bash
+# Factor research toolkit
+cd core_research_backtesting/01_factor_research_toolkit/
+python run_pipeline.py --quick  # Quick test run
+python run_pipeline.py --start-date 2020-01-01 --end-date 2023-12-31
 
-### HFT Strategy Structure
-Each HFT strategy typically follows:
-- `mm_lob/` or `engine/` - C++ core engine for order book simulation and low-latency operations
-- `agents/` - Python RL/ML agents for adaptive behavior
-- `python/` - Pybind11 bindings connecting C++ to Python
-- `analysis/` - Performance metrics and visualization
-- `config/` - YAML/JSON configuration files
-- `tests/` - Unit and integration tests
+# Event-driven backtester
+cd core_research_backtesting/02_event_driven_backtester/
+python run_backtest.py
 
-### Common Components
-- **Market Simulators**: LOB (Limit Order Book) simulators with realistic market dynamics
-- **Execution Engines**: Order routing, position management, risk controls
-- **Alpha Models**: Signal generation from microstructure features
-- **Risk Management**: Position limits, drawdown controls, inventory management
+# Statistical arbitrage
+cd core_research_backtesting/03_statistical_arbitrage/
+python run_statarb_backtest.py
+```
 
-## Critical Implementation Notes
+### Data Generation for Testing
+```bash
+# Generate sample data (most projects have this)
+python generate_sample_data.py
 
-### Performance Optimization
-- Use C++ for: order book processing, latency-critical paths, tick data handling
-- Use Python for: strategy logic, ML training, analysis, visualization
-- Vectorize operations with NumPy/Eigen
-- Pre-allocate memory for hot paths
-- Consider lock-free data structures for multi-threaded components
+# Generate portfolio returns (factor research)
+python generate_portfolio_returns.py
+```
 
-### Market Data Handling
-- Always validate timestamps and handle clock skew
-- Implement proper order book reconstruction from L2/L3 data
-- Handle partial fills and order modifications
-- Account for exchange-specific mechanics (maker/taker fees, tick sizes)
+## Project Structure Patterns
 
-### Risk Controls
-- Implement position limits before production
-- Add circuit breakers for excessive losses
-- Monitor latency and queue position
-- Include slippage and market impact models
+### Core Research Backtesting Projects
+```
+XX_project_name/
+├── src/                 # Main source code
+│   ├── data/           # Data loading and processing
+│   ├── factors/        # Factor definitions (for factor research)
+│   ├── signals/        # Signal generation (for trading strategies)
+│   ├── execution/      # Order execution logic
+│   └── analytics/      # Performance analytics
+├── configs/            # YAML/JSON configuration files
+├── tests/              # Unit and integration tests
+├── examples/           # Example usage scripts
+├── run_*.py           # Main runner scripts
+└── generate_*.py      # Data generation utilities
+```
 
-### Backtesting Integrity
-- Avoid look-ahead bias in signal generation
-- Model realistic latency (1-5ms for colo, 10-50ms otherwise)
-- Include transaction costs (fees, spread, market impact)
-- Separate in-sample and out-of-sample periods
+### HFT Strategy Projects
+```
+XX_strategy_name/
+├── mm_engine/         # Market making engine (C++ planned)
+├── agents/            # RL/ML agents
+├── analysis/          # Performance analysis
+├── configs/           # Configuration files
+└── tests/            # Tests
+```
 
-## Testing Requirements
+## Import Path Management
 
-Before committing strategy changes:
-1. Run unit tests for mathematical correctness
-2. Verify PnL calculations match expected values
-3. Test edge cases (empty book, crossed markets, extreme positions)
-4. Validate risk limits are enforced
-5. Check for memory leaks in C++ components
+Projects consistently add src to path:
+```python
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent / 'src'))
+```
 
-## Data Considerations
+## Common Implementation Patterns
 
-- Use environment variables for API keys: `export API_KEY=xxx`
-- Store market data in `/data/` (gitignored)
-- Document data sources and update frequencies in README
-- Consider data compression for tick data storage
+### Factor Research Pipeline
+- Factors inherit from base classes in `src/factors/base.py`
+- Transforms (neutralization, standardization) in `src/transforms/`
+- Analytics modules for IC analysis, turnover, capacity analysis
+- Pipeline engine orchestrates factor computation
+
+### Event-Driven Backtesting
+- Event-based architecture with MarketEvent, SignalEvent, OrderEvent, FillEvent
+- DataHandler manages historical data
+- Strategy generates signals
+- Portfolio tracks positions and PnL
+- Execution simulates order fills
+
+### Statistical Arbitrage
+- Cointegration testing (Engle-Granger, Johansen, Phillips-Ouliaris)
+- Spread construction and OU process modeling
+- Dynamic hedging with Kalman filters
+- Regime detection with Markov models
+
+## Testing Patterns
+
+### Test Organization
+- `test_*.py` files for each major module
+- `run_tests.py` scripts for test orchestration
+- Tests import parent directory modules using path insertion
+
+### Common Test Commands
+```bash
+# Run all tests in a project
+cd project_directory/
+python -m pytest tests/ -v
+
+# Run with specific markers
+python -m pytest tests/ -m "not slow"
+
+# Run single test file
+python -m pytest tests/test_events.py -v
+```
+
+## Configuration Management
+
+Projects use YAML configs in `configs/` directories:
+- `factor_defs.yml` - Factor definitions
+- `backtest_config.yml` - Backtest parameters
+- `strategy_params.yml` - Strategy configuration
+
+## Performance Profiling
+```bash
+# Python profiling
+python -m cProfile -o profile.stats run_backtest.py
+python -m pstats profile.stats
+
+# Memory profiling
+python -m memory_profiler run_pipeline.py
+```
+
+## Data Handling
+
+- Sample data generation scripts available in most projects
+- Data typically stored in `data/` directories (gitignored)
+- Point-in-time data handling for avoiding look-ahead bias
+- Universe selection and filtering capabilities
 
 ## Repository Status
 
-**Note**: This repository currently contains planning documents and architectural designs only. Implementation code is yet to be written. All directories contain README.md files with detailed implementation plans.
+Mixed implementation status:
+- **core_research_backtesting/**: Fully implemented Python modules with tests
+- **HFT_strategy_projects/**: Partial implementation, C++ components planned
+- **Other directories**: Planning documents and architectural designs
 
-## Key Dependencies
+## Key Active Modules
 
-The repository uses a comprehensive requirements.txt with the following categories:
-- **Core**: numpy, pandas, scipy, numba
-- **ML/DL**: torch, tensorflow, scikit-learn, xgboost, stable-baselines3
-- **Quant Finance**: QuantLib, zipline-reloaded, vectorbt, cvxpy
-- **Market Data**: yfinance, ccxt, TA-Lib
-- **Testing**: pytest, pytest-benchmark, pytest-asyncio
-- **Code Quality**: black, flake8, mypy, isort, pylint
+### Implemented and Tested
+- Factor Research Toolkit (`core_research_backtesting/01_factor_research_toolkit/`)
+- Event-Driven Backtester (`core_research_backtesting/02_event_driven_backtester/`)
+- Statistical Arbitrage (`core_research_backtesting/03_statistical_arbitrage/`)
 
-## Common Development Workflows
-
-### Setting up a new HFT strategy project
-```bash
-cd HFT_strategy_projects/XX_strategy_name/
-python -m venv venv
-source venv/bin/activate
-pip install -r ../../requirements.txt
-# For C++ components
-mkdir build && cd build
-cmake .. && make -j$(nproc)
-```
-
-### Running tests for a specific module
-```bash
-# Python tests
-python -m pytest tests/test_specific.py -v
-python -m pytest tests/test_specific.py::TestClass::test_method  # single test
-
-# C++ tests
-cd build && ctest -R test_name  # run specific test
-```
-
-### Performance profiling for HFT code
-```bash
-# C++ with perf
-perf record ./strategy
-perf report
-
-# Python with cProfile
-python -m cProfile -o profile.stats strategy.py
-python -m pstats profile.stats
-```
+### Partially Implemented
+- HFT strategies with Python agents and analysis modules
+- Market making engines (Python prototypes, C++ planned)

@@ -1,0 +1,212 @@
+# Trading Universe Configuration for Statistical Arbitrage
+
+# Asset Universe
+assets:
+  # Large Cap Equity ETFs
+  - 'SPY'   # SPDR S&P 500 ETF
+  - 'QQQ'   # Invesco QQQ Trust
+  - 'IWM'   # iShares Russell 2000 ETF
+  - 'VTI'   # Vanguard Total Stock Market ETF
+  
+  # International Equity
+  - 'EFA'   # iShares MSCI EAFE ETF
+  - 'EEM'   # iShares MSCI Emerging Markets ETF
+  - 'VEA'   # Vanguard FTSE Developed Markets ETF
+  - 'VWO'   # Vanguard FTSE Emerging Markets ETF
+  
+  # Fixed Income
+  - 'TLT'   # iShares 20+ Year Treasury Bond ETF
+  - 'IEF'   # iShares 7-10 Year Treasury Bond ETF
+  - 'HYG'   # iShares iBoxx $ High Yield Corporate Bond ETF
+  - 'LQD'   # iShares iBoxx $ Investment Grade Corporate Bond ETF
+  - 'TIP'   # iShares TIPS Bond ETF
+  - 'AGG'   # iShares Core U.S. Aggregate Bond ETF
+  
+  # Commodities
+  - 'GLD'   # SPDR Gold Shares
+  - 'SLV'   # iShares Silver Trust
+  - 'USO'   # United States Oil Fund
+  - 'UNG'   # United States Natural Gas Fund
+  - 'DBA'   # Invesco DB Agriculture Fund
+  
+  # Real Estate
+  - 'VNQ'   # Vanguard Real Estate ETF
+  - 'REET'  # iShares Global REIT ETF
+  
+  # Sector ETFs (for sector-specific pairs)
+  - 'XLF'   # Financial Select Sector SPDR Fund
+  - 'XLK'   # Technology Select Sector SPDR Fund
+  - 'XLE'   # Energy Select Sector SPDR Fund
+  - 'XLV'   # Health Care Select Sector SPDR Fund
+  - 'XLI'   # Industrial Select Sector SPDR Fund
+  - 'XLU'   # Utilities Select Sector SPDR Fund
+  - 'XLY'   # Consumer Discretionary Select Sector SPDR Fund
+  - 'XLP'   # Consumer Staples Select Sector SPDR Fund
+  
+# Asset Classifications
+classifications:
+  equity:
+    - 'SPY'
+    - 'QQQ' 
+    - 'IWM'
+    - 'VTI'
+    - 'EFA'
+    - 'EEM'
+    - 'VEA'
+    - 'VWO'
+    
+  fixed_income:
+    - 'TLT'
+    - 'IEF'
+    - 'HYG'
+    - 'LQD'
+    - 'TIP'
+    - 'AGG'
+    
+  commodities:
+    - 'GLD'
+    - 'SLV'
+    - 'USO'
+    - 'UNG'
+    - 'DBA'
+    
+  real_estate:
+    - 'VNQ'
+    - 'REET'
+    
+  sectors:
+    financials:
+      - 'XLF'
+    technology:
+      - 'XLK'
+    energy:
+      - 'XLE'
+    healthcare:
+      - 'XLV'
+    industrials:
+      - 'XLI'
+    utilities:
+      - 'XLU'
+    consumer_discretionary:
+      - 'XLY'
+    consumer_staples:
+      - 'XLP'
+
+# Pair Restrictions and Preferences
+pair_rules:
+  # Preferred pairs (higher weights in selection)
+  preferred_pairs:
+    - ['SPY', 'QQQ']    # Large cap equity pair
+    - ['TLT', 'IEF']    # Treasury curve pair
+    - ['GLD', 'SLV']    # Precious metals pair
+    - ['EFA', 'EEM']    # Developed vs Emerging markets
+    - ['XLF', 'XLK']    # Sector rotation pair
+    
+  # Excluded pairs (avoid these combinations)  
+  excluded_pairs:
+    - ['USO', 'UNG']    # Both volatile commodities
+    - ['HYG', 'LQD']    # Both corporate bonds (too similar)
+    
+  # Sector constraints
+  sector_rules:
+    max_pairs_per_sector: 2
+    allow_cross_sector: true
+    
+  # Asset class constraints
+  asset_class_rules:
+    max_pairs_per_class: 3
+    require_different_classes: false
+
+# Universe Filters
+filters:
+  # Minimum requirements
+  min_market_cap: 1.0e9      # $1B minimum market cap
+  min_avg_volume: 1.0e6      # 1M average daily volume
+  min_price: 5.0             # Minimum price per share
+  
+  # Data quality filters
+  min_data_availability: 0.95  # 95% data availability required
+  max_missing_consecutive: 5   # Max 5 consecutive missing days
+  
+  # Liquidity filters
+  min_bid_ask_spread: 0.01    # Maximum bid-ask spread
+  min_trading_days: 200       # Minimum trading days per year
+
+# Dynamic Universe Updates
+universe_updates:
+  # Rebalancing frequency
+  rebalance_frequency: 'quarterly'  # Options: monthly, quarterly, semi-annual, annual
+  
+  # Update criteria
+  update_criteria:
+    performance_threshold: 0.05     # Remove pairs with <5% correlation
+    volume_threshold: 0.5          # Remove if volume drops 50%
+    cointegration_pvalue: 0.10     # Remove if p-value > 10%
+    
+  # Addition criteria for new assets
+  addition_criteria:
+    min_correlation: 0.3           # Minimum correlation with existing assets
+    max_correlation: 0.97          # Maximum correlation (avoid duplicates)
+    
+# Risk Management Overlays
+risk_overlays:
+  # Concentration limits
+  max_weight_single_asset: 0.15   # Maximum weight in any single asset
+  max_weight_asset_class: 0.40    # Maximum weight in any asset class
+  max_weight_sector: 0.25         # Maximum weight in any sector
+  
+  # Correlation limits
+  max_portfolio_correlation: 0.8   # Maximum average correlation
+  min_portfolio_diversification: 0.7  # Minimum diversification ratio
+
+# Backtesting Specific Settings
+backtesting:
+  # Historical data requirements
+  min_history_years: 2            # Minimum years of history required
+  data_lag_days: 1               # Data lag to simulate real trading
+  
+  # Corporate actions handling
+  handle_dividends: true         # Adjust for dividend payments
+  handle_splits: true           # Adjust for stock splits
+  handle_mergers: true          # Handle merger/acquisition events
+  
+  # Survivorship bias
+  avoid_survivorship_bias: true  # Include delisted assets if available
+  
+# Alternative Universes (for different strategies)
+alternative_universes:
+  # Conservative universe (lower risk assets)
+  conservative:
+    - 'SPY'
+    - 'AGG'
+    - 'TLT'
+    - 'GLD'
+    - 'VNQ'
+    
+  # Aggressive universe (higher volatility)  
+  aggressive:
+    - 'QQQ'
+    - 'IWM'
+    - 'EEM'
+    - 'HYG'
+    - 'USO'
+    - 'SLV'
+    
+  # Sector focused
+  sector_rotation:
+    - 'XLF'
+    - 'XLK' 
+    - 'XLE'
+    - 'XLV'
+    - 'XLI'
+    - 'XLU'
+    - 'XLY'
+    - 'XLP'
+    
+  # International focus
+  international:
+    - 'EFA'
+    - 'EEM'
+    - 'VEA'
+    - 'VWO'
+    - 'REET'
