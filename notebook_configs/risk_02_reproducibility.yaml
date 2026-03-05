@@ -1,0 +1,49 @@
+project:
+  id: risk_02_reproducibility
+  category: risk_engineering
+  dir_name: 02_research_reproducibility_template
+  display_name: Research Reproducibility Template
+  description: MLflow experiment tracking, DVC data versioning, Hydra config management, and statistical result validation
+template: risk
+subcategory: Reproducibility
+asset_class: Equities
+frequency: Daily
+languages:
+- Python
+simulation_tier: precomputed
+synthetic_sharpe: 1.0
+synthetic_vol: 0.12
+source:
+  sys_path_append: src
+  imports:
+  - from core.tracker import ExperimentTracker
+  key_class: ExperimentTracker
+data:
+  source_type: yfinance
+  tickers:
+  - SPY
+  start_date: '2020-01-01'
+  end_date: '2024-12-31'
+  benchmark: SPY
+params:
+  n_splits:
+    default: 5
+    range:
+    - 3
+    - 10
+    type: int
+    label: CV Splits
+interactive_params:
+- name: n_splits
+  label: CV Splits
+  type: slider
+  min: 3
+  max: 10
+  default: 5
+  step: 1
+tags:
+- reproducibility
+- mlflow
+- dvc
+- hydra
+- experiment-tracking

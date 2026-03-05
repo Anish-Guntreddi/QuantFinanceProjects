@@ -1,0 +1,46 @@
+project:
+  id: hft_06_iceberg_detection
+  category: HFT_strategy_projects
+  dir_name: 06_iceberg_detection
+  display_name: Iceberg Order Detection
+  description: Pattern recognition for hidden liquidity detection with refill-rate estimation and IOC probe execution
+template: hft
+subcategory: Signal
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+- C++
+has_cpp: true
+simulation_tier: precomputed
+synthetic_sharpe: 1.8
+synthetic_vol: 0.09
+source:
+  sys_path_append: detector
+  imports:
+  - from iceberg import IcebergDetector
+  key_class: IcebergDetector
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  confidence_threshold:
+    default: 0.7
+    range:
+    - 0.3
+    - 0.95
+    type: float
+    label: Confidence Threshold
+interactive_params:
+- name: confidence_threshold
+  label: Confidence Threshold
+  type: slider
+  min: 0.3
+  max: 0.95
+  default: 0.7
+  step: 0.05
+tags:
+- iceberg-detection
+- hidden-liquidity
+- pattern-recognition

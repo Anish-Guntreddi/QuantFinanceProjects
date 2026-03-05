@@ -1,0 +1,53 @@
+project:
+  id: exec_02_execution_algos
+  category: market_microstructure_execution
+  dir_name: 02_execution_algorithms
+  display_name: Execution Algorithms (VWAP/TWAP/IS)
+  description: Production-grade execution algorithms with POV, VWAP, TWAP, and Implementation Shortfall plus TCA framework
+template: execution
+subcategory: Execution
+asset_class: Equities
+frequency: Minute
+languages:
+- Python
+simulation_tier: live
+synthetic_sharpe: 1.0
+synthetic_vol: 0.08
+source:
+  sys_path_append: exec
+  imports:
+  - from algos.vwap import VWAPAlgorithm
+  - from algos.pov import POVAlgorithm
+  key_class: VWAPAlgorithm
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  participation_rate:
+    default: 0.1
+    range:
+    - 0.01
+    - 0.3
+    type: float
+    label: Participation Rate
+  urgency:
+    default: 0.5
+    range:
+    - 0.0
+    - 1.0
+    type: float
+    label: Urgency
+interactive_params:
+- name: participation_rate
+  label: Participation Rate
+  type: slider
+  min: 0.01
+  max: 0.3
+  default: 0.1
+  step: 0.01
+tags:
+- vwap
+- twap
+- implementation-shortfall
+- tca

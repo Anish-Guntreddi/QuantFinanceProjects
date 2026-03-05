@@ -1,0 +1,54 @@
+project:
+  id: hft_07_latency_arb
+  category: HFT_strategy_projects
+  dir_name: 07_latency_arb_simulator
+  display_name: Latency Arbitrage Simulator
+  description: Educational multi-venue feed simulation showing how latency creates arbitrage windows with stale quote injection
+template: hft
+subcategory: Arbitrage
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+- C++
+has_cpp: true
+simulation_tier: precomputed
+synthetic_sharpe: 2.2
+synthetic_vol: 0.06
+source:
+  sys_path_append: simulator
+  imports:
+  - from latency_arb import LatencyArbSimulator
+  key_class: LatencyArbSimulator
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  latency_advantage_us:
+    default: 10
+    range:
+    - 1
+    - 100
+    type: int
+    label: Latency Advantage (us)
+  num_venues:
+    default: 3
+    range:
+    - 2
+    - 5
+    type: int
+    label: Number of Venues
+interactive_params:
+- name: latency_advantage_us
+  label: Latency Advantage (us)
+  type: slider
+  min: 1
+  max: 100
+  default: 10
+  step: 1
+tags:
+- latency-arbitrage
+- simulation
+- educational
+- multi-venue

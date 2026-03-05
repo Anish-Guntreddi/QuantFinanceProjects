@@ -1,0 +1,55 @@
+project:
+  id: engines_02_feed_handler
+  category: market_microstructure_engines
+  dir_name: 02_feed_handler_order_router
+  display_name: Feed Handler & Order Router
+  description: Low-latency feed handler with lock-free queues, binary protocol decoding, FIX encoding, and latency tracking
+template: microstructure
+subcategory: Feed Handler
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+simulation_tier: precomputed
+synthetic_sharpe: 1.5
+synthetic_vol: 0.08
+source:
+  sys_path_append: feed
+  imports:
+  - from handler import FeedHandler
+  key_class: FeedHandler
+  additional_sys_paths:
+  - router
+  - common
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  queue_size:
+    default: 65536
+    range:
+    - 1024
+    - 262144
+    type: int
+    label: Queue Size
+  worker_threads:
+    default: 2
+    range:
+    - 1
+    - 8
+    type: int
+    label: Worker Threads
+interactive_params:
+- name: queue_size
+  label: Queue Size
+  type: slider
+  min: 1024
+  max: 262144
+  default: 65536
+  step: 1024
+tags:
+- feed-handler
+- lock-free
+- fix-protocol
+- latency-tracking

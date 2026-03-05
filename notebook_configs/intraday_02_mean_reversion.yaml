@@ -1,0 +1,69 @@
+project:
+  id: intraday_02_mean_reversion
+  category: research_intraday_strategies
+  dir_name: 02_mean_reversion
+  display_name: Mean Reversion Strategy
+  description: Bollinger Bands, RSI mean reversion, and pairs trading with z-score signals and dynamic position sizing
+template: intraday
+subcategory: Mean Reversion
+asset_class: Equities
+frequency: Daily
+languages:
+- Python
+simulation_tier: live
+synthetic_sharpe: 1.1
+synthetic_vol: 0.12
+source:
+  sys_path_append: src
+  imports:
+  - from mean_reversion_strategy import MeanReversionStrategy, StrategyConfig
+  key_class: MeanReversionStrategy
+data:
+  source_type: yfinance
+  tickers:
+  - SPY
+  start_date: '2020-01-01'
+  end_date: '2024-12-31'
+  benchmark: SPY
+params:
+  lookback_period:
+    default: 20
+    range:
+    - 5
+    - 100
+    type: int
+    label: Lookback Period
+  stop_loss:
+    default: 0.02
+    range:
+    - 0.005
+    - 0.05
+    type: float
+    label: Stop Loss
+  slippage:
+    default: 0.0001
+    range:
+    - 0.0
+    - 0.001
+    type: float
+    label: Slippage
+  commission:
+    default: 0.001
+    range:
+    - 0.0
+    - 0.005
+    type: float
+    label: Commission
+interactive_params:
+- name: lookback_period
+  label: Lookback Period
+  type: slider
+  min: 5
+  max: 100
+  default: 20
+  step: 5
+tags:
+- mean-reversion
+- bollinger-bands
+- rsi
+- pairs-trading

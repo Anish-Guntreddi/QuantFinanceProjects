@@ -1,0 +1,45 @@
+project:
+  id: exec_03_feed_handler
+  category: market_microstructure_execution
+  dir_name: 03_realtime_feed_handler
+  display_name: Real-Time Feed Handler
+  description: Ultra-low latency market data handler with UDP multicast, async processing, ring buffers, and risk checks
+template: execution
+subcategory: Feed Handler
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+simulation_tier: precomputed
+synthetic_sharpe: 1.2
+synthetic_vol: 0.07
+source:
+  sys_path_append: src/feed
+  imports:
+  - from handler import FeedHandler
+  key_class: FeedHandler
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  buffer_size:
+    default: 4096
+    range:
+    - 512
+    - 65536
+    type: int
+    label: Buffer Size
+interactive_params:
+- name: buffer_size
+  label: Ring Buffer Size
+  type: slider
+  min: 512
+  max: 65536
+  default: 4096
+  step: 512
+tags:
+- feed-handler
+- udp-multicast
+- low-latency
+- async

@@ -1,0 +1,361 @@
+/* Signal Architecture — Complete CSS Theme */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Backgrounds */
+    --bg-primary: #0E1117;
+    --bg-card: #1A1F2E;
+    --bg-card-hover: #212839;
+    --bg-surface: #151922;
+
+    /* Text */
+    --text-primary: #E0E0E0;
+    --text-secondary: #9CA3AF;
+    --text-muted: #6B7280;
+
+    /* Accents */
+    --accent: #00D4AA;
+    --accent-rgb: 0, 212, 170;
+
+    /* Category colors */
+    --cat-hft: #FF6B35;
+    --cat-ml: #7B68EE;
+    --cat-research: #00D4AA;
+    --cat-engines: #FF4757;
+    --cat-execution: #FFA502;
+    --cat-intraday: #1E90FF;
+    --cat-risk: #A855F7;
+
+    /* Semantic */
+    --profit: #00D4AA;
+    --loss: #FF4757;
+    --neutral: #6B7280;
+
+    /* Typography */
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+
+    /* Borders */
+    --border-color: #2D3748;
+    --border-radius: 6px;
+}
+
+/* === Global === */
+.stApp {
+    background-color: var(--bg-primary) !important;
+    font-family: var(--font-body) !important;
+    color: var(--text-primary) !important;
+}
+
+.stApp > header {
+    background-color: transparent !important;
+}
+
+[data-testid="stHeader"] {
+    background-color: transparent !important;
+}
+
+/* === Sidebar === */
+[data-testid="stSidebar"] {
+    background-color: var(--bg-surface) !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
+[data-testid="stSidebar"] .stMarkdown p,
+[data-testid="stSidebar"] .stMarkdown li {
+    font-family: var(--font-body) !important;
+    font-size: 0.9rem !important;
+}
+
+[data-testid="stSidebarNav"] a {
+    font-family: var(--font-body) !important;
+    font-weight: 500 !important;
+}
+
+/* === Typography === */
+h1, h2, h3 {
+    font-family: var(--font-display) !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+}
+
+h1 { font-size: 2rem !important; letter-spacing: -0.02em !important; }
+h2 { font-size: 1.5rem !important; }
+h3 { font-size: 1.15rem !important; }
+
+p, li, span, label {
+    font-family: var(--font-body) !important;
+}
+
+code, pre {
+    font-family: var(--font-mono) !important;
+}
+
+/* === Metrics (st.metric) === */
+[data-testid="stMetricValue"] {
+    font-family: var(--font-mono) !important;
+    font-size: 1.75rem !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stMetricLabel"] {
+    font-family: var(--font-body) !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    color: var(--text-muted) !important;
+}
+
+[data-testid="stMetricDelta"] {
+    font-family: var(--font-mono) !important;
+}
+
+/* === Strategy Cards === */
+.strategy-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-md);
+    border-left: 3px solid var(--accent);
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: cardReveal 0.35s ease forwards;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.strategy-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.12);
+    border-color: var(--accent);
+    background: var(--bg-card-hover);
+}
+
+.strategy-card:nth-child(1) { animation-delay: 0.04s; }
+.strategy-card:nth-child(2) { animation-delay: 0.08s; }
+.strategy-card:nth-child(3) { animation-delay: 0.12s; }
+.strategy-card:nth-child(4) { animation-delay: 0.16s; }
+.strategy-card:nth-child(5) { animation-delay: 0.20s; }
+.strategy-card:nth-child(6) { animation-delay: 0.24s; }
+.strategy-card:nth-child(7) { animation-delay: 0.28s; }
+.strategy-card:nth-child(8) { animation-delay: 0.32s; }
+.strategy-card:nth-child(9) { animation-delay: 0.36s; }
+
+@keyframes cardReveal {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.card-description {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.card-metric {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.metric-positive { color: var(--profit); }
+.metric-negative { color: var(--loss); }
+
+.card-badges {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+    margin-top: var(--space-sm);
+}
+
+.badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.badge-python { color: #3B82F6; border-color: #3B82F640; }
+.badge-cpp { color: #F59E0B; border-color: #F59E0B40; }
+
+/* === Metric Panels === */
+.metric-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--space-md) var(--space-lg);
+    text-align: center;
+}
+
+.metric-value {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.metric-label {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-top: var(--space-xs);
+}
+
+/* === Category Headers === */
+.category-header {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.category-count {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.04);
+    padding: 2px 8px;
+    border-radius: 3px;
+}
+
+/* === Hero Section === */
+.hero-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+/* === Buttons === */
+.stButton button {
+    font-family: var(--font-body) !important;
+    font-weight: 500 !important;
+    border-radius: var(--border-radius) !important;
+    transition: all 0.15s ease !important;
+}
+
+.stButton button:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.2) !important;
+}
+
+/* === Inputs / Sliders === */
+.stSlider label, .stSelectbox label, .stNumberInput label {
+    font-family: var(--font-body) !important;
+    font-size: 0.85rem !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-testid="stSlider"] > div > div > div {
+    font-family: var(--font-mono) !important;
+}
+
+/* === Tabs === */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0 !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+    font-family: var(--font-body) !important;
+    font-weight: 500 !important;
+    padding: var(--space-sm) var(--space-lg) !important;
+}
+
+/* === Expander === */
+.streamlit-expanderHeader {
+    font-family: var(--font-display) !important;
+    font-weight: 500 !important;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .hero-title { font-size: 1.75rem !important; }
+    .metric-value { font-size: 1.25rem; }
+    .strategy-card { padding: var(--space-md); }
+    .card-metric { font-size: 1.1rem; }
+}
+
+/* === Tag pills === */
+.tag-pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(var(--accent-rgb), 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(var(--accent-rgb), 0.2);
+    margin: 2px;
+}
+
+/* === Stats bar === */
+.stats-bar {
+    display: flex;
+    gap: var(--space-xl);
+    padding: var(--space-lg) 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--space-xl);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.stat-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}

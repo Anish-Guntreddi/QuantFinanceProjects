@@ -1,0 +1,74 @@
+project:
+  id: intraday_09_portfolio_construction
+  category: research_intraday_strategies
+  dir_name: 09_portfolio_construction_risk
+  display_name: Portfolio Construction & Risk Management
+  description: Multi-method covariance estimation, optimization (MV, Risk Parity, Kelly, Black-Litterman), and comprehensive
+    risk analytics
+template: intraday
+subcategory: Portfolio Construction
+asset_class: Multi-asset
+frequency: Daily
+languages:
+- Python
+simulation_tier: live
+synthetic_sharpe: 0.9
+synthetic_vol: 0.1
+source:
+  sys_path_append: src
+  imports:
+  - from portfolio_construction_risk_strategy import PortfolioConstructionRiskStrategy, StrategyConfig
+  key_class: PortfolioConstructionRiskStrategy
+data:
+  source_type: yfinance
+  tickers:
+  - SPY
+  - AGG
+  - GLD
+  - EFA
+  - VNQ
+  start_date: '2020-01-01'
+  end_date: '2024-12-31'
+  benchmark: SPY
+params:
+  lookback_period:
+    default: 252
+    range:
+    - 60
+    - 504
+    type: int
+    label: Lookback Period
+  stop_loss:
+    default: 0.05
+    range:
+    - 0.01
+    - 0.1
+    type: float
+    label: Stop Loss
+  slippage:
+    default: 0.0001
+    range:
+    - 0.0
+    - 0.001
+    type: float
+    label: Slippage
+  commission:
+    default: 0.001
+    range:
+    - 0.0
+    - 0.005
+    type: float
+    label: Commission
+interactive_params:
+- name: lookback_period
+  label: Lookback Period
+  type: slider
+  min: 60
+  max: 504
+  default: 252
+  step: 21
+tags:
+- portfolio-construction
+- risk-parity
+- black-litterman
+- covariance-estimation

@@ -1,0 +1,70 @@
+project:
+  id: risk_01_portfolio_optimization
+  category: risk_engineering
+  dir_name: 01_portfolio_construction_risk
+  display_name: Portfolio Construction & Optimization
+  description: Multi-method covariance estimation (EWMA, Ledoit-Wolf, NCO) with advanced optimizers (MV, Kelly, Risk Parity,
+    Black-Litterman)
+template: risk
+subcategory: Portfolio Optimization
+asset_class: Multi-asset
+frequency: Daily
+languages:
+- Python
+simulation_tier: live
+synthetic_sharpe: 0.9
+synthetic_vol: 0.1
+source:
+  sys_path_append: .
+  imports:
+  - from main import PortfolioManager
+  key_class: PortfolioManager
+data:
+  source_type: yfinance
+  tickers:
+  - SPY
+  - AGG
+  - GLD
+  - EFA
+  - VNQ
+  - TLT
+  - DBC
+  start_date: '2018-01-01'
+  end_date: '2024-12-31'
+  benchmark: SPY
+params:
+  max_weight:
+    default: 0.3
+    range:
+    - 0.1
+    - 1.0
+    type: float
+    label: Max Weight
+  risk_free_rate:
+    default: 0.04
+    range:
+    - 0.0
+    - 0.1
+    type: float
+    label: Risk-Free Rate
+interactive_params:
+- name: max_weight
+  label: Max Weight
+  type: slider
+  min: 0.1
+  max: 1.0
+  default: 0.3
+  step: 0.05
+- name: risk_free_rate
+  label: Risk-Free Rate
+  type: slider
+  min: 0.0
+  max: 0.1
+  default: 0.04
+  step: 0.005
+tags:
+- portfolio-optimization
+- mean-variance
+- risk-parity
+- black-litterman
+- covariance

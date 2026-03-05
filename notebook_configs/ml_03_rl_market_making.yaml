@@ -1,0 +1,57 @@
+project:
+  id: ml_03_rl_market_making
+  category: ai_ml_trading
+  dir_name: 03_rl_market_making
+  display_name: Deep RL Market Making
+  description: DQN, PPO, and SAC agents for limit order book market making with reward shaping and multi-agent training
+template: ml_trading
+subcategory: Reinforcement Learning
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+requires_gpu: true
+simulation_tier: precomputed
+synthetic_sharpe: 1.8
+synthetic_vol: 0.1
+source:
+  sys_path_append: rl
+  imports:
+  - from env_lob import LimitOrderBook, MarketConfig
+  key_class: LimitOrderBook
+  additional_sys_paths:
+  - agents
+  - training
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  learning_rate:
+    default: 0.0003
+    range:
+    - 1.0e-05
+    - 0.01
+    type: float
+    label: Learning Rate
+  inventory_penalty:
+    default: 0.01
+    range:
+    - 0.001
+    - 0.1
+    type: float
+    label: Inventory Penalty
+interactive_params:
+- name: inventory_penalty
+  label: Inventory Penalty
+  type: slider
+  min: 0.001
+  max: 0.1
+  default: 0.01
+  step: 0.001
+tags:
+- reinforcement-learning
+- dqn
+- ppo
+- sac
+- market-making

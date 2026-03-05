@@ -1,0 +1,76 @@
+project:
+  id: ml_02_lstm_transformer
+  category: ai_ml_trading
+  dir_name: 02_lstm_transformer_forecasting
+  display_name: LSTM & Transformer Forecasting
+  description: Advanced time series forecasting with attention-based LSTM and Transformer, embargoed CV, and calibrated probability
+    outputs
+template: ml_trading
+subcategory: Forecasting
+asset_class: Equities
+frequency: Daily
+languages:
+- Python
+requires_gpu: true
+simulation_tier: cached_sweep
+synthetic_sharpe: 1.1
+synthetic_vol: 0.14
+source:
+  sys_path_append: models
+  imports:
+  - from lstm_model import AdvancedLSTM
+  key_class: AdvancedLSTM
+  additional_sys_paths:
+  - cv
+  - calibration
+  - sizing
+data:
+  source_type: yfinance
+  tickers:
+  - SPY
+  start_date: '2018-01-01'
+  end_date: '2024-12-31'
+  benchmark: SPY
+params:
+  hidden_dim:
+    default: 256
+    range:
+    - 64
+    - 512
+    type: int
+    label: Hidden Dim
+  num_layers:
+    default: 3
+    range:
+    - 1
+    - 5
+    type: int
+    label: LSTM Layers
+  lookback:
+    default: 60
+    range:
+    - 20
+    - 120
+    type: int
+    label: Lookback Window
+interactive_params:
+- name: lookback
+  label: Lookback Window
+  type: slider
+  min: 20
+  max: 120
+  default: 60
+  step: 10
+- name: hidden_dim
+  label: Hidden Dimension
+  type: slider
+  min: 64
+  max: 512
+  default: 256
+  step: 64
+tags:
+- lstm
+- transformer
+- attention
+- embargo-cv
+- calibration

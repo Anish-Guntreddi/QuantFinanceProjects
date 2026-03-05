@@ -1,0 +1,54 @@
+project:
+  id: hft_03_queue_position
+  category: HFT_strategy_projects
+  dir_name: 03_queue_position_modeling
+  display_name: Queue Position Modeling
+  description: Poisson-based fill probability estimator with latency-aware requoting policy engine
+template: hft
+subcategory: Queue Modeling
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+- C++
+has_cpp: true
+simulation_tier: precomputed
+synthetic_sharpe: 2.0
+synthetic_vol: 0.07
+source:
+  sys_path_append: queue
+  imports:
+  - from queue_model import QueuePositionModel
+  key_class: QueuePositionModel
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  arrival_rate:
+    default: 50.0
+    range:
+    - 10.0
+    - 200.0
+    type: float
+    label: Arrival Rate
+  cancel_latency_us:
+    default: 50
+    range:
+    - 10
+    - 200
+    type: int
+    label: Cancel Latency (us)
+interactive_params:
+- name: arrival_rate
+  label: Arrival Rate
+  type: slider
+  min: 10.0
+  max: 200.0
+  default: 50.0
+  step: 10.0
+tags:
+- queue-position
+- fill-probability
+- poisson
+- latency

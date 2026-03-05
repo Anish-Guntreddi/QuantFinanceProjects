@@ -1,0 +1,54 @@
+project:
+  id: hft_04_cross_exchange_arb
+  category: HFT_strategy_projects
+  dir_name: 04_cross_exchange_arbitrage
+  display_name: Cross-Exchange Arbitrage
+  description: Multi-venue latency-aware arbitrage with fee/rebate optimization and synchronized parallel execution
+template: hft
+subcategory: Arbitrage
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+- C++
+has_cpp: true
+simulation_tier: precomputed
+synthetic_sharpe: 2.8
+synthetic_vol: 0.05
+source:
+  sys_path_append: arbitrage
+  imports:
+  - from strategy import CrossExchangeArbitrage
+  key_class: CrossExchangeArbitrage
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  exchange_latency_ms:
+    default: 5
+    range:
+    - 1
+    - 50
+    type: int
+    label: Exchange Latency (ms)
+  fee_bps:
+    default: 3
+    range:
+    - 1
+    - 10
+    type: int
+    label: Fee (bps)
+interactive_params:
+- name: exchange_latency_ms
+  label: Exchange Latency (ms)
+  type: slider
+  min: 1
+  max: 50
+  default: 5
+  step: 1
+tags:
+- arbitrage
+- multi-venue
+- latency
+- fee-optimization

@@ -1,0 +1,54 @@
+project:
+  id: engines_01_lob_simulator
+  category: market_microstructure_engines
+  dir_name: 01_limit_order_book_simulator
+  display_name: Limit Order Book Simulator
+  description: High-performance LOB with price-time priority, Hawkes process arrivals, and multiple order types (limit, market,
+    stop, iceberg)
+template: microstructure
+subcategory: Order Book
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+simulation_tier: precomputed
+synthetic_sharpe: 1.8
+synthetic_vol: 0.1
+source:
+  sys_path_append: lob
+  imports:
+  - from order_book import OrderBook
+  - from order import Order, Side, OrderType
+  key_class: OrderBook
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  tick_size:
+    default: 0.01
+    range:
+    - 0.001
+    - 0.1
+    type: float
+    label: Tick Size
+  hawkes_mu:
+    default: 50.0
+    range:
+    - 10.0
+    - 200.0
+    type: float
+    label: Base Intensity
+interactive_params:
+- name: hawkes_mu
+  label: Base Intensity (events/sec)
+  type: slider
+  min: 10.0
+  max: 200.0
+  default: 50.0
+  step: 10.0
+tags:
+- limit-order-book
+- hawkes-process
+- price-time-priority
+- simulation

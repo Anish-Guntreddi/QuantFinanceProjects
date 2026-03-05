@@ -1,0 +1,56 @@
+project:
+  id: research_01_factor_toolkit
+  category: core_research_backtesting
+  dir_name: 01_factor_research_toolkit
+  display_name: Cross-Sectional Factor Research Toolkit
+  description: Full factor research pipeline with PIT data, IC analysis, factor neutralization, turnover, and capacity estimation
+template: backtesting
+subcategory: Factor Research
+asset_class: Equities
+frequency: Daily
+languages:
+- Python
+simulation_tier: live
+synthetic_sharpe: 1.2
+synthetic_vol: 0.12
+source:
+  sys_path_append: src
+  imports:
+  - from factors.base import BaseFactor
+  - from pipeline.engine import FactorPipeline
+  key_class: FactorPipeline
+data:
+  source_type: yfinance
+  tickers:
+  - SPY
+  start_date: '2020-01-01'
+  end_date: '2024-12-31'
+  benchmark: SPY
+params:
+  lookback:
+    default: 252
+    range:
+    - 60
+    - 504
+    type: int
+    label: Lookback (days)
+  rebalance_freq:
+    default: 21
+    range:
+    - 5
+    - 63
+    type: int
+    label: Rebalance Frequency (days)
+interactive_params:
+- name: lookback
+  label: Lookback (days)
+  type: slider
+  min: 60
+  max: 504
+  default: 252
+  step: 21
+tags:
+- factor-research
+- cross-sectional
+- ic-analysis
+- pit-data

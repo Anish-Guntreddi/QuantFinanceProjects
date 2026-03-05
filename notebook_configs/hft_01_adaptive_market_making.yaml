@@ -1,0 +1,68 @@
+project:
+  id: hft_01_adaptive_market_making
+  category: HFT_strategy_projects
+  dir_name: 01_adaptive_market_making
+  display_name: Adaptive Market Making with Inventory Management
+  description: Avellaneda-Stoikov market maker with adaptive spread and inventory skew using RL-based quote optimization
+template: hft
+subcategory: Market Making
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+- C++
+has_cpp: true
+simulation_tier: precomputed
+synthetic_sharpe: 2.5
+synthetic_vol: 0.08
+source:
+  sys_path_append: mm_engine
+  imports:
+  - from market_maker import AdaptiveMarketMaker, MarketState, InventoryState, Quote
+  key_class: AdaptiveMarketMaker
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  risk_aversion:
+    default: 0.1
+    range:
+    - 0.01
+    - 1.0
+    type: float
+    label: Risk Aversion
+  max_position:
+    default: 1000
+    range:
+    - 100
+    - 5000
+    type: int
+    label: Max Position
+  base_spread:
+    default: 0.002
+    range:
+    - 0.0005
+    - 0.01
+    type: float
+    label: Base Spread
+interactive_params:
+- name: risk_aversion
+  label: Risk Aversion (gamma)
+  type: slider
+  min: 0.01
+  max: 1.0
+  default: 0.1
+  step: 0.01
+- name: max_position
+  label: Max Position
+  type: slider
+  min: 100
+  max: 5000
+  default: 1000
+  step: 100
+tags:
+- market-making
+- inventory-management
+- avellaneda-stoikov
+- rl

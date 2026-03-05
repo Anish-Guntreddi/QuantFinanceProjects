@@ -1,0 +1,27 @@
+project:
+  id: risk_03_timeseries_storage
+  category: risk_engineering
+  dir_name: 03_timeseries_storage_query
+  display_name: Time Series Storage & Query Engine
+  description: High-performance columnar storage with compression (LZ4/zstd), time-based indexing, and FastAPI REST interface
+template: risk
+subcategory: Infrastructure
+asset_class: Multi-asset
+frequency: Tick-level
+languages:
+- Python
+simulation_tier: precomputed
+synthetic_sharpe: 0.0
+synthetic_vol: 0.0
+source: {}
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params: {}
+interactive_params: []
+tags:
+- timeseries-database
+- columnar-storage
+- compression
+- fastapi

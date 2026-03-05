@@ -1,0 +1,58 @@
+project:
+  id: research_04_vol_surface
+  category: core_research_backtesting
+  dir_name: 04_options_volatility_surface
+  display_name: Options Volatility Surface & Greeks
+  description: Volatility surface modeling with SVI/SABR calibration, arbitrage-free constraints, and analytical/numerical
+    Greeks
+template: backtesting
+subcategory: Volatility Surface
+asset_class: Options
+frequency: Daily
+languages:
+- Python
+simulation_tier: cached_sweep
+synthetic_sharpe: 0.8
+synthetic_vol: 0.18
+source:
+  sys_path_append: vol
+  imports:
+  - from models.black_scholes import BlackScholesModel
+  - from models.svi import SVIModel
+  key_class: SVIModel
+data:
+  source_type: yfinance
+  tickers:
+  - SPY
+  start_date: '2022-01-01'
+  end_date: '2024-12-31'
+  benchmark: SPY
+params:
+  base_vol:
+    default: 0.2
+    range:
+    - 0.05
+    - 0.5
+    type: float
+    label: Base Vol
+  skew_factor:
+    default: -0.1
+    range:
+    - -0.5
+    - 0.0
+    type: float
+    label: Skew Factor
+interactive_params:
+- name: base_vol
+  label: Base Volatility
+  type: slider
+  min: 0.05
+  max: 0.5
+  default: 0.2
+  step: 0.01
+tags:
+- volatility-surface
+- svi
+- sabr
+- greeks
+- options

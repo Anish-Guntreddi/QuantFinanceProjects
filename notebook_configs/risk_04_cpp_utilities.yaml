@@ -1,0 +1,31 @@
+project:
+  id: risk_04_cpp_utilities
+  category: risk_engineering
+  dir_name: 04_latency_aware_cpp_utilities
+  display_name: Latency-Aware C++ Utilities
+  description: 'Ultra-low latency C++20 utilities: SPSC queue (<20ns), pool allocator (<10ns), RDTSC timer, kernel bypass
+    sockets'
+template: risk
+subcategory: Infrastructure
+asset_class: Multi-asset
+frequency: Tick-level
+languages:
+- Python
+- C++
+has_cpp: true
+simulation_tier: precomputed
+synthetic_sharpe: 0.0
+synthetic_vol: 0.0
+source: {}
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params: {}
+interactive_params: []
+tags:
+- cpp
+- low-latency
+- spsc-queue
+- pool-allocator
+- kernel-bypass

@@ -1,0 +1,44 @@
+project:
+  id: exec_01_lob_simulator
+  category: market_microstructure_execution
+  dir_name: 01_limit_order_book_simulator
+  display_name: Limit Order Book Simulator (Execution)
+  description: LOB simulator focused on execution quality analysis with realistic fill modeling and market dynamics
+template: execution
+subcategory: Order Book
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+simulation_tier: precomputed
+synthetic_sharpe: 1.5
+synthetic_vol: 0.1
+source:
+  sys_path_append: python/lob
+  imports:
+  - from simulator import LOBSimulator
+  key_class: LOBSimulator
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  num_events:
+    default: 10000
+    range:
+    - 1000
+    - 100000
+    type: int
+    label: Number of Events
+interactive_params:
+- name: num_events
+  label: Number of Events
+  type: slider
+  min: 1000
+  max: 100000
+  default: 10000
+  step: 1000
+tags:
+- order-book
+- simulation
+- execution-quality

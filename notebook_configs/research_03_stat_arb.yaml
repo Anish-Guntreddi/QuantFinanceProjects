@@ -1,0 +1,63 @@
+project:
+  id: research_03_stat_arb
+  category: core_research_backtesting
+  dir_name: 03_statistical_arbitrage
+  display_name: Statistical Arbitrage Framework
+  description: Cointegration-based pairs/cluster trading with Engle-Granger, Johansen tests, Kalman filter hedge ratios, and
+    OU spread modeling
+template: backtesting
+subcategory: Statistical Arbitrage
+asset_class: Equities
+frequency: Daily
+languages:
+- Python
+simulation_tier: live
+synthetic_sharpe: 1.4
+synthetic_vol: 0.1
+source:
+  sys_path_append: signals
+  imports:
+  - from cointegration.engle_granger import EngleGrangerStatArb
+  key_class: EngleGrangerStatArb
+data:
+  source_type: yfinance
+  tickers:
+  - SPY
+  start_date: '2020-01-01'
+  end_date: '2024-12-31'
+  benchmark: SPY
+params:
+  entry_zscore:
+    default: 2.0
+    range:
+    - 1.0
+    - 3.0
+    type: float
+    label: Entry Z-Score
+  exit_zscore:
+    default: 0.5
+    range:
+    - 0.0
+    - 1.5
+    type: float
+    label: Exit Z-Score
+interactive_params:
+- name: entry_zscore
+  label: Entry Z-Score
+  type: slider
+  min: 1.0
+  max: 3.0
+  default: 2.0
+  step: 0.1
+- name: exit_zscore
+  label: Exit Z-Score
+  type: slider
+  min: 0.0
+  max: 1.5
+  default: 0.5
+  step: 0.1
+tags:
+- statistical-arbitrage
+- cointegration
+- pairs-trading
+- kalman-filter

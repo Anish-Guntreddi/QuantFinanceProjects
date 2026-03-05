@@ -1,0 +1,47 @@
+project:
+  id: hft_08_smart_order_router
+  category: HFT_strategy_projects
+  dir_name: 08_smart_order_router
+  display_name: Smart Order Router
+  description: Cost-aware multi-venue routing with rebate optimization, dark pool allocation, and fill probability estimation
+template: hft
+subcategory: Execution
+asset_class: Equities
+frequency: Tick-level
+languages:
+- Python
+- C++
+has_cpp: true
+simulation_tier: precomputed
+synthetic_sharpe: 1.5
+synthetic_vol: 0.05
+source:
+  sys_path_append: router
+  imports:
+  - from smart_router import SmartOrderRouter
+  key_class: SmartOrderRouter
+data:
+  source_type: synthetic
+  start_date: '2024-01-01'
+  end_date: '2024-12-31'
+params:
+  venue_count:
+    default: 3
+    range:
+    - 2
+    - 5
+    type: int
+    label: Venue Count
+interactive_params:
+- name: venue_count
+  label: Venue Count
+  type: slider
+  min: 2
+  max: 5
+  default: 3
+  step: 1
+tags:
+- smart-order-routing
+- multi-venue
+- cost-optimization
+- dark-pools
