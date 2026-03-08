@@ -1,3 +1,7 @@
+# Claude specific
+CLAUDE.md
+.claude/
+
 # Virtual Environment
 quant/
 venv/
