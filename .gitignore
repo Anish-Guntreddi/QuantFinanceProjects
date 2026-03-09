@@ -86,6 +86,8 @@ desktop.ini
 
 # Data files and databases
 data/
+!portfolio_app/data/
+!portfolio_app/data/**
 *.csv
 *.parquet
 *.h5
@@ -122,6 +124,8 @@ saved_models/
 logs/
 outputs/
 results/
+!portfolio_app/data/results/
+!portfolio_app/data/results/**
 reports/*.html
 reports/*.pdf
 runs/

@@ -1,0 +1,48 @@
+{
+  "project_id": "hft_03_queue_position",
+  "title": "Queue Position Modeling",
+  "short_description": "Poisson-based fill probability estimator with latency-aware requoting policy engine",
+  "long_description": "Poisson-based fill probability estimator with latency-aware requoting policy engine",
+  "category": "HFT_strategy_projects",
+  "subcategory": "Queue Modeling",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "queue-position",
+    "fill-probability",
+    "poisson",
+    "latency"
+  ],
+  "interactive_params": [
+    {
+      "name": "arrival_rate",
+      "label": "Arrival Rate",
+      "type": "slider",
+      "min": 10.0,
+      "max": 200.0,
+      "default": 50.0,
+      "step": 10.0
+    }
+  ],
+  "tags": [
+    "queue-position",
+    "fill-probability",
+    "poisson",
+    "latency"
+  ],
+  "github_path": "HFT_strategy_projects/03_queue_position_modeling",
+  "notebook_path": "HFT_strategy_projects/03_queue_position_modeling/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": -0.0456
+  }
+}

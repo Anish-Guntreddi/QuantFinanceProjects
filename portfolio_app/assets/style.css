@@ -1,0 +1,523 @@
+/* ==========================================================================
+   Signal Lab — Quantitative Research Portfolio Theme
+   ========================================================================== */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:ital,wght@0,300..700;1,300..700&display=swap');
+
+/* ---------- Design Tokens ---------- */
+:root {
+    /* Background layers */
+    --bg-primary: #0a0e17;
+    --bg-secondary: #111827;
+    --bg-tertiary: #1a2234;
+    --bg-card: #111827;
+    --bg-card-hover: #1a2234;
+
+    /* Text */
+    --text-primary: #e5e7eb;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --text-heading: #f9fafb;
+
+    /* Accent */
+    --accent: #f59e0b;
+    --accent-hover: #d97706;
+    --accent-muted: rgba(245, 158, 11, 0.15);
+    --accent-rgb: 245, 158, 11;
+
+    /* Semantic — finance */
+    --profit-green: #10b981;
+    --loss-red: #ef4444;
+    --neutral: #6b7280;
+
+    /* Borders */
+    --border: #1f2937;
+    --border-hover: #374151;
+
+    /* Category accents */
+    --cat-hft: #f59e0b;
+    --cat-ml: #3b82f6;
+    --cat-research: #8b5cf6;
+    --cat-engines: #06b6d4;
+    --cat-execution: #14b8a6;
+    --cat-intraday: #22c55e;
+    --cat-risk: #f43f5e;
+
+    /* Data viz palette (7 series, colorblind-safe on dark bg) */
+    --viz-1: #f59e0b;
+    --viz-2: #3b82f6;
+    --viz-3: #10b981;
+    --viz-4: #f43f5e;
+    --viz-5: #8b5cf6;
+    --viz-6: #06b6d4;
+    --viz-7: #ec4899;
+
+    /* Typography */
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+
+    /* Radius */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-base: 200ms ease;
+    --transition-slow: 350ms ease;
+}
+
+/* ---------- Global Overrides ---------- */
+.stApp {
+    font-family: var(--font-body) !important;
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.stApp > header {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-testid="stHeader"] {
+    background-color: transparent !important;
+}
+
+[data-testid="stSidebar"] {
+    background-color: var(--bg-secondary) !important;
+    border-right: 1px solid var(--border) !important;
+}
+
+[data-testid="stSidebarNav"] a {
+    font-family: var(--font-body) !important;
+    color: var(--text-secondary) !important;
+    transition: color var(--transition-fast);
+}
+
+[data-testid="stSidebarNav"] a:hover,
+[data-testid="stSidebarNav"] a[aria-selected="true"] {
+    color: var(--accent) !important;
+}
+
+/* ---------- Typography ---------- */
+h1, .stMarkdown h1 {
+    font-family: var(--font-display) !important;
+    color: var(--text-heading) !important;
+    font-weight: 400 !important;
+    letter-spacing: -0.01em;
+}
+
+h2, h3, .stMarkdown h2, .stMarkdown h3 {
+    font-family: var(--font-display) !important;
+    color: var(--text-heading) !important;
+    font-weight: 400 !important;
+}
+
+p, li, label, .stMarkdown p {
+    font-family: var(--font-body) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Scope span styling to markdown containers only — avoid overriding
+   Streamlit internal UI spans (headings, buttons, expanders). */
+[data-testid="stMarkdownContainer"] span {
+    font-family: var(--font-body) !important;
+}
+
+code, .stCode, pre {
+    font-family: var(--font-mono) !important;
+}
+
+/* ---------- Fix: ensure headings and expanders are never covered ---------- */
+/* Headings (st.title, st.subheader, etc.) must sit above raw HTML blocks */
+[data-testid="stHeading"] {
+    position: relative;
+    z-index: 2;
+}
+
+/* Expander headers must be clickable and visible */
+[data-testid="stExpander"] > details > summary {
+    position: relative;
+    z-index: 2;
+}
+
+/* ---------- Metrics ---------- */
+.metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    text-align: center;
+}
+
+.metric-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-xs);
+}
+
+.metric-value {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.metric-positive { color: var(--profit-green) !important; }
+.metric-negative { color: var(--loss-red) !important; }
+.metric-neutral  { color: var(--text-secondary) !important; }
+
+/* Streamlit built-in metric override */
+[data-testid="stMetric"] {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+}
+
+[data-testid="stMetric"] label {
+    font-family: var(--font-body) !important;
+    font-size: 0.75rem !important;
+    color: var(--text-muted) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    font-family: var(--font-mono) !important;
+    font-size: 1.5rem !important;
+    font-weight: 500 !important;
+}
+
+/* ---------- Strategy Cards ---------- */
+.strategy-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    border-left: 3px solid var(--accent);
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: cardReveal 0.35s ease forwards;
+    transition: transform var(--transition-base),
+                box-shadow var(--transition-base),
+                border-color var(--transition-base);
+}
+
+.strategy-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.12);
+    border-color: var(--accent);
+    background: var(--bg-card-hover);
+}
+
+/* Staggered reveal — first 12 cards */
+.strategy-card:nth-child(1)  { animation-delay: 0.04s; }
+.strategy-card:nth-child(2)  { animation-delay: 0.08s; }
+.strategy-card:nth-child(3)  { animation-delay: 0.12s; }
+.strategy-card:nth-child(4)  { animation-delay: 0.16s; }
+.strategy-card:nth-child(5)  { animation-delay: 0.20s; }
+.strategy-card:nth-child(6)  { animation-delay: 0.24s; }
+.strategy-card:nth-child(7)  { animation-delay: 0.28s; }
+.strategy-card:nth-child(8)  { animation-delay: 0.32s; }
+.strategy-card:nth-child(9)  { animation-delay: 0.36s; }
+.strategy-card:nth-child(10) { animation-delay: 0.40s; }
+.strategy-card:nth-child(11) { animation-delay: 0.44s; }
+.strategy-card:nth-child(12) { animation-delay: 0.48s; }
+
+@keyframes cardReveal {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--text-heading);
+    margin-bottom: var(--space-xs);
+}
+
+.card-description {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: var(--space-md);
+}
+
+.card-metric {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.card-metric-label {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+    margin-right: 4px;
+}
+
+.badge-python {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-cpp {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-tag {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+.badge-category {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ---------- Category Sections ---------- */
+.category-header {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--text-heading);
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border);
+}
+
+.category-count {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-left: var(--space-sm);
+}
+
+/* ---------- Hero Section ---------- */
+.hero {
+    padding: var(--space-2xl) 0 var(--space-xl) 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--space-2xl);
+}
+
+.hero-title {
+    font-family: var(--font-mono) !important;
+    font-size: 0.85rem !important;
+    color: var(--accent) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: var(--space-sm) !important;
+}
+
+.hero-name {
+    font-family: var(--font-display) !important;
+    font-size: 2.5rem !important;
+    color: var(--text-heading) !important;
+    margin-bottom: var(--space-xs) !important;
+    line-height: 1.15 !important;
+}
+
+.hero-role {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+/* ---------- Stats Bar ---------- */
+.stats-bar {
+    display: flex;
+    gap: var(--space-xl);
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--space-2xl);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.stat-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ---------- Buttons ---------- */
+.stButton button {
+    font-family: var(--font-body) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all var(--transition-fast) !important;
+    font-weight: 500 !important;
+}
+
+.stButton button[kind="primary"] {
+    background-color: var(--accent) !important;
+    color: var(--bg-primary) !important;
+    border: none !important;
+}
+
+.stButton button[kind="primary"]:hover {
+    background-color: var(--accent-hover) !important;
+}
+
+/* Link-style button */
+.link-btn {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--transition-fast);
+}
+
+.link-btn:hover {
+    border-bottom-color: var(--accent);
+}
+
+/* ---------- Slider / Input Overrides ---------- */
+.stSlider > div > div > div {
+    font-family: var(--font-mono) !important;
+}
+
+.stSlider [data-testid="stThumbValue"] {
+    font-family: var(--font-mono) !important;
+    font-size: 0.75rem !important;
+}
+
+.stSelectbox label, .stSlider label, .stNumberInput label {
+    font-family: var(--font-body) !important;
+    font-size: 0.85rem !important;
+    color: var(--text-secondary) !important;
+}
+
+/* ---------- Tabs ---------- */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.stTabs [data-baseweb="tab"] {
+    font-family: var(--font-body) !important;
+    font-size: 0.85rem !important;
+    color: var(--text-secondary) !important;
+    padding: var(--space-sm) var(--space-lg) !important;
+    border-bottom: 2px solid transparent !important;
+    transition: all var(--transition-fast);
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    color: var(--accent) !important;
+    border-bottom-color: var(--accent) !important;
+}
+
+/* ---------- Expander ---------- */
+.streamlit-expanderHeader {
+    font-family: var(--font-body) !important;
+    font-size: 0.9rem !important;
+    color: var(--text-secondary) !important;
+}
+
+/* ---------- Charts Container ---------- */
+.chart-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .hero-name { font-size: 1.75rem !important; }
+    .strategy-card { min-width: 100%; }
+    .metric-value { font-size: 1.25rem; }
+    .stats-bar { flex-wrap: wrap; gap: var(--space-md); }
+    .desktop-only { display: none; }
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-hover);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* ---------- Selection ---------- */
+::selection {
+    background: var(--accent-muted);
+    color: var(--text-heading);
+}
+
+/* ---------- Simulation tier badge ---------- */
+.tier-live {
+    color: var(--profit-green);
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.tier-cached {
+    color: var(--accent);
+    border-color: rgba(245, 158, 11, 0.3);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.tier-precomputed {
+    color: var(--text-muted);
+    border-color: var(--border);
+    background: var(--bg-tertiary);
+}

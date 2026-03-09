@@ -1,0 +1,47 @@
+{
+  "project_id": "engines_01_lob_simulator",
+  "title": "Limit Order Book Simulator",
+  "short_description": "High-performance LOB with price-time priority, Hawkes process arrivals, and multiple order types (limit, market, stop, iceberg)",
+  "long_description": "High-performance LOB with price-time priority, Hawkes process arrivals, and multiple order types (limit, market, stop, iceberg)",
+  "category": "market_microstructure_engines",
+  "subcategory": "Order Book",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "limit-order-book",
+    "hawkes-process",
+    "price-time-priority",
+    "simulation"
+  ],
+  "interactive_params": [
+    {
+      "name": "hawkes_mu",
+      "label": "Base Intensity (events/sec)",
+      "type": "slider",
+      "min": 10.0,
+      "max": 200.0,
+      "default": 50.0,
+      "step": 10.0
+    }
+  ],
+  "tags": [
+    "limit-order-book",
+    "hawkes-process",
+    "price-time-priority",
+    "simulation"
+  ],
+  "github_path": "market_microstructure_engines/01_limit_order_book_simulator",
+  "notebook_path": "market_microstructure_engines/01_limit_order_book_simulator/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 3.0211
+  }
+}

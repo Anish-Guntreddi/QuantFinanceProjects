@@ -1,0 +1,49 @@
+{
+  "project_id": "ml_03_rl_market_making",
+  "title": "Deep RL Market Making",
+  "short_description": "DQN, PPO, and SAC agents for limit order book market making with reward shaping and multi-agent training",
+  "long_description": "DQN, PPO, and SAC agents for limit order book market making with reward shaping and multi-agent training",
+  "category": "ai_ml_trading",
+  "subcategory": "Reinforcement Learning",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "reinforcement-learning",
+    "dqn",
+    "ppo",
+    "sac",
+    "market-making"
+  ],
+  "interactive_params": [
+    {
+      "name": "inventory_penalty",
+      "label": "Inventory Penalty",
+      "type": "slider",
+      "min": 0.001,
+      "max": 0.1,
+      "default": 0.01,
+      "step": 0.001
+    }
+  ],
+  "tags": [
+    "reinforcement-learning",
+    "dqn",
+    "ppo",
+    "sac",
+    "market-making"
+  ],
+  "github_path": "ai_ml_trading/03_rl_market_making",
+  "notebook_path": "ai_ml_trading/03_rl_market_making/notebooks/",
+  "requires_gpu": true,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.8244
+  }
+}

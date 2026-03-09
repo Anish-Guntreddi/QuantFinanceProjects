@@ -1,0 +1,49 @@
+{
+  "project_id": "intraday_05_options",
+  "title": "Options Strategy Suite",
+  "short_description": "Earnings straddles, covered calls, and IV-RV spread trading with Greeks-based PnL attribution",
+  "long_description": "Earnings straddles, covered calls, and IV-RV spread trading with Greeks-based PnL attribution",
+  "category": "research_intraday_strategies",
+  "subcategory": "Options",
+  "asset_class": "Options",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "options",
+    "straddle",
+    "covered-call",
+    "iv-rv",
+    "greeks"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "IV Lookback",
+      "type": "slider",
+      "min": 5,
+      "max": 100,
+      "default": 20,
+      "step": 5
+    }
+  ],
+  "tags": [
+    "options",
+    "straddle",
+    "covered-call",
+    "iv-rv",
+    "greeks"
+  ],
+  "github_path": "research_intraday_strategies/05_options_strategy",
+  "notebook_path": "research_intraday_strategies/05_options_strategy/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.9593
+  }
+}

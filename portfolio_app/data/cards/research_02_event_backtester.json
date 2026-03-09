@@ -1,0 +1,47 @@
+{
+  "project_id": "research_02_event_backtester",
+  "title": "Event-Driven Backtesting Engine",
+  "short_description": "High-performance backtesting with event queue, realistic costs, walk-forward validation, and vectorized acceleration",
+  "long_description": "High-performance backtesting with event queue, realistic costs, walk-forward validation, and vectorized acceleration",
+  "category": "core_research_backtesting",
+  "subcategory": "Backtesting Framework",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "event-driven",
+    "backtesting",
+    "walk-forward",
+    "vectorized"
+  ],
+  "interactive_params": [
+    {
+      "name": "commission_bps",
+      "label": "Commission (bps)",
+      "type": "slider",
+      "min": 1,
+      "max": 50,
+      "default": 10,
+      "step": 1
+    }
+  ],
+  "tags": [
+    "event-driven",
+    "backtesting",
+    "walk-forward",
+    "vectorized"
+  ],
+  "github_path": "core_research_backtesting/02_event_driven_backtester",
+  "notebook_path": "core_research_backtesting/02_event_driven_backtester/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": -0.374
+  }
+}

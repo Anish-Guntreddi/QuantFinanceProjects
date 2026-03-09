@@ -1,0 +1,50 @@
+{
+  "project_id": "intraday_06_execution_tca",
+  "title": "Execution & TCA Analysis",
+  "short_description": "VWAP/TWAP/POV execution with Almgren-Chriss and Propagator market impact models",
+  "long_description": "VWAP/TWAP/POV execution with Almgren-Chriss and Propagator market impact models",
+  "category": "research_intraday_strategies",
+  "subcategory": "Execution",
+  "asset_class": "Equities",
+  "frequency": "Minute",
+  "data_source": "yfinance",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "execution",
+    "tca",
+    "vwap",
+    "market-impact",
+    "almgren-chriss"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 5,
+      "max": 100,
+      "default": 20,
+      "step": 5
+    }
+  ],
+  "tags": [
+    "execution",
+    "tca",
+    "vwap",
+    "market-impact",
+    "almgren-chriss"
+  ],
+  "github_path": "research_intraday_strategies/06_execution_tca",
+  "notebook_path": "research_intraday_strategies/06_execution_tca/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.5171
+  }
+}

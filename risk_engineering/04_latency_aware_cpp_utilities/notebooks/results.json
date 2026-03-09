@@ -1,0 +1,13 @@
+{
+  "project_id": "risk_04_cpp_utilities",
+  "timestamp": "2026-03-09T02:50:49.570298",
+  "type": "infrastructure_benchmark",
+  "metrics": {
+    "throughput_benchmarks": {
+      "list": 0.012148200010415167,
+      "deque": 0.011839099985081702,
+      "numpy": 0.010185799968894571,
+      "dict": 0.015534899954218417
+    }
+  }
+}

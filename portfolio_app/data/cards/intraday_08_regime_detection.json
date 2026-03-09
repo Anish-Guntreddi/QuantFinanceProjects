@@ -1,0 +1,49 @@
+{
+  "project_id": "intraday_08_regime_detection",
+  "title": "Regime Detection & Allocation",
+  "short_description": "HMM and clustering-based regime detection with dynamic strategy allocation and Hurst exponent analysis",
+  "long_description": "HMM and clustering-based regime detection with dynamic strategy allocation and Hurst exponent analysis",
+  "category": "research_intraday_strategies",
+  "subcategory": "Regime Detection",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "regime-detection",
+    "hmm",
+    "clustering",
+    "hurst-exponent",
+    "dynamic-allocation"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 60,
+      "max": 504,
+      "default": 252,
+      "step": 21
+    }
+  ],
+  "tags": [
+    "regime-detection",
+    "hmm",
+    "clustering",
+    "hurst-exponent",
+    "dynamic-allocation"
+  ],
+  "github_path": "research_intraday_strategies/08_regime_detection_allocation",
+  "notebook_path": "research_intraday_strategies/08_regime_detection_allocation/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "cached_sweep",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": -0.0174
+  }
+}

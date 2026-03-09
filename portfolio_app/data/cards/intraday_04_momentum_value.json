@@ -1,0 +1,47 @@
+{
+  "project_id": "intraday_04_momentum_value",
+  "title": "Momentum-Value Long/Short",
+  "short_description": "Cross-sectional ranking combining momentum and value signals with market cap and sector neutralization",
+  "long_description": "Cross-sectional ranking combining momentum and value signals with market cap and sector neutralization",
+  "category": "research_intraday_strategies",
+  "subcategory": "Long-Short",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "momentum-value",
+    "long-short",
+    "cross-sectional",
+    "neutralization"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 20,
+      "max": 252,
+      "default": 60,
+      "step": 10
+    }
+  ],
+  "tags": [
+    "momentum-value",
+    "long-short",
+    "cross-sectional",
+    "neutralization"
+  ],
+  "github_path": "research_intraday_strategies/04_momentum_value_long_short",
+  "notebook_path": "research_intraday_strategies/04_momentum_value_long_short/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": -0.5961
+  }
+}

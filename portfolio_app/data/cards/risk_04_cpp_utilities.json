@@ -1,0 +1,40 @@
+{
+  "project_id": "risk_04_cpp_utilities",
+  "title": "Latency-Aware C++ Utilities",
+  "short_description": "Ultra-low latency C++20 utilities: SPSC queue (<20ns), pool allocator (<10ns), RDTSC timer, kernel bypass sockets",
+  "long_description": "Ultra-low latency C++20 utilities: SPSC queue (<20ns), pool allocator (<10ns), RDTSC timer, kernel bypass sockets",
+  "category": "risk_engineering",
+  "subcategory": "Infrastructure",
+  "asset_class": "Multi-asset",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "cpp",
+    "low-latency",
+    "spsc-queue",
+    "pool-allocator",
+    "kernel-bypass"
+  ],
+  "interactive_params": [],
+  "tags": [
+    "cpp",
+    "low-latency",
+    "spsc-queue",
+    "pool-allocator",
+    "kernel-bypass"
+  ],
+  "github_path": "risk_engineering/04_latency_aware_cpp_utilities",
+  "notebook_path": "risk_engineering/04_latency_aware_cpp_utilities/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.0408
+  }
+}

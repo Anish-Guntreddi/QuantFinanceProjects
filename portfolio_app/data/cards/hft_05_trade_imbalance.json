@@ -1,0 +1,48 @@
+{
+  "project_id": "hft_05_trade_imbalance",
+  "title": "Short-Horizon Trade Imbalance Predictor",
+  "short_description": "SIMD-optimized nowcast engine for sub-microsecond next-tick direction predictions using order flow features",
+  "long_description": "SIMD-optimized nowcast engine for sub-microsecond next-tick direction predictions using order flow features",
+  "category": "HFT_strategy_projects",
+  "subcategory": "Signal",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "trade-imbalance",
+    "nowcasting",
+    "simd",
+    "prediction"
+  ],
+  "interactive_params": [
+    {
+      "name": "threshold_bps",
+      "label": "Threshold (bps)",
+      "type": "slider",
+      "min": 0.1,
+      "max": 5.0,
+      "default": 1.0,
+      "step": 0.1
+    }
+  ],
+  "tags": [
+    "trade-imbalance",
+    "nowcasting",
+    "simd",
+    "prediction"
+  ],
+  "github_path": "HFT_strategy_projects/05_short_horizon_trade_imbalance",
+  "notebook_path": "HFT_strategy_projects/05_short_horizon_trade_imbalance/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.1494
+  }
+}

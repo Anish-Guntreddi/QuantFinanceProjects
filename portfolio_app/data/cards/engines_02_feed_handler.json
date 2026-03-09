@@ -1,0 +1,47 @@
+{
+  "project_id": "engines_02_feed_handler",
+  "title": "Feed Handler & Order Router",
+  "short_description": "Low-latency feed handler with lock-free queues, binary protocol decoding, FIX encoding, and latency tracking",
+  "long_description": "Low-latency feed handler with lock-free queues, binary protocol decoding, FIX encoding, and latency tracking",
+  "category": "market_microstructure_engines",
+  "subcategory": "Feed Handler",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "feed-handler",
+    "lock-free",
+    "fix-protocol",
+    "latency-tracking"
+  ],
+  "interactive_params": [
+    {
+      "name": "queue_size",
+      "label": "Queue Size",
+      "type": "slider",
+      "min": 1024,
+      "max": 262144,
+      "default": 65536,
+      "step": 1024
+    }
+  ],
+  "tags": [
+    "feed-handler",
+    "lock-free",
+    "fix-protocol",
+    "latency-tracking"
+  ],
+  "github_path": "market_microstructure_engines/02_feed_handler_order_router",
+  "notebook_path": "market_microstructure_engines/02_feed_handler_order_router/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 1.5411
+  }
+}

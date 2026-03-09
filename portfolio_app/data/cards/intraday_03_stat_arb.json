@@ -1,0 +1,47 @@
+{
+  "project_id": "intraday_03_stat_arb",
+  "title": "Intraday Statistical Arbitrage",
+  "short_description": "Cointegration-based intraday pairs trading with Engle-Granger and Johansen tests and dynamic hedge ratios",
+  "long_description": "Cointegration-based intraday pairs trading with Engle-Granger and Johansen tests and dynamic hedge ratios",
+  "category": "research_intraday_strategies",
+  "subcategory": "Statistical Arbitrage",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "statistical-arbitrage",
+    "pairs-trading",
+    "cointegration",
+    "intraday"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 20,
+      "max": 252,
+      "default": 60,
+      "step": 10
+    }
+  ],
+  "tags": [
+    "statistical-arbitrage",
+    "pairs-trading",
+    "cointegration",
+    "intraday"
+  ],
+  "github_path": "research_intraday_strategies/03_statistical_arbitrage",
+  "notebook_path": "research_intraday_strategies/03_statistical_arbitrage/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.9471
+  }
+}

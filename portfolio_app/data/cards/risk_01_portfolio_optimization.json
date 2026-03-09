@@ -1,0 +1,58 @@
+{
+  "project_id": "risk_01_portfolio_optimization",
+  "title": "Portfolio Construction & Optimization",
+  "short_description": "Multi-method covariance estimation (EWMA, Ledoit-Wolf, NCO) with advanced optimizers (MV, Kelly, Risk Parity, Black-Litterman)",
+  "long_description": "Multi-method covariance estimation (EWMA, Ledoit-Wolf, NCO) with advanced optimizers (MV, Kelly, Risk Parity, Black-Litterman)",
+  "category": "risk_engineering",
+  "subcategory": "Portfolio Optimization",
+  "asset_class": "Multi-asset",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "portfolio-optimization",
+    "mean-variance",
+    "risk-parity",
+    "black-litterman",
+    "covariance"
+  ],
+  "interactive_params": [
+    {
+      "name": "max_weight",
+      "label": "Max Weight",
+      "type": "slider",
+      "min": 0.1,
+      "max": 1.0,
+      "default": 0.3,
+      "step": 0.05
+    },
+    {
+      "name": "risk_free_rate",
+      "label": "Risk-Free Rate",
+      "type": "slider",
+      "min": 0.0,
+      "max": 0.1,
+      "default": 0.04,
+      "step": 0.005
+    }
+  ],
+  "tags": [
+    "portfolio-optimization",
+    "mean-variance",
+    "risk-parity",
+    "black-litterman",
+    "covariance"
+  ],
+  "github_path": "risk_engineering/01_portfolio_construction_risk",
+  "notebook_path": "risk_engineering/01_portfolio_construction_risk/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.8014
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "project_id": "ml_02_lstm_transformer",
+  "title": "LSTM & Transformer Forecasting",
+  "short_description": "Advanced time series forecasting with attention-based LSTM and Transformer, embargoed CV, and calibrated probability outputs",
+  "long_description": "Advanced time series forecasting with attention-based LSTM and Transformer, embargoed CV, and calibrated probability outputs",
+  "category": "ai_ml_trading",
+  "subcategory": "Forecasting",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "lstm",
+    "transformer",
+    "attention",
+    "embargo-cv",
+    "calibration"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback",
+      "label": "Lookback Window",
+      "type": "slider",
+      "min": 20,
+      "max": 120,
+      "default": 60,
+      "step": 10
+    },
+    {
+      "name": "hidden_dim",
+      "label": "Hidden Dimension",
+      "type": "slider",
+      "min": 64,
+      "max": 512,
+      "default": 256,
+      "step": 64
+    }
+  ],
+  "tags": [
+    "lstm",
+    "transformer",
+    "attention",
+    "embargo-cv",
+    "calibration"
+  ],
+  "github_path": "ai_ml_trading/02_lstm_transformer_forecasting",
+  "notebook_path": "ai_ml_trading/02_lstm_transformer_forecasting/notebooks/",
+  "requires_gpu": true,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "cached_sweep",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": -0.4256
+  }
+}

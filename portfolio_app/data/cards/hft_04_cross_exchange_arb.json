@@ -1,0 +1,48 @@
+{
+  "project_id": "hft_04_cross_exchange_arb",
+  "title": "Cross-Exchange Arbitrage",
+  "short_description": "Multi-venue latency-aware arbitrage with fee/rebate optimization and synchronized parallel execution",
+  "long_description": "Multi-venue latency-aware arbitrage with fee/rebate optimization and synchronized parallel execution",
+  "category": "HFT_strategy_projects",
+  "subcategory": "Arbitrage",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "arbitrage",
+    "multi-venue",
+    "latency",
+    "fee-optimization"
+  ],
+  "interactive_params": [
+    {
+      "name": "exchange_latency_ms",
+      "label": "Exchange Latency (ms)",
+      "type": "slider",
+      "min": 1,
+      "max": 50,
+      "default": 5,
+      "step": 1
+    }
+  ],
+  "tags": [
+    "arbitrage",
+    "multi-venue",
+    "latency",
+    "fee-optimization"
+  ],
+  "github_path": "HFT_strategy_projects/04_cross_exchange_arbitrage",
+  "notebook_path": "HFT_strategy_projects/04_cross_exchange_arbitrage/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.8408
+  }
+}

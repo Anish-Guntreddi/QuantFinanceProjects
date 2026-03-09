@@ -1,0 +1,47 @@
+{
+  "project_id": "intraday_09_portfolio_construction",
+  "title": "Portfolio Construction & Risk Management",
+  "short_description": "Multi-method covariance estimation, optimization (MV, Risk Parity, Kelly, Black-Litterman), and comprehensive risk analytics",
+  "long_description": "Multi-method covariance estimation, optimization (MV, Risk Parity, Kelly, Black-Litterman), and comprehensive risk analytics",
+  "category": "research_intraday_strategies",
+  "subcategory": "Portfolio Construction",
+  "asset_class": "Multi-asset",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "portfolio-construction",
+    "risk-parity",
+    "black-litterman",
+    "covariance-estimation"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 60,
+      "max": 504,
+      "default": 252,
+      "step": 21
+    }
+  ],
+  "tags": [
+    "portfolio-construction",
+    "risk-parity",
+    "black-litterman",
+    "covariance-estimation"
+  ],
+  "github_path": "research_intraday_strategies/09_portfolio_construction_risk",
+  "notebook_path": "research_intraday_strategies/09_portfolio_construction_risk/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 1.4415
+  }
+}

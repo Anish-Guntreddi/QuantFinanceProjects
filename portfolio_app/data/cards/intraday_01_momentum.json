@@ -1,0 +1,58 @@
+{
+  "project_id": "intraday_01_momentum",
+  "title": "Momentum & Trend Following",
+  "short_description": "EMA/SMA crossover, breakout detection, and multi-timeframe momentum with RSI and MACD confirmation",
+  "long_description": "EMA/SMA crossover, breakout detection, and multi-timeframe momentum with RSI and MACD confirmation",
+  "category": "research_intraday_strategies",
+  "subcategory": "Momentum",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "momentum",
+    "trend-following",
+    "sma-crossover",
+    "rsi",
+    "macd"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 5,
+      "max": 100,
+      "default": 20,
+      "step": 5
+    },
+    {
+      "name": "stop_loss",
+      "label": "Stop Loss",
+      "type": "slider",
+      "min": 0.005,
+      "max": 0.05,
+      "default": 0.02,
+      "step": 0.005
+    }
+  ],
+  "tags": [
+    "momentum",
+    "trend-following",
+    "sma-crossover",
+    "rsi",
+    "macd"
+  ],
+  "github_path": "research_intraday_strategies/01_momentum_trend_following",
+  "notebook_path": "research_intraday_strategies/01_momentum_trend_following/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 1.2582
+  }
+}

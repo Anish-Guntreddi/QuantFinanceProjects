@@ -1,0 +1,49 @@
+{
+  "project_id": "risk_02_reproducibility",
+  "title": "Research Reproducibility Template",
+  "short_description": "MLflow experiment tracking, DVC data versioning, Hydra config management, and statistical result validation",
+  "long_description": "MLflow experiment tracking, DVC data versioning, Hydra config management, and statistical result validation",
+  "category": "risk_engineering",
+  "subcategory": "Reproducibility",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "reproducibility",
+    "mlflow",
+    "dvc",
+    "hydra",
+    "experiment-tracking"
+  ],
+  "interactive_params": [
+    {
+      "name": "n_splits",
+      "label": "CV Splits",
+      "type": "slider",
+      "min": 3,
+      "max": 10,
+      "default": 5,
+      "step": 1
+    }
+  ],
+  "tags": [
+    "reproducibility",
+    "mlflow",
+    "dvc",
+    "hydra",
+    "experiment-tracking"
+  ],
+  "github_path": "risk_engineering/02_research_reproducibility_template",
+  "notebook_path": "risk_engineering/02_research_reproducibility_template/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.5663
+  }
+}

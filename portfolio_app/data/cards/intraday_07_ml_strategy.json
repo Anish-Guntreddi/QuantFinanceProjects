@@ -1,0 +1,49 @@
+{
+  "project_id": "intraday_07_ml_strategy",
+  "title": "Machine Learning Trading Strategy",
+  "short_description": "LSTM and Transformer forecasting with 50+ features, embargoed CV, probability calibration, and feature selection",
+  "long_description": "LSTM and Transformer forecasting with 50+ features, embargoed CV, probability calibration, and feature selection",
+  "category": "research_intraday_strategies",
+  "subcategory": "Machine Learning",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "machine-learning",
+    "lstm",
+    "transformer",
+    "feature-selection",
+    "calibration"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 20,
+      "max": 120,
+      "default": 60,
+      "step": 10
+    }
+  ],
+  "tags": [
+    "machine-learning",
+    "lstm",
+    "transformer",
+    "feature-selection",
+    "calibration"
+  ],
+  "github_path": "research_intraday_strategies/07_machine_learning_strategy",
+  "notebook_path": "research_intraday_strategies/07_machine_learning_strategy/notebooks/",
+  "requires_gpu": true,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "cached_sweep",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 1.9768
+  }
+}

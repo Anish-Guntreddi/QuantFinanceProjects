@@ -1,0 +1,45 @@
+{
+  "project_id": "exec_01_lob_simulator",
+  "title": "Limit Order Book Simulator (Execution)",
+  "short_description": "LOB simulator focused on execution quality analysis with realistic fill modeling and market dynamics",
+  "long_description": "LOB simulator focused on execution quality analysis with realistic fill modeling and market dynamics",
+  "category": "market_microstructure_execution",
+  "subcategory": "Order Book",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "order-book",
+    "simulation",
+    "execution-quality"
+  ],
+  "interactive_params": [
+    {
+      "name": "num_events",
+      "label": "Number of Events",
+      "type": "slider",
+      "min": 1000,
+      "max": 100000,
+      "default": 10000,
+      "step": 1000
+    }
+  ],
+  "tags": [
+    "order-book",
+    "simulation",
+    "execution-quality"
+  ],
+  "github_path": "market_microstructure_execution/01_limit_order_book_simulator",
+  "notebook_path": "market_microstructure_execution/01_limit_order_book_simulator/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 2.1899
+  }
+}

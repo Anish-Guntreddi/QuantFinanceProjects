@@ -1,0 +1,57 @@
+{
+  "project_id": "hft_01_adaptive_market_making",
+  "title": "Adaptive Market Making with Inventory Management",
+  "short_description": "Avellaneda-Stoikov market maker with adaptive spread and inventory skew using RL-based quote optimization",
+  "long_description": "Avellaneda-Stoikov market maker with adaptive spread and inventory skew using RL-based quote optimization",
+  "category": "HFT_strategy_projects",
+  "subcategory": "Market Making",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "market-making",
+    "inventory-management",
+    "avellaneda-stoikov",
+    "rl"
+  ],
+  "interactive_params": [
+    {
+      "name": "risk_aversion",
+      "label": "Risk Aversion (gamma)",
+      "type": "slider",
+      "min": 0.01,
+      "max": 1.0,
+      "default": 0.1,
+      "step": 0.01
+    },
+    {
+      "name": "max_position",
+      "label": "Max Position",
+      "type": "slider",
+      "min": 100,
+      "max": 5000,
+      "default": 1000,
+      "step": 100
+    }
+  ],
+  "tags": [
+    "market-making",
+    "inventory-management",
+    "avellaneda-stoikov",
+    "rl"
+  ],
+  "github_path": "HFT_strategy_projects/01_adaptive_market_making",
+  "notebook_path": "HFT_strategy_projects/01_adaptive_market_making/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.1717
+  }
+}

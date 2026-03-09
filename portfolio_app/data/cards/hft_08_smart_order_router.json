@@ -1,0 +1,48 @@
+{
+  "project_id": "hft_08_smart_order_router",
+  "title": "Smart Order Router",
+  "short_description": "Cost-aware multi-venue routing with rebate optimization, dark pool allocation, and fill probability estimation",
+  "long_description": "Cost-aware multi-venue routing with rebate optimization, dark pool allocation, and fill probability estimation",
+  "category": "HFT_strategy_projects",
+  "subcategory": "Execution",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "smart-order-routing",
+    "multi-venue",
+    "cost-optimization",
+    "dark-pools"
+  ],
+  "interactive_params": [
+    {
+      "name": "venue_count",
+      "label": "Venue Count",
+      "type": "slider",
+      "min": 2,
+      "max": 5,
+      "default": 3,
+      "step": 1
+    }
+  ],
+  "tags": [
+    "smart-order-routing",
+    "multi-venue",
+    "cost-optimization",
+    "dark-pools"
+  ],
+  "github_path": "HFT_strategy_projects/08_smart_order_router",
+  "notebook_path": "HFT_strategy_projects/08_smart_order_router/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.1211
+  }
+}

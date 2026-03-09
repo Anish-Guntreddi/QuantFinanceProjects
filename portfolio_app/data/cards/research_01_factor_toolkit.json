@@ -1,0 +1,47 @@
+{
+  "project_id": "research_01_factor_toolkit",
+  "title": "Cross-Sectional Factor Research Toolkit",
+  "short_description": "Full factor research pipeline with PIT data, IC analysis, factor neutralization, turnover, and capacity estimation",
+  "long_description": "Full factor research pipeline with PIT data, IC analysis, factor neutralization, turnover, and capacity estimation",
+  "category": "core_research_backtesting",
+  "subcategory": "Factor Research",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "factor-research",
+    "cross-sectional",
+    "ic-analysis",
+    "pit-data"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback",
+      "label": "Lookback (days)",
+      "type": "slider",
+      "min": 60,
+      "max": 504,
+      "default": 252,
+      "step": 21
+    }
+  ],
+  "tags": [
+    "factor-research",
+    "cross-sectional",
+    "ic-analysis",
+    "pit-data"
+  ],
+  "github_path": "core_research_backtesting/01_factor_research_toolkit",
+  "notebook_path": "core_research_backtesting/01_factor_research_toolkit/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.2667
+  }
+}

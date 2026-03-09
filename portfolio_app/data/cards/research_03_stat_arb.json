@@ -1,0 +1,56 @@
+{
+  "project_id": "research_03_stat_arb",
+  "title": "Statistical Arbitrage Framework",
+  "short_description": "Cointegration-based pairs/cluster trading with Engle-Granger, Johansen tests, Kalman filter hedge ratios, and OU spread modeling",
+  "long_description": "Cointegration-based pairs/cluster trading with Engle-Granger, Johansen tests, Kalman filter hedge ratios, and OU spread modeling",
+  "category": "core_research_backtesting",
+  "subcategory": "Statistical Arbitrage",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "statistical-arbitrage",
+    "cointegration",
+    "pairs-trading",
+    "kalman-filter"
+  ],
+  "interactive_params": [
+    {
+      "name": "entry_zscore",
+      "label": "Entry Z-Score",
+      "type": "slider",
+      "min": 1.0,
+      "max": 3.0,
+      "default": 2.0,
+      "step": 0.1
+    },
+    {
+      "name": "exit_zscore",
+      "label": "Exit Z-Score",
+      "type": "slider",
+      "min": 0.0,
+      "max": 1.5,
+      "default": 0.5,
+      "step": 0.1
+    }
+  ],
+  "tags": [
+    "statistical-arbitrage",
+    "cointegration",
+    "pairs-trading",
+    "kalman-filter"
+  ],
+  "github_path": "core_research_backtesting/03_statistical_arbitrage",
+  "notebook_path": "core_research_backtesting/03_statistical_arbitrage/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": -0.5832
+  }
+}

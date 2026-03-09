@@ -1,0 +1,47 @@
+{
+  "project_id": "exec_02_execution_algos",
+  "title": "Execution Algorithms (VWAP/TWAP/IS)",
+  "short_description": "Production-grade execution algorithms with POV, VWAP, TWAP, and Implementation Shortfall plus TCA framework",
+  "long_description": "Production-grade execution algorithms with POV, VWAP, TWAP, and Implementation Shortfall plus TCA framework",
+  "category": "market_microstructure_execution",
+  "subcategory": "Execution",
+  "asset_class": "Equities",
+  "frequency": "Minute",
+  "data_source": "synthetic",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "vwap",
+    "twap",
+    "implementation-shortfall",
+    "tca"
+  ],
+  "interactive_params": [
+    {
+      "name": "participation_rate",
+      "label": "Participation Rate",
+      "type": "slider",
+      "min": 0.01,
+      "max": 0.3,
+      "default": 0.1,
+      "step": 0.01
+    }
+  ],
+  "tags": [
+    "vwap",
+    "twap",
+    "implementation-shortfall",
+    "tca"
+  ],
+  "github_path": "market_microstructure_execution/02_execution_algorithms",
+  "notebook_path": "market_microstructure_execution/02_execution_algorithms/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.5305
+  }
+}

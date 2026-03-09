@@ -1,0 +1,56 @@
+{
+  "project_id": "ml_01_regime_detection",
+  "title": "Regime Detection & Dynamic Allocation",
+  "short_description": "Multi-model regime detection (HMM, Markov-switching, clustering) with meta-policy dynamic strategy allocation",
+  "long_description": "Multi-model regime detection (HMM, Markov-switching, clustering) with meta-policy dynamic strategy allocation",
+  "category": "ai_ml_trading",
+  "subcategory": "Regime",
+  "asset_class": "Multi-asset",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "regime-detection",
+    "hmm",
+    "markov-switching",
+    "dynamic-allocation"
+  ],
+  "interactive_params": [
+    {
+      "name": "num_regimes",
+      "label": "Number of Regimes",
+      "type": "slider",
+      "min": 2,
+      "max": 6,
+      "default": 4,
+      "step": 1
+    },
+    {
+      "name": "lookback_days",
+      "label": "Lookback (days)",
+      "type": "slider",
+      "min": 60,
+      "max": 504,
+      "default": 252,
+      "step": 21
+    }
+  ],
+  "tags": [
+    "regime-detection",
+    "hmm",
+    "markov-switching",
+    "dynamic-allocation"
+  ],
+  "github_path": "ai_ml_trading/01_regime_detection_allocation",
+  "notebook_path": "ai_ml_trading/01_regime_detection_allocation/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "cached_sweep",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.5381
+  }
+}

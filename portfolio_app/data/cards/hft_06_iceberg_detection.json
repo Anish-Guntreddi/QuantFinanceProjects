@@ -1,0 +1,46 @@
+{
+  "project_id": "hft_06_iceberg_detection",
+  "title": "Iceberg Order Detection",
+  "short_description": "Pattern recognition for hidden liquidity detection with refill-rate estimation and IOC probe execution",
+  "long_description": "Pattern recognition for hidden liquidity detection with refill-rate estimation and IOC probe execution",
+  "category": "HFT_strategy_projects",
+  "subcategory": "Signal",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "iceberg-detection",
+    "hidden-liquidity",
+    "pattern-recognition"
+  ],
+  "interactive_params": [
+    {
+      "name": "confidence_threshold",
+      "label": "Confidence Threshold",
+      "type": "slider",
+      "min": 0.3,
+      "max": 0.95,
+      "default": 0.7,
+      "step": 0.05
+    }
+  ],
+  "tags": [
+    "iceberg-detection",
+    "hidden-liquidity",
+    "pattern-recognition"
+  ],
+  "github_path": "HFT_strategy_projects/06_iceberg_detection",
+  "notebook_path": "HFT_strategy_projects/06_iceberg_detection/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.1356
+  }
+}

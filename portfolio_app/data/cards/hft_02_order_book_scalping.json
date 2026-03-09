@@ -1,0 +1,48 @@
+{
+  "project_id": "hft_02_order_book_scalping",
+  "title": "Order Book Imbalance Scalper",
+  "short_description": "Micro-alpha HFT strategy using order book imbalance signals with SIMD-optimized feature computation",
+  "long_description": "Micro-alpha HFT strategy using order book imbalance signals with SIMD-optimized feature computation",
+  "category": "HFT_strategy_projects",
+  "subcategory": "Scalping",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "scalping",
+    "order-book",
+    "imbalance",
+    "simd"
+  ],
+  "interactive_params": [
+    {
+      "name": "signal_threshold",
+      "label": "Signal Threshold",
+      "type": "slider",
+      "min": 0.1,
+      "max": 2.0,
+      "default": 0.5,
+      "step": 0.1
+    }
+  ],
+  "tags": [
+    "scalping",
+    "order-book",
+    "imbalance",
+    "simd"
+  ],
+  "github_path": "HFT_strategy_projects/02_order_book_imbalance_scalper",
+  "notebook_path": "HFT_strategy_projects/02_order_book_imbalance_scalper/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": -0.0374
+  }
+}

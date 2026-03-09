@@ -1,0 +1,50 @@
+{
+  "project_id": "hft_09_rl_market_maker",
+  "title": "RL-Based Market Maker",
+  "short_description": "Deep reinforcement learning market maker with PPO/DQN agents in a pybind11-wrapped C++ LOB environment",
+  "long_description": "Deep reinforcement learning market maker with PPO/DQN agents in a pybind11-wrapped C++ LOB environment",
+  "category": "HFT_strategy_projects",
+  "subcategory": "Market Making",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "reinforcement-learning",
+    "market-making",
+    "ppo",
+    "dqn",
+    "pybind11"
+  ],
+  "interactive_params": [
+    {
+      "name": "num_regimes",
+      "label": "Number of Regimes",
+      "type": "slider",
+      "min": 2,
+      "max": 4,
+      "default": 3,
+      "step": 1
+    }
+  ],
+  "tags": [
+    "reinforcement-learning",
+    "market-making",
+    "ppo",
+    "dqn",
+    "pybind11"
+  ],
+  "github_path": "HFT_strategy_projects/09_rl_market_maker",
+  "notebook_path": "HFT_strategy_projects/09_rl_market_maker/notebooks/",
+  "requires_gpu": true,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.1119
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "project_id": "intraday_02_mean_reversion",
+  "title": "Mean Reversion Strategy",
+  "short_description": "Bollinger Bands, RSI mean reversion, and pairs trading with z-score signals and dynamic position sizing",
+  "long_description": "Bollinger Bands, RSI mean reversion, and pairs trading with z-score signals and dynamic position sizing",
+  "category": "research_intraday_strategies",
+  "subcategory": "Mean Reversion",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "mean-reversion",
+    "bollinger-bands",
+    "rsi",
+    "pairs-trading"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 5,
+      "max": 100,
+      "default": 20,
+      "step": 5
+    }
+  ],
+  "tags": [
+    "mean-reversion",
+    "bollinger-bands",
+    "rsi",
+    "pairs-trading"
+  ],
+  "github_path": "research_intraday_strategies/02_mean_reversion",
+  "notebook_path": "research_intraday_strategies/02_mean_reversion/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.3465
+  }
+}
