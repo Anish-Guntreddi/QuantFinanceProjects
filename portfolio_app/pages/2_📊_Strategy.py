@@ -48,6 +48,19 @@ with st.sidebar:
         format_func=lambda x: x.replace("_", " ").title(),
     )
 
+    st.markdown("---")
+    st.markdown(
+        '<p style="font-size: 0.78rem; color: #6b7280; text-transform: uppercase; '
+        'letter-spacing: 0.06em; font-weight: 600; margin-bottom: 0.5rem;">Explore This Strategy</p>',
+        unsafe_allow_html=True,
+    )
+    if st.button("🔬 Run in Research Lab", width="stretch", key="nav_lab"):
+        st.session_state["lab_project"] = selected_id
+        st.switch_page("pages/4_🔬_Research_Lab.py")
+    if st.button("🏗️ View Architecture", width="stretch", key="nav_arch"):
+        st.session_state["arch_project"] = selected_id
+        st.switch_page("pages/5_🏗️_Architecture.py")
+
 # ---------------------------------------------------------------------------
 # Load data
 # ---------------------------------------------------------------------------
