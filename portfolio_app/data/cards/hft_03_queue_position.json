@@ -44,5 +44,6 @@
   "headline_metric": {
     "name": "Sharpe",
     "value": -0.0456
-  }
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nModels the order queue at each price level as a Poisson process. Fill probability for a resting limit order at position `n` in a queue of total size `Q` is:\n\n```\nP(fill) = P(next_event = cancellation before fill) = \u03bb_trade / (\u03bb_trade + \u03bb_cancel)\n```\n\nconditioned on the price level being touched. The model estimates `\u03bb_trade` (arrival rate) and `\u03bb_cancel` (cancellation rate) from recent L2 data.\n\n## Signal Generation\n\n- **Queue position score**: Probability of fill within `T` seconds as a function of current queue rank.\n- **Requoting trigger**: If fill probability drops below 10% (due to queue growing behind new arrivals), cancel and resubmit at the front.\n- **Inventory-aware quoting**: When flat, quote both sides. When long, pull bids to stop accumulating; skew offers to reduce.\n\n## Latency-Aware Policy\n\nThe policy engine accounts for round-trip latency `\u03c4`: if the expected fill in the next `\u03c4` seconds is less than the expected adverse selection cost, cancel preemptively rather than waiting.\n\n## Metric Methodology\n\n- **Fill rate by queue position**: Empirical fill rate broken down by entry queue position quartile \u2014 validates the Poisson model fit.\n- **Queue alpha**: Excess return per unit of queue exposure vs. a passive baseline.\n- **Adverse selection**: Fraction of fills where mid-price moved against the position within 10 ticks of fill."
 }

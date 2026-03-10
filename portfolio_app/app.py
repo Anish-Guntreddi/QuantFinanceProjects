@@ -72,15 +72,100 @@ with st.sidebar:
 # ---------------------------------------------------------------------------
 # Hero
 # ---------------------------------------------------------------------------
-st.markdown(
+import streamlit.components.v1 as _components
+_components.html(
     """
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300..700&family=JetBrains+Mono:wght@300..700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: transparent; }
+        .hero {
+            padding: 1.5rem 0 1.25rem 0;
+            border-bottom: 1px solid #1f2937;
+            margin-bottom: 0;
+        }
+        .hero-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #f59e0b;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.4rem;
+        }
+        .hero-name {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 2.5rem;
+            color: #f9fafb;
+            line-height: 1.15;
+            margin-bottom: 0.35rem;
+        }
+        .hero-role {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.1rem;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        #typed-role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.05rem;
+            color: #f59e0b;
+            font-weight: 500;
+            border-right: 2px solid #f59e0b;
+            padding-right: 2px;
+            white-space: nowrap;
+        }
+        @keyframes blink { 0%,100%{border-color:#f59e0b} 50%{border-color:transparent} }
+    </style>
+
     <div class="hero">
-        <div class="hero-title">Quantitative Research Lab</div>
-        <div class="hero-name">Your Name</div>
-        <div class="hero-role">Quantitative Developer · Systems Engineer</div>
+        <div class="hero-title">Quant Finance Portfolio</div>
+        <div class="hero-name">Anish Guntreddi</div>
+        <div class="hero-role">
+            <span>Role:&nbsp;</span>
+            <span id="typed-role"></span>
+        </div>
     </div>
+
+    <script>
+    (function() {
+        const el           = document.getElementById("typed-role");
+        const words        = ["Quant Dev", "Quant Researcher"];
+        const TYPE_SPEED   = 80;
+        const DELETE_SPEED = 45;
+        const PAUSE_AFTER  = 1800;
+        const PAUSE_BEFORE = 400;
+
+        let wordIdx = 0, charIdx = 0, deleting = false;
+        el.style.animation = "blink 0.75s step-end infinite";
+
+        function tick() {
+            const word = words[wordIdx];
+            if (!deleting) {
+                el.textContent = word.slice(0, ++charIdx);
+                if (charIdx === word.length) {
+                    deleting = true;
+                    setTimeout(tick, PAUSE_AFTER);
+                } else {
+                    setTimeout(tick, TYPE_SPEED);
+                }
+            } else {
+                el.textContent = word.slice(0, --charIdx);
+                if (charIdx === 0) {
+                    deleting = false;
+                    wordIdx  = (wordIdx + 1) % words.length;
+                    setTimeout(tick, PAUSE_BEFORE);
+                } else {
+                    setTimeout(tick, DELETE_SPEED);
+                }
+            }
+        }
+        setTimeout(tick, 400);
+    })();
+    </script>
     """,
-    unsafe_allow_html=True,
+    height=140,
 )
 
 # ---------------------------------------------------------------------------

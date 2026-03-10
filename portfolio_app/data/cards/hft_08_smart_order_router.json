@@ -44,5 +44,6 @@
   "headline_metric": {
     "name": "Sharpe",
     "value": 0.1211
-  }
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nRoutes a parent order across N venues to minimize total execution cost (price impact + fees \u2212 rebates). The routing optimization solves:\n\n```\nmin \u03a3\u1d62 (price_impact(q\u1d62, ADV_i) + taker_fee_i \u00b7 q\u1d62 \u2212 maker_rebate_i \u00b7 q\u1d62)\nsubject to \u03a3\u1d62 q\u1d62 = Q_total, q\u1d62 \u2265 0\n```\n\nwhere `q\u1d62` is quantity sent to venue `i`, `ADV_i` is that venue's average daily volume, and price impact follows a square-root model.\n\n## Routing Decision Logic\n\n1. **Fill probability estimation**: For each venue, estimate P(fill within T ms) using recent historical fill rates stratified by order size.\n2. **Dark pool allocation**: A fixed fraction of order is sent to dark pools; posted as pegged-to-midpoint IOC orders.\n3. **Dynamic rebalancing**: Unfilled portions are re-allocated every 100ms based on updated venue conditions.\n4. **Rebate optimization**: For passive venues with maker rebates, the router may rest a portion of the order to earn the rebate.\n\n## Metric Methodology\n\n- **Implementation Shortfall (IS)**: `(arrival_price \u2212 execution_vwap) \u00d7 Q` \u2014 the total slippage cost vs. the price at signal time.\n- **VWAP slippage**: Execution VWAP vs. market VWAP over the execution horizon.\n- **Fill rate by venue**: Fraction of routed quantity that received a fill at each venue.\n- **Net cost (bps)**: IS in basis points after netting out rebates earned."
 }

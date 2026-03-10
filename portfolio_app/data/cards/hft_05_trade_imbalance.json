@@ -44,5 +44,6 @@
   "headline_metric": {
     "name": "Sharpe",
     "value": 0.1494
-  }
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nNowcasts next-tick mid-price direction using a real-time order flow feature vector. The nowcast model is a shallow ridge regression trained on 50,000 historical ticks with features updated each tick.\n\nFeature vector (12 components):\n- OBI at levels 1\u20135\n- Rolling 1s, 5s, 10s net trade imbalance\n- Order arrival rate ratio (bid vs ask side)\n- Mid-price velocity (\u0394mid over last 10 ticks)\n\n## Signal Generation\n\n```\nsignal = w^T \u00b7 x_t\n```\n\nIf `|signal| > threshold_bps` (in basis points of the current spread), submit an aggressive order in the predicted direction.\n\nSIMD AVX2 intrinsics compute the full dot product across all 12 features in under 50ns.\n\n## Prediction Calibration\n\nModel is recalibrated every 5 minutes using a sliding window of recent ticks. Calibration uses isotonic regression to convert raw scores to probabilities.\n\n## Metric Methodology\n\n- **Directional accuracy**: Fraction of predictions where next-tick mid moves in the predicted direction.\n- **Brier score**: Measures calibration quality of probability estimates.\n- **Expected PnL per prediction**: Signal magnitude \u00d7 realized mid-move, averaged across all predictions above threshold.\n- **Sharpe**: Computed on per-trade PnL with 0.1 bps taker cost deducted per trade."
 }

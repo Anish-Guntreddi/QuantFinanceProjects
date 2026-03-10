@@ -354,6 +354,10 @@ code, .stCode, pre {
     font-family: var(--font-body);
     font-size: 1.1rem;
     color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 /* ---------- Stats Bar ---------- */
@@ -520,4 +524,77 @@ code, .stCode, pre {
     color: var(--text-muted);
     border-color: var(--border);
     background: var(--bg-tertiary);
+}
+
+/* ---------- Technical docs panel (markdown inside About section) ---------- */
+[data-testid="stMarkdownContainer"] h2 {
+    font-family: var(--font-display);
+    font-size: 1.0rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--border);
+}
+
+[data-testid="stMarkdownContainer"] h3 {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #a78bfa;
+    margin-top: 1rem;
+    margin-bottom: 0.35rem;
+}
+
+[data-testid="stMarkdownContainer"] p {
+    font-size: 0.92rem;
+    color: #d1d5db;
+    line-height: 1.75;
+    margin-bottom: 0.75rem;
+}
+
+[data-testid="stMarkdownContainer"] code {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    background: #1a2236;
+    color: #93c5fd;
+    padding: 0.15em 0.45em;
+    border-radius: 4px;
+    border: 1px solid #1e3a5f;
+}
+
+[data-testid="stMarkdownContainer"] pre {
+    background: #0d1b2e !important;
+    border: 1px solid #1e3a5f;
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    margin: 0.75rem 0 1rem;
+}
+
+[data-testid="stMarkdownContainer"] pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 0.82rem;
+    color: #7dd3fc;
+}
+
+[data-testid="stMarkdownContainer"] ul,
+[data-testid="stMarkdownContainer"] ol {
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+[data-testid="stMarkdownContainer"] li {
+    font-size: 0.92rem;
+    color: #d1d5db;
+    line-height: 1.7;
+    margin-bottom: 0.2rem;
+}
+
+[data-testid="stMarkdownContainer"] strong {
+    color: #f3f4f6;
+    font-weight: 600;
 }

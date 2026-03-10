@@ -87,7 +87,12 @@ render_metrics_panel(metrics, cols=4)
 tier = card.get("simulation_tier", "precomputed")
 interactive_params = card.get("interactive_params", [])
 
-sim_results = None  # Will hold live simulation output if run
+# Session-state key for this project's simulation results.
+# Cleared whenever the user switches to a different project.
+_sim_key = f"sim_results_{selected_id}"
+if st.session_state.get("_last_sim_project") != selected_id:
+    st.session_state.pop(_sim_key, None)
+    st.session_state["_last_sim_project"] = selected_id
 
 if interactive_params:
     with st.expander("Interactive Controls", expanded=False):
@@ -96,11 +101,18 @@ if interactive_params:
         if can_simulate(selected_id, tier):
             if st.button("▶ Run Simulation", type="primary"):
                 with st.spinner("Running simulation..."):
-                    sim_results = run_simulation(selected_id, params)
-                if sim_results and "error" not in sim_results:
-                    st.success("Simulation complete — results updated below.")
-                elif sim_results:
-                    st.error(f"Simulation error: {sim_results['error']}")
+                    _result = run_simulation(selected_id, params)
+                if _result and "error" not in _result:
+                    st.session_state[_sim_key] = _result
+                    st.success("Simulation complete — metrics and equity curve updated below.")
+                elif _result:
+                    st.error(f"Simulation error: {_result['error']}")
+
+            if _sim_key in st.session_state:
+                if st.button("✕ Reset to pre-computed", type="secondary"):
+                    st.session_state.pop(_sim_key, None)
+                    st.rerun()
+
             st.caption("Adjust parameters above, then click Run to re-compute metrics and equity curve.")
         elif tier == "cached_sweep":
             st.caption("Results interpolated from pre-computed parameter sweep.")
@@ -111,57 +123,92 @@ if interactive_params:
         if bp:
             st.caption(f"Backtest period: {bp.get('start', '')} → {bp.get('end', '')}")
 
-# Use simulation results if available, otherwise fall back to pre-computed
-display_results = sim_results if (sim_results and "error" not in sim_results) else results
-display_metrics = display_results.get("metrics", metrics)
+# Retrieve persisted sim results (survives slider-change reruns)
+sim_results = st.session_state.get(_sim_key)
 
-# Re-render metrics if simulation was run (override the static panel above)
-if sim_results and "error" not in sim_results:
+# Always use pre-computed monthly_returns and sensitivity — sim engines don't produce them
+display_metrics  = sim_results["metrics"]       if sim_results else metrics
+display_equity   = sim_results                  if sim_results else results
+display_monthly  = results.get("monthly_returns", {})          # always pre-computed
+display_sensitivity = results.get("parameter_sensitivity", []) # always pre-computed
+
+# Show updated metrics panel when simulation has run
+if sim_results:
     st.subheader("Simulated Results")
     render_metrics_panel(display_metrics, cols=4)
 
 # ---------------------------------------------------------------------------
 # Charts (full-width, stacked vertically)
 # ---------------------------------------------------------------------------
-render_equity_curve(display_results, title="Equity Curve vs Benchmark")
+render_equity_curve(display_equity, title="Equity Curve vs Benchmark")
 
-render_monthly_heatmap(display_results.get("monthly_returns", {}))
+render_monthly_heatmap(display_monthly)
 
-sensitivity = display_results.get("parameter_sensitivity", [])
-if sensitivity:
+if display_sensitivity:
     st.subheader("Parameter Sensitivity")
-    render_sensitivity_chart(sensitivity)
+    render_sensitivity_chart(display_sensitivity)
 
 # ---------------------------------------------------------------------------
 # About
 # ---------------------------------------------------------------------------
 st.markdown("---")
 
-with st.expander("About This Strategy", expanded=False):
-    desc = card.get("long_description", card.get("short_description", ""))
-    st.markdown(
-        f'<p style="font-size: 0.95rem; color: #d1d5db; line-height: 1.6; margin-bottom: 1rem;">{desc}</p>',
-        unsafe_allow_html=True,
-    )
-
+with st.expander("About This Strategy", expanded=True):
+    # ── Meta row ────────────────────────────────────────────────────────────
     data_source = card.get("data_source", "")
     freq = card.get("frequency", "")
     asset_class = card.get("asset_class", "")
-    if data_source or freq:
+    has_cpp = card.get("has_cpp", False)
+    languages = card.get("languages", [])
+
+    meta_parts = []
+    if asset_class:
+        meta_parts.append(f"<strong>Asset class:</strong> {asset_class}")
+    if freq:
+        meta_parts.append(f"<strong>Frequency:</strong> {freq}")
+    if data_source:
+        meta_parts.append(f"<strong>Data source:</strong> {data_source}")
+    if has_cpp:
+        meta_parts.append('<strong>C++ core:</strong> Yes')
+
+    if meta_parts:
         st.markdown(
-            f'<p style="font-size: 0.85rem; color: #9ca3af;">'
-            f'<strong>Data source:</strong> {data_source} · '
-            f'<strong>Frequency:</strong> {freq} · '
-            f'<strong>Asset class:</strong> {asset_class}</p>',
+            f'<p style="font-size: 0.82rem; color: #9ca3af; margin-bottom: 0.75rem;">'
+            + " &nbsp;·&nbsp; ".join(meta_parts) + "</p>",
             unsafe_allow_html=True,
         )
 
+    # ── Key techniques ───────────────────────────────────────────────────────
     techniques = card.get("key_techniques", [])
     if techniques:
         tags = " ".join(f'<span class="badge badge-tag">{t}</span>' for t in techniques)
         st.markdown(
-            f'<p style="margin-top: 0.75rem;"><strong style="font-size: 0.85rem; color: #9ca3af;">'
-            f'Key Techniques:</strong> {tags}</p>',
+            f'<div style="margin-bottom: 1.25rem;">'
+            f'<span style="font-size: 0.82rem; color: #9ca3af; font-weight: 600; text-transform: uppercase; '
+            f'letter-spacing: 0.05em;">Key Techniques &nbsp;</span>{tags}</div>',
+            unsafe_allow_html=True,
+        )
+
+    # ── Technical documentation ──────────────────────────────────────────────
+    technical_details = card.get("technical_details", "")
+    if technical_details:
+        st.markdown(
+            '<div style="'
+            'background: #0d1117; '
+            'border: 1px solid #1f2937; '
+            'border-radius: 8px; '
+            'padding: 1.5rem 1.75rem; '
+            'margin-top: 0.5rem;'
+            '">',
+            unsafe_allow_html=True,
+        )
+        st.markdown(technical_details)
+        st.markdown("</div>", unsafe_allow_html=True)
+    else:
+        # Fallback to long_description if no technical_details
+        desc = card.get("long_description", card.get("short_description", ""))
+        st.markdown(
+            f'<p style="font-size: 0.95rem; color: #d1d5db; line-height: 1.6;">{desc}</p>',
             unsafe_allow_html=True,
         )
 
