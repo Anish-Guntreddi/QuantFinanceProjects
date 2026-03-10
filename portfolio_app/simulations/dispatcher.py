@@ -97,7 +97,7 @@ def _mm(**fixed) -> dict[str, Any]:
             ("risk_aversion", "risk_aversion", float),
             ("max_position", "max_position", int),
             ("base_spread_bps", "base_spread_bps", float),
-            ("arrival_rate", "arrival_rate", float),
+            ("arrival_rate", "arrival_rate", lambda v: min(0.95, float(v) / 200.0)),  # normalize [10,200] → [0.05,0.95]
             ("volatility", "volatility", float),
             ("signal_threshold", "base_spread_bps", float),  # maps threshold → spread
             ("threshold_bps", "base_spread_bps", float),
@@ -153,14 +153,42 @@ _DISPATCH_MAP: dict[str, dict[str, Any]] = {
     "intraday_04_momentum_value": _bt("Momentum"),
     "intraday_05_options": _bt("Momentum"),
     "intraday_06_execution_tca": _bt("Momentum"),
-    "intraday_07_ml_strategy": _bt("MA Crossover", ma_fast=10, ma_slow=50),
-    "intraday_08_regime_detection": _bt("MA Crossover", ma_fast=20, ma_slow=100),
+    # intraday_07/08: lookback_period → ma_slow; ma_fast = lookback // 5
+    "intraday_07_ml_strategy": {
+        "engine": lambda **kw: _get_backtest_runner()(**kw),
+        "translate": lambda p: {
+            "strategy": "MA Crossover", "symbol": "SPY",
+            "start": "2022-01-01", "end": "2024-12-31",
+            "ma_fast": max(2, int(p.get("lookback_period", 60)) // 5),
+            "ma_slow": int(p.get("lookback_period", 60)),
+        },
+    },
+    "intraday_08_regime_detection": {
+        "engine": lambda **kw: _get_backtest_runner()(**kw),
+        "translate": lambda p: {
+            "strategy": "MA Crossover", "symbol": "SPY",
+            "start": "2022-01-01", "end": "2024-12-31",
+            "ma_fast": max(5, int(p.get("lookback_period", 252)) // 8),
+            "ma_slow": int(p.get("lookback_period", 252)),
+        },
+    },
     "intraday_09_portfolio_construction": _bt("Momentum"),
 
     # ═══════════════════════════════════════════════════════════════════
     # AI/ML trading → backtest_runner (ML proxied as momentum/MR)
     # ═══════════════════════════════════════════════════════════════════
-    "ml_01_regime_detection": _bt("MA Crossover", start="2020-01-01", ma_fast=20, ma_slow=100),
+    # ml_01: lookback_days → ma_slow (regime window), ma_fast stays 20
+    "ml_01_regime_detection": {
+        "engine": lambda **kw: _get_backtest_runner()(**kw),
+        "translate": lambda p: {
+            "strategy": "MA Crossover",
+            "symbol": "SPY",
+            "start": "2020-01-01",
+            "end": "2024-12-31",
+            "ma_fast": max(5, int(p.get("lookback_days", 252)) // 10),
+            "ma_slow": int(p.get("lookback_days", 252)),
+        },
+    },
     "ml_02_lstm_transformer": _bt("Momentum", start="2020-01-01"),
     "ml_03_rl_market_making": _mm(),
 
@@ -168,9 +196,27 @@ _DISPATCH_MAP: dict[str, dict[str, Any]] = {
     # Core research → backtest_runner
     # ═══════════════════════════════════════════════════════════════════
     "research_01_factor_toolkit": _bt("Momentum", start="2020-01-01"),
-    "research_02_event_backtester": _bt("Momentum", start="2020-01-01"),
+    # research_02: commission_bps → lookback (higher commission → longer holding period)
+    "research_02_event_backtester": {
+        "engine": lambda **kw: _get_backtest_runner()(**kw),
+        "translate": lambda p: {
+            "strategy": "Momentum", "symbol": "SPY",
+            "start": "2020-01-01", "end": "2024-12-31",
+            "lookback": max(5, int(p.get("commission_bps", 10)) * 2),
+        },
+    },
     "research_03_stat_arb": _bt("Mean Reversion", start="2020-01-01"),
-    "research_04_vol_surface": _bt("Mean Reversion", start="2020-01-01", entry_zscore=2.0, exit_zscore=0.5),
+    # research_04: base_vol → entry_zscore (higher vol → wider entry threshold)
+    "research_04_vol_surface": {
+        "engine": lambda **kw: _get_backtest_runner()(**kw),
+        "translate": lambda p: {
+            "strategy": "Mean Reversion", "symbol": "SPY",
+            "start": "2020-01-01", "end": "2024-12-31",
+            "lookback": 60,
+            "entry_zscore": max(0.5, float(p.get("base_vol", 0.2)) * 10),
+            "exit_zscore": max(0.1, float(p.get("base_vol", 0.2)) * 3),
+        },
+    },
 
     # ═══════════════════════════════════════════════════════════════════
     # Market microstructure engines → market_making_sim
@@ -182,12 +228,39 @@ _DISPATCH_MAP: dict[str, dict[str, Any]] = {
     # Market microstructure execution → backtest_runner / MM sim
     # ═══════════════════════════════════════════════════════════════════
     "exec_01_lob_simulator": _mm(),
-    "exec_02_execution_algos": _bt("MA Crossover", start="2020-01-01", ma_fast=10, ma_slow=50),
+    # exec_02: participation_rate → ma_fast (higher rate = faster execution = shorter window)
+    "exec_02_execution_algos": {
+        "engine": lambda **kw: _get_backtest_runner()(**kw),
+        "translate": lambda p: {
+            "strategy": "MA Crossover",
+            "symbol": "SPY",
+            "start": "2020-01-01",
+            "end": "2024-12-31",
+            "ma_fast": max(2, int(p.get("participation_rate", 0.1) * 100)),
+            "ma_slow": max(10, int(p.get("participation_rate", 0.1) * 500)),
+        },
+    },
     "exec_03_feed_handler": _mm(),
 
     # ═══════════════════════════════════════════════════════════════════
     # Risk engineering → backtest_runner
     # ═══════════════════════════════════════════════════════════════════
-    "risk_01_portfolio_optimization": _bt("Momentum", start="2020-01-01"),
-    "risk_02_reproducibility": _bt("Momentum", start="2020-01-01"),
+    # risk_01: max_weight → lookback (higher concentration → shorter momentum window)
+    "risk_01_portfolio_optimization": {
+        "engine": lambda **kw: _get_backtest_runner()(**kw),
+        "translate": lambda p: {
+            "strategy": "Momentum", "symbol": "SPY",
+            "start": "2020-01-01", "end": "2024-12-31",
+            "lookback": max(5, int((1.0 - float(p.get("max_weight", 0.3))) * 120)),
+        },
+    },
+    # risk_02: n_splits → lookback (more CV splits → longer evaluation window)
+    "risk_02_reproducibility": {
+        "engine": lambda **kw: _get_backtest_runner()(**kw),
+        "translate": lambda p: {
+            "strategy": "Momentum", "symbol": "SPY",
+            "start": "2020-01-01", "end": "2024-12-31",
+            "lookback": int(p.get("n_splits", 5)) * 10,
+        },
+    },
 }
