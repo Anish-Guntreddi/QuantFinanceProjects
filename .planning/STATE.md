@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-alpharank-03-PLAN.md (labels, IC analytics, IC decay, factor attribution)
-last_updated: "2026-06-10T22:20:34.476Z"
+stopped_at: Completed 02-alpharank-06-PLAN.md (four models + comparison harness)
+last_updated: "2026-06-10T22:42:05.685Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 17
-  completed_plans: 14
+  completed_plans: 15
   percent: 33
 ---
 
@@ -65,6 +65,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02-alpharank P05 | 4 | 2 tasks | 5 files |
 | Phase 02-alpharank P04 | 4 | 2 tasks | 3 files |
 | Phase 02-alpharank P03 | 8 | 3 tasks | 8 files |
+| Phase 02-alpharank P06 | 18 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -109,6 +110,9 @@ Recent decisions affecting current work:
 - [Phase 02-alpharank]: maxlags=floor(4*(T/100)^0.25): T=60 gives 3 not 4 (plan doc arithmetic error corrected)
 - [Phase 02-alpharank]: min_obs=3 for compute_ic_series — minimum for valid Spearman (plan spec said 5 but test uses 3-asset input)
 - [Phase 02-alpharank]: icir zero-std guard: std < 1e-14 (not == 0.0) — floating point makes constant arrays non-zero std ~1e-18
+- [Phase 02-alpharank]: LGBMRankModel wraps LGBMRegressor (NOT LGBMRanker) — continuous rank labels incompatible with relevance-tier LambdaRank objective
+- [Phase 02-alpharank]: _make_xy uses BME dates (panel.monthly_returns.index) not resample(ME) — avoids 30% date mismatch causing biased label alignment
+- [Phase 02-alpharank]: Leakage validator threshold raised to 0.5 — catches IC~1.0 look-ahead bugs without falsely rejecting genuinely predictive factors
 
 ### Pending Todos
 
@@ -122,6 +126,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T22:20:34.474Z
-Stopped at: Completed 02-alpharank-03-PLAN.md (labels, IC analytics, IC decay, factor attribution)
+Last session: 2026-06-10T22:42:05.682Z
+Stopped at: Completed 02-alpharank-06-PLAN.md (four models + comparison harness)
 Resume file: None

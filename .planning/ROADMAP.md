@@ -55,7 +55,7 @@ Plans:
   3. Analytics report shows IC, rank-IC, ICIR with Newey-West t-statistics, and IC decay curves across forecast horizons for all four models (equal-weight, linear, elastic net, LightGBM) in a consistent comparison table
   4. Long-short decile portfolio backtested through qbacktest reports turnover and net-of-cost Sharpe; factor attribution regression appears in the final research report
   5. One-command runner (`python run_pipeline.py`) produces a research report with figures covering question, methodology, results, and robustness; codex leakage audit passes with no unresolved findings
-**Plans:** 5/8 plans executed
+**Plans:** 6/8 plans executed
 
 Plans:
 - [ ] 02-01-PLAN.md — Package skeleton, CrossSectionalGenerator with planted IC, Wave 0 test stubs, optional yfinance loader (wave 1)
@@ -116,7 +116,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. QBacktest | 8/9 | Complete    | 2026-06-10 |
-| 2. AlphaRank | 5/8 | In Progress|  |
+| 2. AlphaRank | 6/8 | In Progress|  |
 | 3. MacroRegime | 0/TBD | Not started | - |
 | 4. VolSurfaceLab | 0/TBD | Not started | - |
 | 5. DeFiRegimeNet | 0/TBD | Not started | - |

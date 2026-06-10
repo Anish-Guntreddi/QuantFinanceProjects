@@ -22,12 +22,12 @@
 
 - [x] **ALR-01**: Pipeline builds a multi-stock universe of daily OHLCV + fundamentals-proxy data from a deterministic synthetic generator (optional yfinance path for real data)
 - [x] **ALR-02**: Feature module computes cross-sectional factor features (momentum, short-term reversal, volatility, value proxy, quality proxy, liquidity) with all features lagged — leakage assertions verify no feature at time t uses data after t
-- [ ] **ALR-03**: Labels are next-period forward-return cross-sectional ranks (not absolute prices); label construction is unit-tested against hand-computed examples
-- [ ] **ALR-04**: Models are trained in strict baseline order — equal-weight factor composite, linear regression, elastic net, LightGBM — and all evaluated with the same protocol
+- [x] **ALR-03**: Labels are next-period forward-return cross-sectional ranks (not absolute prices); label construction is unit-tested against hand-computed examples
+- [x] **ALR-04**: Models are trained in strict baseline order — equal-weight factor composite, linear regression, elastic net, LightGBM — and all evaluated with the same protocol
 - [x] **ALR-05**: Validation uses purged/embargoed walk-forward (skfolio CombinatorialPurgedCV or equivalent); no standard KFold anywhere
-- [ ] **ALR-06**: Analytics report IC, rank-IC, ICIR with Newey-West t-statistics, and IC decay across horizons
+- [x] **ALR-06**: Analytics report IC, rank-IC, ICIR with Newey-West t-statistics, and IC decay across horizons
 - [x] **ALR-07**: Long-short decile portfolio from model scores is backtested through qbacktest with transaction costs; turnover and net-of-cost Sharpe reported
-- [ ] **ALR-08**: Factor attribution regression of strategy returns against factor composites; results in the final report
+- [x] **ALR-08**: Factor attribution regression of strategy returns against factor composites; results in the final report
 - [ ] **ALR-09**: One-command runner produces a research report (README + figures) covering question, methodology, results, robustness
 
 ### MacroRegime — Regime-Switching Asset Allocation (MCR)
@@ -108,12 +108,12 @@
 | QBT-10 | Phase 1 — QBacktest | Pending |
 | ALR-01 | Phase 2 — AlphaRank | Complete |
 | ALR-02 | Phase 2 — AlphaRank | Complete |
-| ALR-03 | Phase 2 — AlphaRank | Pending |
-| ALR-04 | Phase 2 — AlphaRank | Pending |
+| ALR-03 | Phase 2 — AlphaRank | Complete |
+| ALR-04 | Phase 2 — AlphaRank | Complete |
 | ALR-05 | Phase 2 — AlphaRank | Complete |
-| ALR-06 | Phase 2 — AlphaRank | Pending |
+| ALR-06 | Phase 2 — AlphaRank | Complete |
 | ALR-07 | Phase 2 — AlphaRank | Complete |
-| ALR-08 | Phase 2 — AlphaRank | Pending |
+| ALR-08 | Phase 2 — AlphaRank | Complete |
 | ALR-09 | Phase 2 — AlphaRank | Pending |
 | MCR-01 | Phase 3 — MacroRegime | Pending |
 | MCR-02 | Phase 3 — MacroRegime | Pending |
