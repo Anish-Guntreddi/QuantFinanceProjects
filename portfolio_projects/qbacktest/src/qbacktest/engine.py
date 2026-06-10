@@ -371,14 +371,16 @@ class EventDrivenBacktester:
         net_equities = [e for _, e in equity_data]
         net_equity_series = pd.Series(net_equities, index=timestamps, name="equity")
 
-        # Build gross equity Series: add back cumulative commission at each bar
-        # Align cumulative_commission_at_bar with equity curve length
-        # (equity_curve has one point per bar; _cumulative_commission_at_bar also)
+        # Build gross equity Series: add back cumulative commission at each bar.
+        # Both lists are appended exactly once per bar in run() — any drift is a
+        # structural bug, so fail loudly instead of silently padding.
         n = len(net_equities)
         cum_commissions = self._cumulative_commission_at_bar
-        # Pad or trim to match equity curve length
-        if len(cum_commissions) < n:
-            cum_commissions = cum_commissions + [cum_commissions[-1]] * (n - len(cum_commissions))
+        if len(cum_commissions) != n:
+            raise RuntimeError(
+                f"equity/commission snapshot misalignment: {n} equity points vs "
+                f"{len(cum_commissions)} commission snapshots"
+            )
         gross_equities = [
             net_equities[i] + cum_commissions[i]
             for i in range(n)

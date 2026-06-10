@@ -222,3 +222,6 @@ def test_one_equity_point_per_bar_multi_symbol(synthetic_bars):
     assert not results.equity_curve.index.has_duplicates, (
         "Equity curve has duplicate timestamps — per-event MTM regression"
     )
+    assert len(engine._cumulative_commission_at_bar) == len(results.equity_curve), (
+        "Commission snapshots must align 1:1 with equity points"
+    )
