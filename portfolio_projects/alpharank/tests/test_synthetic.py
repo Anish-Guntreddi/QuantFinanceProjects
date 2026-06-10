@@ -107,14 +107,19 @@ def test_delist_shrinks_universe():
 
 
 def test_daily_compounds_to_monthly():
-    """Compounded daily close-to-close returns equal planted monthly return to 1e-8."""
+    """Compounded daily log-returns equal planted monthly return to 1e-8.
+
+    For each month, the daily log-return series is computed as:
+      - Day 0: log(close[0] / open[0])   (open is the previous month's last close)
+      - Day k>0: log(close[k] / close[k-1])
+    This exactly recovers the planted monthly log-return.
+    """
     gen = CrossSectionalGenerator(n_assets=10, n_months=6, seed=7)
     panel = gen.generate()
 
     # Pick first alive symbol
     sym = list(panel.ohlcv.keys())[0]
     df = panel.ohlcv[sym]
-    log_daily = np.log(df["close"] / df["close"].shift(1)).dropna()
 
     # Group by (year, month) and compare compounded return to monthly_returns
     months = panel.monthly_returns.index
@@ -125,11 +130,14 @@ def test_daily_compounds_to_monthly():
         if np.isnan(planted_log_r):
             break
         # daily bars in this calendar month
-        mask = (log_daily.index.year == month_end.year) & (log_daily.index.month == month_end.month)
-        daily_in_month = log_daily[mask]
-        if len(daily_in_month) == 0:
+        mask = (df.index.year == month_end.year) & (df.index.month == month_end.month)
+        month_df = df[mask]
+        if len(month_df) == 0:
             continue
-        compounded_log_r = daily_in_month.sum()
+        # Day 0: open -> close; subsequent days: prev_close -> close
+        day0 = np.log(month_df["close"].iloc[0] / month_df["open"].iloc[0])
+        rest = np.log(month_df["close"].iloc[1:].values / month_df["close"].iloc[:-1].values)
+        compounded_log_r = day0 + rest.sum()
         assert abs(compounded_log_r - planted_log_r) < 1e-8, (
             f"Month {month_end}: compounded daily {compounded_log_r:.10f} != planted {planted_log_r:.10f}"
         )
