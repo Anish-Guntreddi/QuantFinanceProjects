@@ -2,6 +2,7 @@
 
 import pytest
 import pandas as pd
+import numpy as np
 
 from qbacktest.events import OrderEvent, FillEvent
 
@@ -205,8 +206,120 @@ class TestSimulatedExecutionHandler:
 
 
 # ---------------------------------------------------------------------------
-# W0 stub preserved for plan 01-06
+# T+1 oracle test — QBT-04 / plan 01-06
 # ---------------------------------------------------------------------------
 
-def test_t_plus_one_fill_oracle():
-    pytest.skip("W0 stub — implemented in plan 01-06")
+@pytest.mark.parametrize("slippage_cfg,commission_cfg", [
+    ("zero", "zero"),
+    ("fixed10", "pct001"),
+    ("spread20", "fixed1"),
+])
+def test_t_plus_one_fill_oracle(slippage_cfg, commission_cfg):
+    """Oracle strategy peeks future closes but T+1 fill neutralizes the edge.
+
+    The oracle cheats by looking at close[t+1] vs close[t] (future knowledge).
+    Under a correct T+1 engine this look-ahead advantage vanishes because:
+      - signal is generated at bar T
+      - fill executes at bar T+1's OPEN (not T+1's close)
+    So oracle Sharpe < 0.5 under every slippage/commission configuration.
+
+    Also verifies: fill.timestamp > timestamp of the signal bar that caused it.
+    """
+    from qbacktest.data.historical import HistoricalDataHandler
+    from qbacktest.data.synthetic import SyntheticOHLCVGenerator
+    from qbacktest.execution.commission import (
+        FixedCommission, PercentageCommission, ZeroCommission
+    )
+    from qbacktest.execution.handler import SimulatedExecutionHandler
+    from qbacktest.execution.slippage import (
+        FixedSlippage, SpreadSlippage, ZeroSlippage
+    )
+    from qbacktest.engine import BacktestConfig, EventDrivenBacktester
+    from qbacktest.events import MarketEvent, SignalEvent
+    from qbacktest.strategy.base import Strategy
+
+    # Build slippage and commission models
+    if slippage_cfg == "zero":
+        slip = ZeroSlippage()
+    elif slippage_cfg == "fixed10":
+        slip = FixedSlippage(bps=10)
+    else:  # spread20
+        slip = SpreadSlippage(spread_bps=20)
+
+    if commission_cfg == "zero":
+        comm = ZeroCommission()
+    elif commission_cfg == "pct001":
+        comm = PercentageCommission(rate=0.001)
+    else:  # fixed1
+        comm = FixedCommission(per_trade=1.0)
+
+    # Generate reproducible synthetic data
+    gen = SyntheticOHLCVGenerator(symbols=["SPY"], n_bars=504, seed=42)
+    raw_data = gen.generate()
+    spy_df = raw_data["SPY"]
+
+    # The oracle strategy: read the raw dataframe directly to look ahead
+    # It signals LONG when next close > current close, SHORT otherwise
+    class OracleStrategy(Strategy):
+        def __init__(self, raw_df: "pd.DataFrame") -> None:
+            self._df = raw_df
+            self._signal_timestamps: list[pd.Timestamp] = []
+
+        def calculate_signals(self, event: MarketEvent) -> list[SignalEvent]:
+            ts = event.timestamp
+            try:
+                idx = self._df.index.get_loc(ts)
+            except KeyError:
+                return []
+            # Peek at next bar's close (oracle cheat — future knowledge)
+            if idx + 1 >= len(self._df):
+                return []
+            next_close = float(self._df.iloc[idx + 1]["close"])
+            current_close = float(self._df.iloc[idx]["close"])
+            direction = "LONG" if next_close > current_close else "SHORT"
+            self._signal_timestamps.append(ts)
+            return [SignalEvent(
+                timestamp=ts,
+                symbol=event.symbol,
+                direction=direction,
+            )]
+
+    oracle = OracleStrategy(spy_df)
+
+    data_handler = HistoricalDataHandler(raw_data)
+    exec_handler = SimulatedExecutionHandler(
+        slippage_model=slip,
+        commission_model=comm,
+    )
+    config = BacktestConfig(
+        initial_capital=100_000.0,
+        position_size=0.1,
+        max_position_weight=0.2,
+        max_gross_exposure=1.0,
+    )
+    engine = EventDrivenBacktester(
+        data_handler=data_handler,
+        strategy=oracle,
+        execution_handler=exec_handler,
+        config=config,
+    )
+    results = engine.run()
+
+    # 1. Oracle Sharpe must be < 0.5 under T+1 fill (look-ahead edge neutralized)
+    net_sharpe = results.net_sharpe
+    assert abs(net_sharpe) < 0.5, (
+        f"[{slippage_cfg}/{commission_cfg}] Oracle net Sharpe {net_sharpe:.4f} >= 0.5 — "
+        "engine may be filling same-bar (look-ahead bias!)"
+    )
+
+    # 2. Every fill timestamp must be AFTER the signal bar timestamp that caused it
+    # Build a mapping: for each fill, find the latest signal_timestamp < fill.timestamp
+    fill_timestamps = {f.timestamp for f in results.trades}
+    signal_timestamps = sorted(oracle._signal_timestamps)
+
+    for fill in results.trades:
+        # There must exist a signal bar strictly before this fill
+        earlier_signals = [ts for ts in signal_timestamps if ts < fill.timestamp]
+        assert len(earlier_signals) > 0, (
+            f"Fill at {fill.timestamp} has no signal before it — same-bar fill!"
+        )

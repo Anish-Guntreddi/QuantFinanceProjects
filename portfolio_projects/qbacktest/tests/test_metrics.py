@@ -211,9 +211,60 @@ class TestMetricsReport:
 
 
 # ---------------------------------------------------------------------------
-# Stub that belongs to plan 01-06 — keep skip
+# Plan 01-06: BacktestResults gross/net/cost_bps fields
 # ---------------------------------------------------------------------------
 
 
 def test_results_has_net_sharpe():
-    pytest.skip("W0 stub — implemented in plan 01-06")
+    """BacktestResults from a real run has float gross_sharpe, net_sharpe, cost_bps.
+
+    When costs > 0, gross_sharpe >= net_sharpe.
+    """
+    import pandas as pd
+    from qbacktest.data.historical import HistoricalDataHandler
+    from qbacktest.data.synthetic import SyntheticOHLCVGenerator
+    from qbacktest.engine import BacktestConfig, EventDrivenBacktester
+    from qbacktest.events import MarketEvent, SignalEvent
+    from qbacktest.execution.handler import SimulatedExecutionHandler
+    from qbacktest.execution.slippage import FixedSlippage
+    from qbacktest.execution.commission import PercentageCommission
+    from qbacktest.strategy.base import Strategy
+
+    class _BuyAndHold(Strategy):
+        def __init__(self):
+            self._done: set[str] = set()
+
+        def calculate_signals(self, event: MarketEvent) -> list[SignalEvent]:
+            if event.symbol not in self._done:
+                self._done.add(event.symbol)
+                return [SignalEvent(
+                    timestamp=event.timestamp,
+                    symbol=event.symbol,
+                    direction="LONG",
+                )]
+            return []
+
+    gen = SyntheticOHLCVGenerator(symbols=["SPY"], n_bars=252, seed=42)
+    data_handler = HistoricalDataHandler(gen.generate())
+    exec_handler = SimulatedExecutionHandler(
+        slippage_model=FixedSlippage(bps=10),
+        commission_model=PercentageCommission(rate=0.001),
+    )
+    config = BacktestConfig(initial_capital=100_000.0, position_size=0.1)
+    engine = EventDrivenBacktester(
+        data_handler=data_handler,
+        strategy=_BuyAndHold(),
+        execution_handler=exec_handler,
+        config=config,
+    )
+    results = engine.run()
+
+    # Fields must be floats
+    assert isinstance(results.gross_sharpe, float), "gross_sharpe is not float"
+    assert isinstance(results.net_sharpe, float), "net_sharpe is not float"
+    assert isinstance(results.cost_bps, float), "cost_bps is not float"
+
+    # With costs, gross >= net
+    assert results.gross_sharpe >= results.net_sharpe, (
+        f"gross_sharpe {results.gross_sharpe:.4f} < net_sharpe {results.net_sharpe:.4f}"
+    )
