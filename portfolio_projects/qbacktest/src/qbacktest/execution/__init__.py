@@ -18,6 +18,7 @@ from qbacktest.execution.commission import (
     FixedCommission,
     PercentageCommission,
 )
+from qbacktest.execution.handler import ExecutionHandler, SimulatedExecutionHandler
 
 __all__ = [
     "SlippageModel",
@@ -28,4 +29,6 @@ __all__ = [
     "ZeroCommission",
     "FixedCommission",
     "PercentageCommission",
+    "ExecutionHandler",
+    "SimulatedExecutionHandler",
 ]
