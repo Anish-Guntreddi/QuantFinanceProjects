@@ -55,7 +55,17 @@ Plans:
   3. Analytics report shows IC, rank-IC, ICIR with Newey-West t-statistics, and IC decay curves across forecast horizons for all four models (equal-weight, linear, elastic net, LightGBM) in a consistent comparison table
   4. Long-short decile portfolio backtested through qbacktest reports turnover and net-of-cost Sharpe; factor attribution regression appears in the final research report
   5. One-command runner (`python run_pipeline.py`) produces a research report with figures covering question, methodology, results, and robustness; codex leakage audit passes with no unresolved findings
-**Plans**: TBD
+**Plans:** 8 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Package skeleton, CrossSectionalGenerator with planted IC, Wave 0 test stubs, optional yfinance loader (wave 1)
+- [ ] 02-02-PLAN.md — Six lag-safe cross-sectional factors + FeatureLeakageValidator (wave 2)
+- [ ] 02-03-PLAN.md — Forward-rank labels, IC/ICIR/Newey-West analytics, IC decay, factor attribution (wave 2)
+- [ ] 02-04-PLAN.md — PurgedCVEvaluator wrapping skfolio CombinatorialPurgedCV(6,2,1,1), no-KFold guard (wave 2)
+- [ ] 02-05-PLAN.md — Decile L/S construction, PrecomputedWeightsStrategy, qbacktest wiring with locked costs (wave 2)
+- [ ] 02-06-PLAN.md — Four models in strict baseline order + identical-protocol comparison harness (wave 3)
+- [ ] 02-07-PLAN.md — run_pipeline.py runner, ReportBuilder figures, README research report, integration tests (wave 4)
+- [ ] 02-08-PLAN.md — Quality gate: strict suite x2, API freeze, codex read-only leakage audit (wave 5)
 
 ### Phase 3: MacroRegime
 **Goal**: A complete macro regime-switching asset allocation system exists — point-in-time FRED/synthetic macro data, causal HMM/GMM regime detection, regime-conditional allocation through QBacktest — benchmarked against 60/40, equal weight, and risk parity in one runner command
@@ -106,7 +116,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. QBacktest | 8/9 | Complete    | 2026-06-10 |
-| 2. AlphaRank | 0/TBD | Not started | - |
+| 2. AlphaRank | 0/8 | Planned | - |
 | 3. MacroRegime | 0/TBD | Not started | - |
 | 4. VolSurfaceLab | 0/TBD | Not started | - |
 | 5. DeFiRegimeNet | 0/TBD | Not started | - |
