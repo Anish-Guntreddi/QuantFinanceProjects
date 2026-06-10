@@ -31,7 +31,18 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. An oracle test demonstrates that signal generated at bar T fills at T+1 open price — not the same-bar close — under all slippage/spread model configurations
   4. WalkForwardRunner produces aggregated out-of-sample results with no state bleed between windows (verified by injecting a sentinel into engine state and confirming it does not appear in the next window)
   5. One-command runner (`python run_demo.py`) produces a tearsheet PNG and summary table with gross and net-of-cost Sharpe side by side on synthetic data; codex read-only review passes with no unresolved findings
-**Plans**: TBD
+**Plans:** 9 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Package skeleton, synthetic OHLCV generator, conftest + Wave 0 test stubs (wave 1)
+- [ ] 01-02-PLAN.md — Typed events, deterministic EventQueue, DataHandler + Strategy ABCs (wave 2)
+- [ ] 01-03-PLAN.md — Metrics module: Sharpe/Sortino/MDD/turnover/hit rate, bootstrap CI, gross-vs-net report (wave 2)
+- [ ] 01-04-PLAN.md — Portfolio accounting: on_fill sole mutation point, 1e-6 invariant, order generation risk seam (wave 3)
+- [ ] 01-05-PLAN.md — Execution: slippage/spread/commission models, fill_at_open handler, RiskManager (wave 3)
+- [ ] 01-06-PLAN.md — Engine assembly: T+1 pending buffer, oracle + determinism tests, EOD cancellation (wave 4)
+- [ ] 01-07-PLAN.md — WalkForwardRunner: engine_factory isolation, sentinel state-bleed test, OOS aggregation (wave 5)
+- [ ] 01-08-PLAN.md — Tearsheet renderer, demo MA strategy, run_demo.py, README (wave 5)
+- [ ] 01-09-PLAN.md — Quality gate: public API freeze, strict full suite, codex read-only review (wave 6)
 
 ### Phase 2: AlphaRank
 **Goal**: A complete ML cross-sectional equity ranking pipeline exists — factors to labels to models to long-short portfolio — backtested through QBacktest with purged CV and net-of-cost performance analytics in one runner command
@@ -94,7 +105,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. QBacktest | 0/TBD | Not started | - |
+| 1. QBacktest | 0/9 | Planned | - |
 | 2. AlphaRank | 0/TBD | Not started | - |
 | 3. MacroRegime | 0/TBD | Not started | - |
 | 4. VolSurfaceLab | 0/TBD | Not started | - |
