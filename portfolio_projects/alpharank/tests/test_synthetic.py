@@ -4,6 +4,7 @@ All tests import from the installed alpharank package (no sys.path hacks).
 """
 import subprocess
 import sys
+import os
 
 import numpy as np
 import pandas as pd
@@ -164,3 +165,22 @@ def test_schema():
     assert isinstance(panel.fundamentals.index, pd.MultiIndex), "fundamentals index not MultiIndex"
     assert "book_to_market" in panel.fundamentals.columns
     assert "quality" in panel.fundamentals.columns
+
+
+def test_loader_is_lazy():
+    """Importing alpharank.data.loader must NOT import yfinance into sys.modules."""
+    python_exe = sys.executable
+    code = (
+        "import alpharank.data.loader; "
+        "import sys; "
+        "assert 'yfinance' not in sys.modules, "
+        "f'yfinance was imported eagerly: {list(sys.modules.keys())}'"
+    )
+    result = subprocess.run(
+        [python_exe, "-c", code],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, (
+        f"Lazy import check failed:\nstdout: {result.stdout}\nstderr: {result.stderr}"
+    )
