@@ -211,14 +211,18 @@ class TestFixedParams:
 def comparison_result():
     """Module-scoped fixture: runs full comparison once, shared across tests.
 
-    Uses n_assets=30, n_months=48 for speed — planted IC tolerance still holds
-    at smaller panel (documented choice: LGBM with 15 splits x 48 months x 30
-    assets takes ~30-40s; n=50, T=60 would take ~90s+).
+    Uses n_assets=50, n_months=60 — the same panel as test_composite_positive_ic.
+    At n=30, T=48 the planted IC (IC_target=0.06) is too weak relative to sampling
+    noise (E[|IC|] ≈ 0.06 with 30 assets) and the composite mean IC goes negative
+    with seed=42 purely by chance.  n=50 gives enough cross-sectional signal to
+    reliably recover positive IC across all four models.
+
+    Runtime: ~15-25s (LGBM with 15 splits x 46 months x 50 assets).
     """
     from alpharank.models.comparison import run_model_comparison
     from alpharank.validation.purged_cv import PurgedCVEvaluator
 
-    X, y = _make_xy(n_assets=30, n_months=48, seed=42)
+    X, y = _make_xy(n_assets=50, n_months=60, seed=42)
     evaluator = PurgedCVEvaluator(n_folds=6, n_test_folds=2, purged_size=1, embargo_size=1)
     table, oos_frames = run_model_comparison(X, y, evaluator)
     return table, oos_frames
