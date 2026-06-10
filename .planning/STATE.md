@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-alpharank-06-PLAN.md (four models + comparison harness)
-last_updated: "2026-06-10T22:42:05.685Z"
+stopped_at: Completed 02-alpharank-07-PLAN.md (runner, report builder, README, integration tests)
+last_updated: "2026-06-10T22:55:56.830Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 17
-  completed_plans: 15
+  completed_plans: 16
   percent: 33
 ---
 
@@ -66,6 +66,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02-alpharank P04 | 4 | 2 tasks | 3 files |
 | Phase 02-alpharank P03 | 8 | 3 tasks | 8 files |
 | Phase 02-alpharank P06 | 18 | 2 tasks | 10 files |
+| Phase 02-alpharank P07 | 11 | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -113,6 +114,8 @@ Recent decisions affecting current work:
 - [Phase 02-alpharank]: LGBMRankModel wraps LGBMRegressor (NOT LGBMRanker) — continuous rank labels incompatible with relevance-tier LambdaRank objective
 - [Phase 02-alpharank]: _make_xy uses BME dates (panel.monthly_returns.index) not resample(ME) — avoids 30% date mismatch causing biased label alignment
 - [Phase 02-alpharank]: Leakage validator threshold raised to 0.5 — catches IC~1.0 look-ahead bugs without falsely rejecting genuinely predictive factors
+- [Phase 02-alpharank]: PipelineResults dataclass returned by run(): in-process testing without subprocess
+- [Phase 02-alpharank]: Quick mode CV params: n_folds=5/n_test_folds=2/purged=1/embargo=0 — skfolio requires purge+embargo < fold_size
 
 ### Pending Todos
 
@@ -126,6 +129,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T22:42:05.682Z
-Stopped at: Completed 02-alpharank-06-PLAN.md (four models + comparison harness)
+Last session: 2026-06-10T22:55:56.828Z
+Stopped at: Completed 02-alpharank-07-PLAN.md (runner, report builder, README, integration tests)
 Resume file: None
