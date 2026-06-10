@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. An oracle test demonstrates that signal generated at bar T fills at T+1 open price — not the same-bar close — under all slippage/spread model configurations
   4. WalkForwardRunner produces aggregated out-of-sample results with no state bleed between windows (verified by injecting a sentinel into engine state and confirming it does not appear in the next window)
   5. One-command runner (`python run_demo.py`) produces a tearsheet PNG and summary table with gross and net-of-cost Sharpe side by side on synthetic data; codex read-only review passes with no unresolved findings
-**Plans:** 3/9 plans executed
+**Plans:** 4/9 plans executed
 
 Plans:
 - [ ] 01-01-PLAN.md — Package skeleton, synthetic OHLCV generator, conftest + Wave 0 test stubs (wave 1)
@@ -105,7 +105,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. QBacktest | 3/9 | In Progress|  |
+| 1. QBacktest | 4/9 | In Progress|  |
 | 2. AlphaRank | 0/TBD | Not started | - |
 | 3. MacroRegime | 0/TBD | Not started | - |
 | 4. VolSurfaceLab | 0/TBD | Not started | - |

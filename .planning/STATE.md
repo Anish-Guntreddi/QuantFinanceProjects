@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-qbacktest-02-PLAN.md (events, data, strategy)
-last_updated: "2026-06-10T19:33:11.365Z"
+stopped_at: Completed 01-qbacktest-04-PLAN.md (portfolio accounting)
+last_updated: "2026-06-10T19:40:05.988Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 9
-  completed_plans: 3
+  completed_plans: 4
   percent: 33
 ---
 
@@ -55,6 +55,7 @@ Progress: [███░░░░░░░] 33%
 
 *Updated after each plan completion*
 | Phase 01-qbacktest P02 | 22 | 2 tasks | 7 files |
+| Phase 01-qbacktest P04 | 5 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -70,6 +71,8 @@ Recent decisions affecting current work:
 - Init: FRED unauthenticated CSV removed Nov 2025; fredapi free key = optional real-data path; synthetic macro generator = default/offline path
 - [Phase 01-qbacktest]: EventQueue heap entries: (ts_nanos, priority, counter, event) — no rich comparison needed on event objects
 - [Phase 01-qbacktest]: HistoricalDataHandler.peek_next_bar reads cursor without mutation — T+1 fill engine prerequisite
+- [Phase 01-qbacktest]: slippage is informational in cumulative_costs — commission only reduces cash; invariant uses book value (avg_fill_price) not market price
+- [Phase 01-qbacktest]: Portfolio reversal splits into full-close + open-residual within single on_fill call
 
 ### Pending Todos
 
@@ -83,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T19:33:11.364Z
-Stopped at: Completed 01-qbacktest-02-PLAN.md (events, data, strategy)
+Last session: 2026-06-10T19:40:05.986Z
+Stopped at: Completed 01-qbacktest-04-PLAN.md (portfolio accounting)
 Resume file: None
