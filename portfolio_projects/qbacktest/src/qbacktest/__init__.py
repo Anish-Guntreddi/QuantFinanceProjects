@@ -29,6 +29,10 @@ Public API:
   Metrics
   -------
   MetricsReport           — full performance report dataclass
+
+  Tearsheet
+  ---------
+  TearsheetRenderer       — 3-panel matplotlib PNG + summary table
 """
 
 __version__ = "0.1.0"
@@ -41,6 +45,7 @@ from qbacktest.data.synthetic import SyntheticOHLCVGenerator
 from qbacktest.risk.manager import RiskManager
 from qbacktest.execution.handler import SimulatedExecutionHandler
 from qbacktest.metrics.performance import MetricsReport
+from qbacktest.tearsheet import TearsheetRenderer
 
 __all__ = [
     "__version__",
@@ -54,4 +59,5 @@ __all__ = [
     "RiskManager",
     "SimulatedExecutionHandler",
     "MetricsReport",
+    "TearsheetRenderer",
 ]
