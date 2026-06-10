@@ -100,3 +100,15 @@ def test_runner_smoke() -> None:
 
     results_md = PROJECT_ROOT / "reports" / "RESULTS.md"
     assert results_md.exists(), "reports/RESULTS.md not found after pipeline run"
+
+
+def test_no_skipped_stubs():
+    """All Wave 0 skip stubs have been replaced by real tests."""
+    import pathlib
+
+    tests_dir = pathlib.Path(__file__).parent
+    marker = "W0 " + "stub"  # split so this file's own source doesn't match
+    offenders = [
+        p.name for p in tests_dir.glob("test_*.py") if marker in p.read_text()
+    ]
+    assert offenders == [], f"Wave-0 skip markers remain in: {offenders}"

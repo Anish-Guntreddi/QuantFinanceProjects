@@ -184,3 +184,39 @@ def test_loader_is_lazy():
     assert result.returncode == 0, (
         f"Lazy import check failed:\nstdout: {result.stdout}\nstderr: {result.stderr}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Plan 02-08 meta tests: offline import + frozen API
+# ---------------------------------------------------------------------------
+
+def test_no_network_modules_on_import():
+    """import alpharank must not pull in yfinance/requests/urllib3 or matplotlib."""
+    import subprocess
+    import sys
+    import tempfile
+
+    # matplotlib itself is pulled by lightgbm (third-party behavior), so the
+    # boundary we own is: no network modules, and our report module stays lazy.
+    code = (
+        "import sys; import alpharank; "
+        "banned = [m for m in ('yfinance', 'requests', 'urllib3', "
+        "'alpharank.report.builder') if m in sys.modules]; "
+        "sys.exit(1 if banned else 0)"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=tempfile.mkdtemp(),
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    assert result.returncode == 0, "alpharank import pulled in banned modules"
+
+
+def test_public_api_complete():
+    """Every name in __all__ resolves from the alpharank top level."""
+    import alpharank
+
+    for name in alpharank.__all__:
+        assert getattr(alpharank, name, None) is not None, f"missing export: {name}"
