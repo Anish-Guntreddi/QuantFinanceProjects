@@ -96,13 +96,59 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmap) | | |
+| QBT-01 | Phase 1 — QBacktest | Pending |
+| QBT-02 | Phase 1 — QBacktest | Pending |
+| QBT-03 | Phase 1 — QBacktest | Pending |
+| QBT-04 | Phase 1 — QBacktest | Pending |
+| QBT-05 | Phase 1 — QBacktest | Pending |
+| QBT-06 | Phase 1 — QBacktest | Pending |
+| QBT-07 | Phase 1 — QBacktest | Pending |
+| QBT-08 | Phase 1 — QBacktest | Pending |
+| QBT-09 | Phase 1 — QBacktest | Pending |
+| QBT-10 | Phase 1 — QBacktest | Pending |
+| ALR-01 | Phase 2 — AlphaRank | Pending |
+| ALR-02 | Phase 2 — AlphaRank | Pending |
+| ALR-03 | Phase 2 — AlphaRank | Pending |
+| ALR-04 | Phase 2 — AlphaRank | Pending |
+| ALR-05 | Phase 2 — AlphaRank | Pending |
+| ALR-06 | Phase 2 — AlphaRank | Pending |
+| ALR-07 | Phase 2 — AlphaRank | Pending |
+| ALR-08 | Phase 2 — AlphaRank | Pending |
+| ALR-09 | Phase 2 — AlphaRank | Pending |
+| MCR-01 | Phase 3 — MacroRegime | Pending |
+| MCR-02 | Phase 3 — MacroRegime | Pending |
+| MCR-03 | Phase 3 — MacroRegime | Pending |
+| MCR-04 | Phase 3 — MacroRegime | Pending |
+| MCR-05 | Phase 3 — MacroRegime | Pending |
+| MCR-06 | Phase 3 — MacroRegime | Pending |
+| MCR-07 | Phase 3 — MacroRegime | Pending |
+| MCR-08 | Phase 3 — MacroRegime | Pending |
+| VSL-01 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-02 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-03 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-04 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-05 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-06 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-07 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-08 | Phase 4 — VolSurfaceLab | Pending |
+| DFR-01 | Phase 5 — DeFiRegimeNet | Pending |
+| DFR-02 | Phase 5 — DeFiRegimeNet | Pending |
+| DFR-03 | Phase 5 — DeFiRegimeNet | Pending |
+| DFR-04 | Phase 5 — DeFiRegimeNet | Pending |
+| DFR-05 | Phase 5 — DeFiRegimeNet | Pending |
+| DFR-06 | Phase 5 — DeFiRegimeNet | Pending |
+| DFR-07 | Phase 5 — DeFiRegimeNet | Pending |
+| QUAL-01 | Phase 1 (established); recurs in Phases 2-5 | Pending |
+| QUAL-02 | Phase 1 (established); recurs in Phases 2-5 | Pending |
+| QUAL-03 | Phase 1 (established); recurs in Phases 2-5 | Pending |
+| QUAL-04 | Phase 1 (established); recurs in Phases 2-5 | Pending |
+| QUAL-05 | Phase 1 (established); recurs in Phases 2-5 | Pending |
 
 **Coverage:**
 - v1 requirements: 47 total
-- Mapped to phases: 0
-- Unmapped: 47 ⚠️
+- Mapped to phases: 47
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-06-10*
-*Last updated: 2026-06-10 after initial definition*
+*Last updated: 2026-06-10 after roadmap creation — all 47 requirements mapped*
