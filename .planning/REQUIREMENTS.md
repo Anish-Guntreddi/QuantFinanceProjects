@@ -10,7 +10,7 @@
 - [ ] **QBT-01**: Researcher can `pip install -e` qbacktest as a package (src layout, pyproject.toml/hatchling) and import it from any sibling project
 - [x] **QBT-02**: Engine processes typed events (MarketEvent, SignalEvent, OrderEvent, FillEvent) through a priority event queue with a deterministic main loop
 - [x] **QBT-03**: Strategies plug in via a Strategy ABC (`calculate_signals(MarketEvent) → SignalEvent`s) without touching engine internals
-- [ ] **QBT-04**: Orders fill at T+1 bar open by default (never same-bar close); fill price includes configurable slippage, bid-ask spread, and commission models
+- [x] **QBT-04**: Orders fill at T+1 bar open by default (never same-bar close); fill price includes configurable slippage, bid-ask spread, and commission models
 - [x] **QBT-05**: Portfolio accounting passes an invariant test after every fill: cash + market value of positions = initial capital − cumulative costs ± realized PnL (tolerance 1e-6)
 - [x] **QBT-06**: Engine enforces position sizing and risk limits (max position, max gross exposure) at order generation
 - [ ] **QBT-07**: WalkForwardRunner runs train/test windows with a fresh engine per window (no state bleed) and aggregates out-of-sample results
@@ -99,7 +99,7 @@
 | QBT-01 | Phase 1 — QBacktest | Pending |
 | QBT-02 | Phase 1 — QBacktest | Complete |
 | QBT-03 | Phase 1 — QBacktest | Complete |
-| QBT-04 | Phase 1 — QBacktest | Pending |
+| QBT-04 | Phase 1 — QBacktest | Complete |
 | QBT-05 | Phase 1 — QBacktest | Complete |
 | QBT-06 | Phase 1 — QBacktest | Complete |
 | QBT-07 | Phase 1 — QBacktest | Pending |

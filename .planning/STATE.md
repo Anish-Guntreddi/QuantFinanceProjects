@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-qbacktest-04-PLAN.md (portfolio accounting)
-last_updated: "2026-06-10T19:40:05.988Z"
+stopped_at: Completed 01-qbacktest-05-PLAN.md (execution and risk)
+last_updated: "2026-06-10T19:42:03.855Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 9
-  completed_plans: 4
+  completed_plans: 5
   percent: 33
 ---
 
@@ -56,6 +56,7 @@ Progress: [███░░░░░░░] 33%
 *Updated after each plan completion*
 | Phase 01-qbacktest P02 | 22 | 2 tasks | 7 files |
 | Phase 01-qbacktest P04 | 5 | 2 tasks | 4 files |
+| Phase 01-qbacktest P05 | 6 | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,9 @@ Recent decisions affecting current work:
 - [Phase 01-qbacktest]: HistoricalDataHandler.peek_next_bar reads cursor without mutation — T+1 fill engine prerequisite
 - [Phase 01-qbacktest]: slippage is informational in cumulative_costs — commission only reduces cash; invariant uses book value (avg_fill_price) not market price
 - [Phase 01-qbacktest]: Portfolio reversal splits into full-close + open-residual within single on_fill call
+- [Phase 01-qbacktest]: Slippage sign convention: BUY +adjustment (pay more), SELL -adjustment (receive less)
+- [Phase 01-qbacktest]: FillEvent.slippage stores total currency cost: abs(price_adjustment) * qty, consistent with portfolio cumulative_costs
+- [Phase 01-qbacktest]: RiskManager uses POST-TRADE projected values for both position_weight and gross_exposure checks; limits are inclusive (<=)
 
 ### Pending Todos
 
@@ -86,6 +90,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T19:40:05.986Z
-Stopped at: Completed 01-qbacktest-04-PLAN.md (portfolio accounting)
+Last session: 2026-06-10T19:42:03.853Z
+Stopped at: Completed 01-qbacktest-05-PLAN.md (execution and risk)
 Resume file: None
