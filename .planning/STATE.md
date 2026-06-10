@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-qbacktest-05-PLAN.md (execution and risk)
-last_updated: "2026-06-10T19:42:03.855Z"
+stopped_at: Completed 01-qbacktest-06-PLAN.md (engine and T+1 backtest loop)
+last_updated: "2026-06-10T19:51:01.333Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 9
-  completed_plans: 5
+  completed_plans: 6
   percent: 33
 ---
 
@@ -57,6 +57,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 01-qbacktest P02 | 22 | 2 tasks | 7 files |
 | Phase 01-qbacktest P04 | 5 | 2 tasks | 4 files |
 | Phase 01-qbacktest P05 | 6 | 3 tasks | 5 files |
+| Phase 01-qbacktest P06 | 8 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,8 @@ Recent decisions affecting current work:
 - [Phase 01-qbacktest]: Slippage sign convention: BUY +adjustment (pay more), SELL -adjustment (receive less)
 - [Phase 01-qbacktest]: FillEvent.slippage stores total currency cost: abs(price_adjustment) * qty, consistent with portfolio cumulative_costs
 - [Phase 01-qbacktest]: RiskManager uses POST-TRADE projected values for both position_weight and gross_exposure checks; limits are inclusive (<=)
+- [Phase 01-qbacktest]: T+1 flush order: _flush_pending_orders() runs BEFORE update_bars() — orders from bar T fill at bar T+1 open, never same-bar
+- [Phase 01-qbacktest]: No reset() method on EventDrivenBacktester — fresh instances only (locked)
 
 ### Pending Todos
 
@@ -90,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T19:42:03.853Z
-Stopped at: Completed 01-qbacktest-05-PLAN.md (execution and risk)
+Last session: 2026-06-10T19:51:01.331Z
+Stopped at: Completed 01-qbacktest-06-PLAN.md (engine and T+1 backtest loop)
 Resume file: None
