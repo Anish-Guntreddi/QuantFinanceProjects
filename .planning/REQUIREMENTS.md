@@ -26,7 +26,7 @@
 - [ ] **ALR-04**: Models are trained in strict baseline order — equal-weight factor composite, linear regression, elastic net, LightGBM — and all evaluated with the same protocol
 - [ ] **ALR-05**: Validation uses purged/embargoed walk-forward (skfolio CombinatorialPurgedCV or equivalent); no standard KFold anywhere
 - [ ] **ALR-06**: Analytics report IC, rank-IC, ICIR with Newey-West t-statistics, and IC decay across horizons
-- [ ] **ALR-07**: Long-short decile portfolio from model scores is backtested through qbacktest with transaction costs; turnover and net-of-cost Sharpe reported
+- [x] **ALR-07**: Long-short decile portfolio from model scores is backtested through qbacktest with transaction costs; turnover and net-of-cost Sharpe reported
 - [ ] **ALR-08**: Factor attribution regression of strategy returns against factor composites; results in the final report
 - [ ] **ALR-09**: One-command runner produces a research report (README + figures) covering question, methodology, results, robustness
 
@@ -66,7 +66,7 @@
 
 - [x] **QUAL-01**: Every project has a pytest suite that passes deterministically (seeded RNG fixtures) and runs offline with no network or API keys
 - [x] **QUAL-02**: Every project has README with research question, data description, methodology, how-to-run, and results summary with figures
-- [ ] **QUAL-03**: Every backtest/strategy result reports net-of-cost performance beside gross, with statistical significance (bootstrap CI or t-stats)
+- [x] **QUAL-03**: Every backtest/strategy result reports net-of-cost performance beside gross, with statistical significance (bootstrap CI or t-stats)
 - [ ] **QUAL-04**: Codex read-only review passes per phase (correctness + dedicated leakage audit of each data pipeline); findings triaged and resolved before phase completion
 - [x] **QUAL-05**: Shared conventions: src layout, pyproject.toml, configs in YAML, per-project requirements.txt, figures under reports/figures/
 
@@ -112,7 +112,7 @@
 | ALR-04 | Phase 2 — AlphaRank | Pending |
 | ALR-05 | Phase 2 — AlphaRank | Pending |
 | ALR-06 | Phase 2 — AlphaRank | Pending |
-| ALR-07 | Phase 2 — AlphaRank | Pending |
+| ALR-07 | Phase 2 — AlphaRank | Complete |
 | ALR-08 | Phase 2 — AlphaRank | Pending |
 | ALR-09 | Phase 2 — AlphaRank | Pending |
 | MCR-01 | Phase 3 — MacroRegime | Pending |
@@ -140,7 +140,7 @@
 | DFR-07 | Phase 5 — DeFiRegimeNet | Pending |
 | QUAL-01 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-02 | Phase 1 (established); recurs in Phases 2-5 | Complete |
-| QUAL-03 | Phase 1 (established); recurs in Phases 2-5 | Pending |
+| QUAL-03 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-04 | Phase 1 (established); recurs in Phases 2-5 | Pending |
 | QUAL-05 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 
