@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-alpharank-05-PLAN.md (decile weights + PrecomputedWeightsStrategy + qbacktest backtest wiring)
-last_updated: "2026-06-10T22:16:51.568Z"
+stopped_at: Completed 02-alpharank-04-PLAN.md (PurgedCVEvaluator, panel expansion, purge/embargo tests)
+last_updated: "2026-06-10T22:17:29.404Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
@@ -63,6 +63,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02-alpharank P01 | 12 | 3 tasks | 24 files |
 | Phase 02-alpharank P02 | 5 | 2 tasks | 4 files |
 | Phase 02-alpharank P05 | 4 | 2 tasks | 5 files |
+| Phase 02-alpharank P04 | 4 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,9 @@ Recent decisions affecting current work:
 - [Phase 02-alpharank]: value_proxy/quality_proxy: monthly.shift(1) for 1-month publication lag before daily ffill
 - [Phase 02-alpharank]: bisect_right O(log k) as-of rebalance lookup in PrecomputedWeightsStrategy — rebal_keys sorted once in __init__
 - [Phase 02-alpharank]: max_gross_exposure=2.0 locked for long-short: gross exposure = 1 long + 1 short = 2.0
+- [Phase 02-alpharank]: CPCV test side is list[ndarray] — np.concatenate(test_sets) required before any index arithmetic
+- [Phase 02-alpharank]: Panel expansion via flatnonzero dict NOT n_assets arithmetic — variable universe after delistings
+- [Phase 02-alpharank]: CPCV aggregation: average predictions across paths before IC computation (not average IC values)
 
 ### Pending Todos
 
@@ -113,6 +117,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T22:16:51.566Z
-Stopped at: Completed 02-alpharank-05-PLAN.md (decile weights + PrecomputedWeightsStrategy + qbacktest backtest wiring)
+Last session: 2026-06-10T22:17:29.401Z
+Stopped at: Completed 02-alpharank-04-PLAN.md (PurgedCVEvaluator, panel expansion, purge/embargo tests)
 Resume file: None
