@@ -125,6 +125,12 @@ class TestDummyModel:
         )
 
     def test_random_model_ic_small(self):
+        """Random predictions should have mean |IC| well below 0.2.
+
+        Auto-fix [Rule 1 - Bug]: With n=10 assets, E[|Spearman IC|] ≈ 0.27
+        due to high variance in small cross-sections.  Using n=30 assets gives
+        E[|IC|] ≈ 0.15 which reliably satisfies the < 0.2 threshold.
+        """
         from alpharank.validation import PurgedCVEvaluator
 
         class RandomModel:
@@ -135,7 +141,8 @@ class TestDummyModel:
             def predict(self, X):
                 return self._rng.standard_normal(len(X))
 
-        X, y = _make_panel(n_months=60, n_assets=10, seed=0)
+        # n_assets=30 so that E[|Spearman IC|] ≈ 0.15 for truly random predictions
+        X, y = _make_panel(n_months=60, n_assets=30, seed=0)
         ev = PurgedCVEvaluator()
         model = RandomModel(seed=77)
         result = ev.evaluate(model, X, y)
