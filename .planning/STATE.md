@@ -1,3 +1,19 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: planning
+stopped_at: Completed 01-qbacktest-02-PLAN.md (events, data, strategy)
+last_updated: "2026-06-10T19:33:11.365Z"
+last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
+progress:
+  total_phases: 5
+  completed_phases: 0
+  total_plans: 9
+  completed_plans: 3
+  percent: 33
+---
+
 # Project State
 
 ## Project Reference
@@ -14,7 +30,7 @@ Plan: 0 of TBD in current phase
 Status: Ready to plan
 Last activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [███░░░░░░░] 33%
 
 ## Performance Metrics
 
@@ -38,6 +54,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 01-qbacktest P02 | 22 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -51,6 +68,8 @@ Recent decisions affecting current work:
 - Init: VolSurfaceLab uses standalone P&L accounting — does NOT route through QBacktest event engine
 - Init: Codex read-only gate (`codex exec --sandbox read-only`) required after every phase before marking complete
 - Init: FRED unauthenticated CSV removed Nov 2025; fredapi free key = optional real-data path; synthetic macro generator = default/offline path
+- [Phase 01-qbacktest]: EventQueue heap entries: (ts_nanos, priority, counter, event) — no rich comparison needed on event objects
+- [Phase 01-qbacktest]: HistoricalDataHandler.peek_next_bar reads cursor without mutation — T+1 fill engine prerequisite
 
 ### Pending Todos
 
@@ -64,6 +83,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10
-Stopped at: Roadmap created; all 47 v1 requirements mapped to 5 phases; STATE.md initialized; REQUIREMENTS.md traceability updated
+Last session: 2026-06-10T19:33:11.364Z
+Stopped at: Completed 01-qbacktest-02-PLAN.md (events, data, strategy)
 Resume file: None
