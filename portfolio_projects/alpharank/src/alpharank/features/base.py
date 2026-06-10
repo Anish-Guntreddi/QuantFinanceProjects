@@ -148,7 +148,7 @@ class FeatureLeakageValidator:
 
         # Next-day returns: the evaluation target (negative shift is allowed here
         # because this is the LABEL side, not the feature side).
-        next_day_ret = prices.pct_change().shift(-1)  # evaluation-side only
+        next_day_ret = prices.pct_change(fill_method=None).shift(-1)  # evaluation-side only
 
         for col in feature.columns:
             feat_col = feature[col]
@@ -170,6 +170,10 @@ class FeatureLeakageValidator:
                 continue
 
             ic, _ = spearmanr(f[mask].values, r[mask].values)
+
+            # Skip NaN IC (constant column — spearmanr returns nan for constant input)
+            if np.isnan(ic):
+                continue
 
             assert abs(ic) < threshold, (
                 f"Feature leakage detected: column '{col}' has Spearman IC "

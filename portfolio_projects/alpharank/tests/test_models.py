@@ -38,10 +38,19 @@ def _make_xy(n_assets: int = 50, n_months: int = 60, seed: int = 42):
     # Feature panel — MultiIndex (date, symbol) x 6 factors
     X = build_feature_panel(panel)
 
-    # Month-end closes for labelling (daily close sampled at month-ends)
-    close_daily = panel.close  # date x symbol daily DataFrame
-    # Resample to month-end by taking the last daily close of each month
-    monthly_close = close_daily.resample("ME").last()
+    # Build wide daily close from ohlcv dict (same as build_feature_panel does internally)
+    symbols = list(panel.ohlcv.keys())
+    close_daily = pd.DataFrame(
+        {sym: panel.ohlcv[sym]["close"] for sym in symbols}
+    ).sort_index()
+
+    # Use generator BME month-end dates for sampling (same freq as build_feature_panel
+    # uses for rebalance_dates).  resample("ME") gives calendar month-ends which
+    # diverge from BME on months where the last bday < last calendar day — causing a
+    # 33/47-date date mismatch.  Sampling at panel.monthly_returns.index directly
+    # gives perfect date alignment with X.
+    bme_dates = panel.monthly_returns.index
+    monthly_close = close_daily.reindex(bme_dates, method="ffill")
 
     # Labels: percentile ranks of 1-month forward returns
     labels_wide = make_labels(monthly_close, horizon=1)  # date x symbol, NaN at tail
@@ -129,8 +138,12 @@ class TestFixedParams:
         import alpharank.models.elastic as _elastic_mod
         import alpharank.models.lgbm as _lgbm_mod
 
-        # Read source of each module via its __file__ attribute (static, no dynamic import)
-        forbidden = ["GridSearchCV", "RandomizedSearchCV", "optuna", "LGBMRanker"]
+        # Read source of each module via its __file__ attribute (static, no dynamic import).
+        # Forbidden: no hyperparameter search infrastructure in any model module.
+        # Note: LGBMRanker is checked separately below (via isinstance) rather than
+        # string scan, because the lgbm.py docstring legitimately mentions it as an
+        # anti-pattern explanation.
+        forbidden_search = ["GridSearchCV", "RandomizedSearchCV", "optuna"]
         for mod, label in [
             (_base_mod, "base"),
             (_composite_mod, "composite"),
@@ -142,10 +155,19 @@ class TestFixedParams:
             if src_file:
                 with open(src_file) as f:
                     source = f.read()
-                for bad in forbidden:
+                for bad in forbidden_search:
                     assert bad not in source, (
                         f"Module alpharank.models.{label} must not reference {bad!r}"
                     )
+
+        # LGBMRanker check: the inner model must be an LGBMRegressor instance,
+        # not an LGBMRanker instance (runtime check, not string scan).
+        from lightgbm import LGBMRegressor
+        from alpharank.models.lgbm import LGBMRankModel
+        lgbm_instance = LGBMRankModel()
+        assert isinstance(lgbm_instance._model, LGBMRegressor), (
+            "LGBMRankModel._model must be LGBMRegressor (NOT LGBMRanker)"
+        )
 
         # LGBM params must match locked constants exactly
         from alpharank.models.lgbm import LGBMRankModel
