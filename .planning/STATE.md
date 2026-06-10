@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-qbacktest-08-PLAN.md (tearsheet renderer, demo strategy, README)
-last_updated: "2026-06-10T21:05:18.721Z"
+stopped_at: Completed 02-alpharank-01-PLAN.md (package skeleton, synthetic generator, Wave 0 stubs)
+last_updated: "2026-06-10T22:09:39.682Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 9
-  completed_plans: 9
+  total_plans: 17
+  completed_plans: 10
   percent: 33
 ---
 
@@ -60,6 +60,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 01-qbacktest P06 | 8 | 2 tasks | 6 files |
 | Phase 01-qbacktest P07 | 6 | 2 tasks | 4 files |
 | Phase 01-qbacktest P08 | 7 | 3 tasks | 7 files |
+| Phase 02-alpharank P01 | 12 | 3 tasks | 24 files |
 
 ## Accumulated Context
 
@@ -87,6 +88,11 @@ Recent decisions affecting current work:
 - [Phase 01-qbacktest]: OOS equity curve re-basing: window N scaled so first value equals window N-1 terminal equity
 - [Phase 01-qbacktest]: matplotlib.use('Agg') at tearsheet module import before pyplot — headless safety without polluting qbacktest package init
 - [Phase 01-qbacktest]: MA strategy uses EXIT (not FLAT) for crossdown signal — portfolio.generate_orders only handles LONG/SHORT/EXIT
+- [Phase 02-alpharank]: No sys.path hacks anywhere in alpharank — package imports only (locked)
+- [Phase 02-alpharank]: Single seeded default_rng per CrossSectionalGenerator — no global np.random calls
+- [Phase 02-alpharank]: Planted alpha formula (LOCKED): alpha = IC_target * monthly_vol / sqrt(1 - IC_target^2)
+- [Phase 02-alpharank]: Delist: OHLCV frames truncated at delist month (no NaN rows) — qbacktest HistoricalDataHandler convention
+- [Phase 02-alpharank]: yfinance import is lazy (inside function body) — never in module scope for offline tests
 
 ### Pending Todos
 
@@ -100,6 +106,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T20:01:57.689Z
-Stopped at: Completed 01-qbacktest-08-PLAN.md (tearsheet renderer, demo strategy, README)
+Last session: 2026-06-10T22:09:39.680Z
+Stopped at: Completed 02-alpharank-01-PLAN.md (package skeleton, synthetic generator, Wave 0 stubs)
 Resume file: None

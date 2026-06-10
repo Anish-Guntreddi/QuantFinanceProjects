@@ -20,7 +20,7 @@
 
 ### AlphaRank — ML Cross-Sectional Equity Ranking (ALR)
 
-- [ ] **ALR-01**: Pipeline builds a multi-stock universe of daily OHLCV + fundamentals-proxy data from a deterministic synthetic generator (optional yfinance path for real data)
+- [x] **ALR-01**: Pipeline builds a multi-stock universe of daily OHLCV + fundamentals-proxy data from a deterministic synthetic generator (optional yfinance path for real data)
 - [ ] **ALR-02**: Feature module computes cross-sectional factor features (momentum, short-term reversal, volatility, value proxy, quality proxy, liquidity) with all features lagged — leakage assertions verify no feature at time t uses data after t
 - [ ] **ALR-03**: Labels are next-period forward-return cross-sectional ranks (not absolute prices); label construction is unit-tested against hand-computed examples
 - [ ] **ALR-04**: Models are trained in strict baseline order — equal-weight factor composite, linear regression, elastic net, LightGBM — and all evaluated with the same protocol
@@ -64,11 +64,11 @@
 
 ### Cross-Cutting Quality (QUAL)
 
-- [ ] **QUAL-01**: Every project has a pytest suite that passes deterministically (seeded RNG fixtures) and runs offline with no network or API keys
+- [x] **QUAL-01**: Every project has a pytest suite that passes deterministically (seeded RNG fixtures) and runs offline with no network or API keys
 - [x] **QUAL-02**: Every project has README with research question, data description, methodology, how-to-run, and results summary with figures
 - [ ] **QUAL-03**: Every backtest/strategy result reports net-of-cost performance beside gross, with statistical significance (bootstrap CI or t-stats)
 - [ ] **QUAL-04**: Codex read-only review passes per phase (correctness + dedicated leakage audit of each data pipeline); findings triaged and resolved before phase completion
-- [ ] **QUAL-05**: Shared conventions: src layout, pyproject.toml, configs in YAML, per-project requirements.txt, figures under reports/figures/
+- [x] **QUAL-05**: Shared conventions: src layout, pyproject.toml, configs in YAML, per-project requirements.txt, figures under reports/figures/
 
 ## v2 Requirements
 
@@ -106,7 +106,7 @@
 | QBT-08 | Phase 1 — QBacktest | Pending |
 | QBT-09 | Phase 1 — QBacktest | Complete |
 | QBT-10 | Phase 1 — QBacktest | Pending |
-| ALR-01 | Phase 2 — AlphaRank | Pending |
+| ALR-01 | Phase 2 — AlphaRank | Complete |
 | ALR-02 | Phase 2 — AlphaRank | Pending |
 | ALR-03 | Phase 2 — AlphaRank | Pending |
 | ALR-04 | Phase 2 — AlphaRank | Pending |
@@ -138,11 +138,11 @@
 | DFR-05 | Phase 5 — DeFiRegimeNet | Pending |
 | DFR-06 | Phase 5 — DeFiRegimeNet | Pending |
 | DFR-07 | Phase 5 — DeFiRegimeNet | Pending |
-| QUAL-01 | Phase 1 (established); recurs in Phases 2-5 | Pending |
+| QUAL-01 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-02 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-03 | Phase 1 (established); recurs in Phases 2-5 | Pending |
 | QUAL-04 | Phase 1 (established); recurs in Phases 2-5 | Pending |
-| QUAL-05 | Phase 1 (established); recurs in Phases 2-5 | Pending |
+| QUAL-05 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 
 **Coverage:**
 - v1 requirements: 47 total
