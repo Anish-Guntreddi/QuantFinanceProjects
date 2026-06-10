@@ -78,7 +78,18 @@ Plans:
   3. Regime diagnostics output includes transition matrix, mean dwell times per regime, and regime-label alignment documentation (states ordered by economically meaningful quantity) — visible in the research report
   4. Walk-forward backtest through qbacktest shows regime-conditional strategy versus 60/40, equal weight, and risk parity benchmarks over identical periods with identical cost assumptions; net-of-cost Sharpe with bootstrap CIs reported for all four strategies
   5. One-command runner (`python run_pipeline.py`) produces the research report; codex leakage audit (FRED release-lag focus) passes with no unresolved findings
-**Plans**: TBD
+**Plans:** 9 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Package skeleton, Wave-0 test stubs, SyntheticMacroGenerator (4-state Markov DGP) (wave 1)
+- [ ] 03-02-PLAN.md — Point-in-time macro data layer: release-lag, as-of masking, Synthetic/Fred loaders (wave 2)
+- [ ] 03-03-PLAN.md — Causal market features: realized vol, momentum, drawdown, rolling correlation (wave 2)
+- [ ] 03-04-PLAN.md — CausalRegimeDetector (HMM+GMM), label alignment, causality oracle test (wave 2)
+- [ ] 03-05-PLAN.md — TargetWeightPortfolio + TargetWeightStrategy, regime→weights through qbacktest (wave 2)
+- [ ] 03-06-PLAN.md — Benchmarks: 60/40, equal weight, inverse-vol risk parity with identical costs (wave 3)
+- [ ] 03-07-PLAN.md — Pipeline assembly, walk-forward, OOS regime stability + K sensitivity (wave 3)
+- [ ] 03-08-PLAN.md — run_macroregime.py runner, ReportBuilder figures, README research report (wave 4)
+- [ ] 03-09-PLAN.md — Quality gate: API freeze, strict suite x2, codex read-only leakage audit (wave 5)
 
 ### Phase 4: VolSurfaceLab
 **Goal**: A complete options volatility research system exists — synthetic/real options chains, IV surface fitting with no-arbitrage validation, HAR/GARCH/EGARCH RV forecasting with QLIKE evaluation, and IV-vs-RV spread strategy P&L — all from one runner command
