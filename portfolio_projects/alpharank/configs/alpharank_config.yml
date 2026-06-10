@@ -1,0 +1,37 @@
+data:
+  n_assets: 50
+  n_months: 60
+  seed: 42
+  momentum_ic_target: 0.06
+  value_ic_target: 0.04
+  monthly_vol: 0.04
+  delist_prob_annual: 0.03
+
+features:
+  rebalance: monthly
+
+labels:
+  horizon: 1
+
+cv:
+  n_folds: 6
+  n_test_folds: 2
+  purged_size: 1
+  embargo_size: 1
+
+ic:
+  horizons: [1, 2, 3, 6]
+
+costs:
+  spread_bps: 5.0
+  commission_rate: 0.001
+
+backtest:
+  initial_capital: 1000000
+  position_size: 0.02
+  max_position_weight: 0.05
+  max_gross_exposure: 2.0
+
+quick:
+  n_assets: 20
+  n_months: 36
