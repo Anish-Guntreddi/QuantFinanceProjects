@@ -48,10 +48,10 @@ class TestHistoricalDataHandler:
         assert handler.continue_backtest is True
 
     def test_peek_does_not_advance(self, synthetic_bars):
-        """peek_next_bar then update_bars returns the peeked bar; second peek differs."""
+        """_peek_next_bar then update_bars returns the peeked bar; second peek differs."""
         handler = _make_handler(synthetic_bars)
 
-        peeked = handler.peek_next_bar("AAPL")
+        peeked = handler._peek_next_bar("AAPL")
         assert peeked is not None
 
         # advance — must return the bar we peeked at
@@ -62,11 +62,11 @@ class TestHistoricalDataHandler:
         assert aapl_event.close == pytest.approx(peeked["close"])
 
         # now peek should point to the *next* bar
-        peeked2 = handler.peek_next_bar("AAPL")
+        peeked2 = handler._peek_next_bar("AAPL")
         assert peeked2 is None or peeked2["timestamp"] != peeked["timestamp"]
 
     def test_peek_at_end_returns_none(self, synthetic_bars):
-        """After consuming all bars peek_next_bar returns None and continue_backtest is False."""
+        """After consuming all bars _peek_next_bar returns None and continue_backtest is False."""
         handler = _make_handler(synthetic_bars)
         n_bars = len(next(iter(synthetic_bars.values())))
 
@@ -74,7 +74,7 @@ class TestHistoricalDataHandler:
             handler.update_bars()
 
         assert handler.continue_backtest is False
-        assert handler.peek_next_bar("AAPL") is None
+        assert handler._peek_next_bar("AAPL") is None
 
     def test_get_latest_bars_window(self, synthetic_bars):
         """After k updates, get_latest_bars(sym, n=5) returns last min(k,5) rows in

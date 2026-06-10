@@ -158,3 +158,67 @@ def test_invariant_after_run(synthetic_bars):
     assert abs(residual) < 1e-6, (
         f"Accounting invariant violated: residual = {residual}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Codex review regression tests (plan 01-09)
+# ---------------------------------------------------------------------------
+
+class _LongThenExitStrategy(Strategy):
+    """LONG on bar 1, EXIT on bar 2.
+
+    Regression for codex finding 1: the bar-2 EXIT must see the position that
+    filled at bar 2's open. Under the old queued-fill ordering the EXIT saw a
+    flat book and emitted nothing, so the position was never closed.
+    """
+
+    def __init__(self):
+        self._bar_count: dict[str, int] = {}
+
+    def calculate_signals(self, event: MarketEvent) -> list[SignalEvent]:
+        n = self._bar_count.get(event.symbol, 0) + 1
+        self._bar_count[event.symbol] = n
+        if n == 1:
+            return [SignalEvent(event.timestamp, event.symbol, "LONG")]
+        if n == 2:
+            return [SignalEvent(event.timestamp, event.symbol, "EXIT")]
+        return []
+
+
+def test_fill_visible_to_same_bar_signals():
+    """Entry fills at bar 2 open; bar 2's EXIT sees it; exit fills at bar 3 open."""
+    from qbacktest.engine import BacktestConfig, EventDrivenBacktester
+
+    gen = SyntheticOHLCVGenerator(symbols=["AAPL"], n_bars=20, seed=42)
+    engine = EventDrivenBacktester(
+        data_handler=HistoricalDataHandler(gen.generate()),
+        strategy=_LongThenExitStrategy(),
+        config=BacktestConfig(initial_capital=100_000.0, position_size=0.1),
+    )
+    results = engine.run()
+
+    assert len(results.trades) == 2, (
+        f"Expected entry + exit fills, got {len(results.trades)} "
+        "(EXIT signal could not see the just-applied fill)"
+    )
+    final_qty = engine.portfolio.positions["AAPL"].quantity
+    assert abs(final_qty) < 1e-9, f"Position should be flat, got {final_qty}"
+
+
+def test_one_equity_point_per_bar_multi_symbol(synthetic_bars):
+    """3 symbols × 504 bars → exactly 504 equity points (not 1512)."""
+    from qbacktest.engine import BacktestConfig, EventDrivenBacktester
+
+    engine = EventDrivenBacktester(
+        data_handler=HistoricalDataHandler(synthetic_bars),
+        strategy=_BuyAndHoldStrategy(),
+        config=BacktestConfig(initial_capital=100_000.0, position_size=0.1),
+    )
+    results = engine.run()
+
+    assert len(results.equity_curve) == 504, (
+        f"Expected one equity point per bar (504), got {len(results.equity_curve)}"
+    )
+    assert not results.equity_curve.index.has_duplicates, (
+        "Equity curve has duplicate timestamps — per-event MTM regression"
+    )

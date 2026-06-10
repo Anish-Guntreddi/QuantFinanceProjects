@@ -17,13 +17,17 @@ Design invariants (from RESEARCH.md Pattern 1 and locked decisions):
      generate_orders, which calls risk_manager.validate_order).
 
 Loop order per iteration:
-  (1) Flush _pending_orders using peek_next_bar → fill_at_open → enqueue FillEvents
+  (1) Flush _pending_orders using _peek_next_bar → fill_at_open → portfolio.on_fill
+      APPLIED IMMEDIATELY, so bar T+1's signals/sizing see post-fill state
+      (codex review finding 1: routing fills through the queue made them process
+      after T+1 market/signal events due to FILL's low same-timestamp priority)
   (2) data_handler.update_bars() → enqueue MarketEvents
   (3) Drain EventQueue:
-        MARKET  → strategy.calculate_signals + portfolio.mark_to_market
+        MARKET  → strategy.calculate_signals
         SIGNAL  → portfolio.generate_orders (enqueue OrderEvents)
         ORDER   → append to _pending_orders (NEVER fill same bar)
-        FILL    → portfolio.on_fill
+  (4) portfolio.mark_to_market ONCE per bar (codex review finding 3: per-event
+      MTM produced N equity points per bar for N symbols)
 """
 
 from __future__ import annotations
@@ -122,8 +126,8 @@ class EventDrivenBacktester:
     Parameters
     ----------
     data_handler:
-        DataHandler providing ``update_bars()``, ``peek_next_bar()``,
-        ``get_latest_bars()``, and ``continue_backtest``.
+        DataHandler providing ``update_bars()``, ``get_latest_bars()``, and the
+        engine-internal ``_peek_next_bar()`` (not part of the strategy-facing API).
     strategy:
         Strategy subclass implementing ``calculate_signals()``.
     portfolio:
@@ -200,7 +204,7 @@ class EventDrivenBacktester:
         """Execute the full backtest and return BacktestResults.
 
         Loop order per bar:
-          1. Flush _pending_orders using peek_next_bar + fill_at_open
+          1. Flush _pending_orders using _peek_next_bar + fill_at_open
           2. Advance data via update_bars → enqueue MarketEvents
           3. Drain queue: MARKET → signals + mtm; SIGNAL → orders; ORDER → buffer; FILL → accounting
 
@@ -208,6 +212,8 @@ class EventDrivenBacktester:
         """
         while True:
             # --- Step 1: Flush pending orders at T+1 open ----------------------
+            # Fills are applied to the portfolio IMMEDIATELY (not queued), so
+            # this bar's signals and sizing observe post-fill cash/positions.
             self._flush_pending_orders()
 
             # --- Step 2: Advance data ------------------------------------------
@@ -221,6 +227,11 @@ class EventDrivenBacktester:
 
             # --- Step 3: Drain event queue -------------------------------------
             self._drain_queue()
+
+            # --- Step 4: Mark to market ONCE per bar ----------------------------
+            bar_timestamp = market_events[0].timestamp
+            prices = self._latest_close_prices()
+            self.portfolio.mark_to_market(bar_timestamp, prices)
 
             # --- Track cumulative commission snapshot after each bar -----------
             self._cumulative_commission_at_bar.append(
@@ -247,7 +258,9 @@ class EventDrivenBacktester:
     def _flush_pending_orders(self) -> None:
         """Fill every pending order at the next bar's open price.
 
-        For each order, call peek_next_bar without advancing the cursor.
+        For each order, call the engine-internal _peek_next_bar without advancing
+        the cursor. Fills are applied to the portfolio IMMEDIATELY — never queued —
+        so the upcoming bar's signals and sizing observe post-fill state.
         If no next bar exists, the order stays in the buffer (will be cancelled
         at EOD by the main loop).
         """
@@ -256,13 +269,13 @@ class EventDrivenBacktester:
 
         filled_indices = []
         for i, order in enumerate(self._pending_orders):
-            next_bar = self.data_handler.peek_next_bar(order.symbol)
+            next_bar = self.data_handler._peek_next_bar(order.symbol)
             if next_bar is None:
                 # No T+1 bar — will be cancelled at EOD
                 continue
             fill = self.execution_handler.fill_at_open(order, next_bar)
             if fill is not None:
-                self._queue.put(fill)
+                self._handle_fill_event(fill)
                 filled_indices.append(i)
 
         # Remove filled orders from buffer (reverse order to preserve indices)
@@ -291,24 +304,19 @@ class EventDrivenBacktester:
     # ------------------------------------------------------------------
 
     def _handle_market_event(self, event: MarketEvent) -> None:
-        """Generate signals and mark portfolio to market."""
-        # Generate signals
+        """Generate signals from the strategy (MTM happens once per bar in run())."""
         signals = self.strategy.calculate_signals(event)
         for signal in signals:
             self._queue.put(signal)
 
-        # Mark to market using latest closes for all symbols
-        # We use the current event's close for this symbol; other symbols
-        # use their avg_fill_price (book value) for MTM
-        prices = {event.symbol: event.close}
-        # Add closes for other symbols using latest bars
+    def _latest_close_prices(self) -> dict[str, float]:
+        """Latest available close per symbol, for the once-per-bar MTM."""
+        prices: dict[str, float] = {}
         for sym in self.data_handler._symbols:
-            if sym != event.symbol:
-                latest = self.data_handler.get_latest_bars(sym, 1)
-                if not latest.empty:
-                    prices[sym] = float(latest["close"].iloc[-1])
-
-        self.portfolio.mark_to_market(event.timestamp, prices)
+            latest = self.data_handler.get_latest_bars(sym, 1)
+            if not latest.empty:
+                prices[sym] = float(latest["close"].iloc[-1])
+        return prices
 
     def _handle_signal_event(self, signal: SignalEvent) -> None:
         """Convert signal to orders using portfolio's position sizing."""

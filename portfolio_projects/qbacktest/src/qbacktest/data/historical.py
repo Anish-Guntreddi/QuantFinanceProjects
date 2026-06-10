@@ -1,7 +1,7 @@
 """HistoricalDataHandler — in-memory backtesting data handler.
 
 Aligns symbols on the union DatetimeIndex, keeps an integer cursor,
-emits MarketEvents, and supports peek_next_bar for T+1 fill calculations.
+emits MarketEvents, and supports _peek_next_bar for T+1 fill calculations.
 
 Pandas 2.x CoW-safe: uses .loc/.iloc only, no chained indexing.
 """
@@ -125,7 +125,7 @@ class HistoricalDataHandler(DataHandler):
         df = df.set_index("timestamp")
         return df
 
-    def peek_next_bar(self, symbol: str) -> dict | None:
+    def _peek_next_bar(self, symbol: str) -> dict | None:
         """Return the next bar that update_bars() would emit for *symbol*.
 
         Does NOT advance the cursor.  Returns ``None`` when exhausted.

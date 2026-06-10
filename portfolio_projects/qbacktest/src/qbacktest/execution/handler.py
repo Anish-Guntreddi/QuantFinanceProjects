@@ -39,7 +39,7 @@ class ExecutionHandler(ABC):
             The OrderEvent to fill.
         next_bar:
             Dict with keys: timestamp, open, high, low, close, volume.
-            Sourced from ``DataHandler.peek_next_bar()``.
+            Sourced from ``DataHandler._peek_next_bar()``.
 
         Returns
         -------

@@ -41,7 +41,7 @@ class DataHandler(ABC):
         """
 
     @abstractmethod
-    def peek_next_bar(self, symbol: str) -> dict | None:
+    def _peek_next_bar(self, symbol: str) -> dict | None:
         """Return the *next* bar that ``update_bars()`` would emit for *symbol*,
         without advancing the cursor.
 
