@@ -21,7 +21,7 @@
 ### AlphaRank — ML Cross-Sectional Equity Ranking (ALR)
 
 - [x] **ALR-01**: Pipeline builds a multi-stock universe of daily OHLCV + fundamentals-proxy data from a deterministic synthetic generator (optional yfinance path for real data)
-- [ ] **ALR-02**: Feature module computes cross-sectional factor features (momentum, short-term reversal, volatility, value proxy, quality proxy, liquidity) with all features lagged — leakage assertions verify no feature at time t uses data after t
+- [x] **ALR-02**: Feature module computes cross-sectional factor features (momentum, short-term reversal, volatility, value proxy, quality proxy, liquidity) with all features lagged — leakage assertions verify no feature at time t uses data after t
 - [ ] **ALR-03**: Labels are next-period forward-return cross-sectional ranks (not absolute prices); label construction is unit-tested against hand-computed examples
 - [ ] **ALR-04**: Models are trained in strict baseline order — equal-weight factor composite, linear regression, elastic net, LightGBM — and all evaluated with the same protocol
 - [ ] **ALR-05**: Validation uses purged/embargoed walk-forward (skfolio CombinatorialPurgedCV or equivalent); no standard KFold anywhere
@@ -107,7 +107,7 @@
 | QBT-09 | Phase 1 — QBacktest | Complete |
 | QBT-10 | Phase 1 — QBacktest | Pending |
 | ALR-01 | Phase 2 — AlphaRank | Complete |
-| ALR-02 | Phase 2 — AlphaRank | Pending |
+| ALR-02 | Phase 2 — AlphaRank | Complete |
 | ALR-03 | Phase 2 — AlphaRank | Pending |
 | ALR-04 | Phase 2 — AlphaRank | Pending |
 | ALR-05 | Phase 2 — AlphaRank | Pending |

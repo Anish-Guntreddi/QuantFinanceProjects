@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-alpharank-01-PLAN.md (package skeleton, synthetic generator, Wave 0 stubs)
-last_updated: "2026-06-10T22:09:39.682Z"
+stopped_at: Completed 02-alpharank-05-PLAN.md (decile weights + PrecomputedWeightsStrategy + qbacktest backtest wiring)
+last_updated: "2026-06-10T22:16:51.568Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 17
-  completed_plans: 10
+  completed_plans: 13
   percent: 33
 ---
 
@@ -61,6 +61,8 @@ Progress: [███░░░░░░░] 33%
 | Phase 01-qbacktest P07 | 6 | 2 tasks | 4 files |
 | Phase 01-qbacktest P08 | 7 | 3 tasks | 7 files |
 | Phase 02-alpharank P01 | 12 | 3 tasks | 24 files |
+| Phase 02-alpharank P02 | 5 | 2 tasks | 4 files |
+| Phase 02-alpharank P05 | 4 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -93,6 +95,11 @@ Recent decisions affecting current work:
 - [Phase 02-alpharank]: Planted alpha formula (LOCKED): alpha = IC_target * monthly_vol / sqrt(1 - IC_target^2)
 - [Phase 02-alpharank]: Delist: OHLCV frames truncated at delist month (no NaN rows) — qbacktest HistoricalDataHandler convention
 - [Phase 02-alpharank]: yfinance import is lazy (inside function body) — never in module scope for offline tests
+- [Phase 02-alpharank]: safe_shift asserts n>=1 at call site — impossible to construct factor with n<=0
+- [Phase 02-alpharank]: FeatureLeakageValidator wired into build_feature_panel — every construction self-asserts on leakage
+- [Phase 02-alpharank]: value_proxy/quality_proxy: monthly.shift(1) for 1-month publication lag before daily ffill
+- [Phase 02-alpharank]: bisect_right O(log k) as-of rebalance lookup in PrecomputedWeightsStrategy — rebal_keys sorted once in __init__
+- [Phase 02-alpharank]: max_gross_exposure=2.0 locked for long-short: gross exposure = 1 long + 1 short = 2.0
 
 ### Pending Todos
 
@@ -106,6 +113,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T22:09:39.680Z
-Stopped at: Completed 02-alpharank-01-PLAN.md (package skeleton, synthetic generator, Wave 0 stubs)
+Last session: 2026-06-10T22:16:51.566Z
+Stopped at: Completed 02-alpharank-05-PLAN.md (decile weights + PrecomputedWeightsStrategy + qbacktest backtest wiring)
 Resume file: None
