@@ -13,7 +13,7 @@ Five research-grade quantitative finance projects built sequentially under `port
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: QBacktest** - Build the pip-installable event-driven backtesting engine that all other projects depend on (completed 2026-06-10)
-- [ ] **Phase 2: AlphaRank** - Build the ML cross-sectional equity ranking pipeline using QBacktest as the portfolio execution layer
+- [x] **Phase 2: AlphaRank** - Build the ML cross-sectional equity ranking pipeline using QBacktest as the portfolio execution layer (completed 2026-06-10)
 - [ ] **Phase 3: MacroRegime** - Build the regime-switching macro asset allocation system with point-in-time FRED data and HMM/GMM regime detection
 - [ ] **Phase 4: VolSurfaceLab** - Build the options volatility research system with IV surface fitting, RV forecasting, and standalone strategy P&L
 - [ ] **Phase 5: DeFiRegimeNet** - Build the hybrid ML + econometric regime detection system for DeFi/crypto markets
@@ -55,7 +55,7 @@ Plans:
   3. Analytics report shows IC, rank-IC, ICIR with Newey-West t-statistics, and IC decay curves across forecast horizons for all four models (equal-weight, linear, elastic net, LightGBM) in a consistent comparison table
   4. Long-short decile portfolio backtested through qbacktest reports turnover and net-of-cost Sharpe; factor attribution regression appears in the final research report
   5. One-command runner (`python run_pipeline.py`) produces a research report with figures covering question, methodology, results, and robustness; codex leakage audit passes with no unresolved findings
-**Plans:** 7/8 plans executed
+**Plans:** 8/8 plans complete
 
 Plans:
 - [ ] 02-01-PLAN.md — Package skeleton, CrossSectionalGenerator with planted IC, Wave 0 test stubs, optional yfinance loader (wave 1)
@@ -116,7 +116,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. QBacktest | 8/9 | Complete    | 2026-06-10 |
-| 2. AlphaRank | 7/8 | In Progress|  |
+| 2. AlphaRank | 7/8 | Complete    | 2026-06-10 |
 | 3. MacroRegime | 0/TBD | Not started | - |
 | 4. VolSurfaceLab | 0/TBD | Not started | - |
 | 5. DeFiRegimeNet | 0/TBD | Not started | - |

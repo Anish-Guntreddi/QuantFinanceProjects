@@ -28,7 +28,7 @@
 - [x] **ALR-06**: Analytics report IC, rank-IC, ICIR with Newey-West t-statistics, and IC decay across horizons
 - [x] **ALR-07**: Long-short decile portfolio from model scores is backtested through qbacktest with transaction costs; turnover and net-of-cost Sharpe reported
 - [x] **ALR-08**: Factor attribution regression of strategy returns against factor composites; results in the final report
-- [ ] **ALR-09**: One-command runner produces a research report (README + figures) covering question, methodology, results, robustness
+- [x] **ALR-09**: One-command runner produces a research report (README + figures) covering question, methodology, results, robustness
 
 ### MacroRegime — Regime-Switching Asset Allocation (MCR)
 
@@ -114,7 +114,7 @@
 | ALR-06 | Phase 2 — AlphaRank | Complete |
 | ALR-07 | Phase 2 — AlphaRank | Complete |
 | ALR-08 | Phase 2 — AlphaRank | Complete |
-| ALR-09 | Phase 2 — AlphaRank | Pending |
+| ALR-09 | Phase 2 — AlphaRank | Complete |
 | MCR-01 | Phase 3 — MacroRegime | Pending |
 | MCR-02 | Phase 3 — MacroRegime | Pending |
 | MCR-03 | Phase 3 — MacroRegime | Pending |
