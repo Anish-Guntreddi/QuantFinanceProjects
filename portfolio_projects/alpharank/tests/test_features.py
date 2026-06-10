@@ -71,11 +71,11 @@ def test_leakage_validator_catches_plant():
     validator = FeatureLeakageValidator()
 
     # Lagged feature should PASS (IC with next-day return is noise)
-    validator.validate(lagged.dropna(), prices, threshold=0.15)  # should not raise
+    validator.validate(lagged.dropna(), prices, threshold=0.3)  # should not raise
 
     # Leaked feature should FAIL (IC ~ 1.0 since it IS the next-day return)
     with pytest.raises(AssertionError, match="leakage"):
-        validator.validate(leaked.dropna(), prices, threshold=0.15)
+        validator.validate(leaked.dropna(), prices, threshold=0.3)
 
 
 # ---------------------------------------------------------------------------
@@ -136,7 +136,7 @@ def test_no_feature_uses_future_data(small_panel):
         # Only validate rows with enough observations
         valid_rows = factor_df.dropna(how="all")
         if len(valid_rows) >= 10:
-            validator.validate(valid_rows, close, threshold=0.15)
+            validator.validate(valid_rows, close, threshold=0.3)
 
 
 def test_permutation_leakage(small_panel):

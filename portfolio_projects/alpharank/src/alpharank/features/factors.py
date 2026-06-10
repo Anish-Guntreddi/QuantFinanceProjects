@@ -267,12 +267,10 @@ def build_feature_panel(
         valid_rows = df.dropna(how="all")
         if len(valid_rows) >= 10:
             try:
-                # threshold=0.5: catches true look-ahead leakage (IC ~ 1.0 for
-                # next-day-return features) while permitting genuine predictive
-                # signal.  Fundamental-based factors (value, quality) may have
-                # IC > 0.15 on next-day returns by coincidence in seeded
-                # synthetic data without any look-ahead.
-                validator.validate(valid_rows, close, threshold=0.5)
+                # Cross-sectional mean-IC design: planted signal sits at
+                # ~0.06, an identity leak at ~1.0, so the 0.3 default has
+                # an order of magnitude of margin on both sides.
+                validator.validate(valid_rows, close, threshold=0.3)
             except AssertionError as exc:
                 raise AssertionError(
                     f"Leakage detected in factor '{name}': {exc}"

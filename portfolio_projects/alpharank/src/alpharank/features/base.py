@@ -99,33 +99,37 @@ def cross_sectional_zscore(df: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 class FeatureLeakageValidator:
-    """Assert that feature columns are not correlated with future returns.
+    """Assert that a feature panel is not correlated with future returns.
 
-    Pattern 1 — Spearman IC leakage test:
-      For each feature column, compute the Spearman rank correlation with
-      next-day returns (prices.pct_change().shift(-1)).  A properly lagged
-      feature should have IC ≈ 0 (noise).  A look-ahead feature (e.g., the
-      next-day return itself) has IC ≈ 1.  Any |IC| >= threshold triggers an
-      AssertionError naming the offending feature.
+    Cross-sectional design (codex leakage-audit finding, plan 02-08):
+      For each date, compute the cross-sectional Spearman rank correlation
+      between the feature values and next-day returns across symbols, then
+      average the signed ICs over dates.  This matches how the planted alpha
+      is constructed (cross-sectional), so the scales separate cleanly:
+
+        - legitimate planted signal: mean IC ≈ 0.04–0.06
+        - pure noise feature:        mean IC ≈ 0
+        - leaked future data:        mean IC ≈ 1.0
+
+      The earlier per-symbol *time-series* IC design conflated horizons and
+      needed thresholds so loose (0.5) that only identity leaks tripped it;
+      signed-mean cross-sectional IC at threshold 0.3 leaves an order of
+      magnitude of margin on both sides.
 
     The only permitted negative shift in this codebase is the one inside
     validate() on the *evaluation* side (computing next-day returns for
     comparison), which is why this is the single exception to the no-
     negative-shift rule.  Feature columns in `feature` must NOT themselves
     contain negative-shifted data.
-
-    Parameters
-    ----------
-    (none — use keyword args on validate())
     """
 
     def validate(
         self,
         feature: pd.DataFrame,
         prices: pd.DataFrame,
-        threshold: float = 0.15,
+        threshold: float = 0.3,
     ) -> None:
-        """Run leakage check on every column of feature.
+        """Run the cross-sectional leakage check on a feature panel.
 
         Parameters
         ----------
@@ -137,12 +141,13 @@ class FeatureLeakageValidator:
             returns.  The negative shift here is EVALUATION-SIDE only —
             it is the thing being predicted, not a feature.
         threshold : float
-            Maximum absolute Spearman IC allowed.  Default 0.15.
+            Maximum absolute *mean* cross-sectional Spearman IC allowed.
+            Default 0.3 (planted signal ≈ 0.06, identity leak ≈ 1.0).
 
         Raises
         ------
         AssertionError
-            Naming the offending feature column and its IC if |IC| >= threshold.
+            Reporting the mean cross-sectional IC if |mean IC| >= threshold.
         """
         from scipy.stats import spearmanr  # lazy import; scipy optional dependency
 
@@ -150,33 +155,29 @@ class FeatureLeakageValidator:
         # because this is the LABEL side, not the feature side).
         next_day_ret = prices.pct_change(fill_method=None).shift(-1)  # evaluation-side only
 
-        for col in feature.columns:
-            feat_col = feature[col]
+        shared_dates = feature.index.intersection(next_day_ret.index)
+        shared_cols = feature.columns.intersection(next_day_ret.columns)
+        if len(shared_dates) < 5 or len(shared_cols) < 3:
+            return  # insufficient panel for a meaningful cross-sectional check
 
-            # Align on shared dates
-            shared_idx = feat_col.index.intersection(next_day_ret.index)
-            if len(shared_idx) < 10:
-                continue  # insufficient observations — skip
-
-            f = feat_col.loc[shared_idx]
-            r = next_day_ret.loc[shared_idx, col] if col in next_day_ret.columns else None
-
-            if r is None:
-                continue
-
-            # Drop NaN pairs
+        ics: list[float] = []
+        for date in shared_dates:
+            f = feature.loc[date, shared_cols]
+            r = next_day_ret.loc[date, shared_cols]
             mask = ~(f.isna() | r.isna())
-            if mask.sum() < 10:
+            if mask.sum() < 3:
                 continue
-
             ic, _ = spearmanr(f[mask].values, r[mask].values)
+            if not np.isnan(ic):
+                ics.append(float(ic))
 
-            # Skip NaN IC (constant column — spearmanr returns nan for constant input)
-            if np.isnan(ic):
-                continue
+        if len(ics) < 5:
+            return  # too few valid cross-sections — skip
 
-            assert abs(ic) < threshold, (
-                f"Feature leakage detected: column '{col}' has Spearman IC "
-                f"{ic:.4f} with next-day returns (threshold={threshold}). "
-                "This indicates the feature contains future data."
-            )
+        mean_ic = float(np.mean(ics))
+        assert abs(mean_ic) < threshold, (
+            f"Feature leakage detected: mean cross-sectional Spearman IC "
+            f"{mean_ic:.4f} with next-day returns over {len(ics)} dates "
+            f"(threshold={threshold}). This indicates the feature contains "
+            "future data."
+        )
