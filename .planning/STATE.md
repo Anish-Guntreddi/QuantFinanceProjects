@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-qbacktest-07-PLAN.md (WalkForwardRunner)
-last_updated: "2026-06-10T20:00:18.328Z"
+stopped_at: Completed 01-qbacktest-08-PLAN.md (tearsheet renderer, demo strategy, README)
+last_updated: "2026-06-10T20:01:57.691Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 9
-  completed_plans: 7
+  completed_plans: 8
   percent: 33
 ---
 
@@ -59,6 +59,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 01-qbacktest P05 | 6 | 3 tasks | 5 files |
 | Phase 01-qbacktest P06 | 8 | 2 tasks | 6 files |
 | Phase 01-qbacktest P07 | 6 | 2 tasks | 4 files |
+| Phase 01-qbacktest P08 | 7 | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,8 @@ Recent decisions affecting current work:
 - [Phase 01-qbacktest]: WalkForwardRunner: isolation via construction not reset() — engine_factory called fresh per window
 - [Phase 01-qbacktest]: generate_windows step defaults to test_bars — non-overlapping test segments by default
 - [Phase 01-qbacktest]: OOS equity curve re-basing: window N scaled so first value equals window N-1 terminal equity
+- [Phase 01-qbacktest]: matplotlib.use('Agg') at tearsheet module import before pyplot — headless safety without polluting qbacktest package init
+- [Phase 01-qbacktest]: MA strategy uses EXIT (not FLAT) for crossdown signal — portfolio.generate_orders only handles LONG/SHORT/EXIT
 
 ### Pending Todos
 
@@ -97,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T20:00:18.325Z
-Stopped at: Completed 01-qbacktest-07-PLAN.md (WalkForwardRunner)
+Last session: 2026-06-10T20:01:57.689Z
+Stopped at: Completed 01-qbacktest-08-PLAN.md (tearsheet renderer, demo strategy, README)
 Resume file: None

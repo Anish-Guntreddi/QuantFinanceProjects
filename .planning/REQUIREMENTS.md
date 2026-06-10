@@ -15,7 +15,7 @@
 - [x] **QBT-06**: Engine enforces position sizing and risk limits (max position, max gross exposure) at order generation
 - [x] **QBT-07**: WalkForwardRunner runs train/test windows with a fresh engine per window (no state bleed) and aggregates out-of-sample results
 - [ ] **QBT-08**: Metrics module reports Sharpe, Sortino, max drawdown, turnover, hit rate, and bootstrap confidence intervals on Sharpe; gross and net-of-cost figures side by side
-- [ ] **QBT-09**: Tearsheet module renders an equity-curve/drawdown/returns report (matplotlib PNG + summary table); demo strategy on synthetic data runs end-to-end via one runner script
+- [x] **QBT-09**: Tearsheet module renders an equity-curve/drawdown/returns report (matplotlib PNG + summary table); demo strategy on synthetic data runs end-to-end via one runner script
 - [ ] **QBT-10**: Synthetic OHLCV market-data generator produces deterministic, seedable multi-asset daily bars used by all engine tests
 
 ### AlphaRank — ML Cross-Sectional Equity Ranking (ALR)
@@ -65,7 +65,7 @@
 ### Cross-Cutting Quality (QUAL)
 
 - [ ] **QUAL-01**: Every project has a pytest suite that passes deterministically (seeded RNG fixtures) and runs offline with no network or API keys
-- [ ] **QUAL-02**: Every project has README with research question, data description, methodology, how-to-run, and results summary with figures
+- [x] **QUAL-02**: Every project has README with research question, data description, methodology, how-to-run, and results summary with figures
 - [ ] **QUAL-03**: Every backtest/strategy result reports net-of-cost performance beside gross, with statistical significance (bootstrap CI or t-stats)
 - [ ] **QUAL-04**: Codex read-only review passes per phase (correctness + dedicated leakage audit of each data pipeline); findings triaged and resolved before phase completion
 - [ ] **QUAL-05**: Shared conventions: src layout, pyproject.toml, configs in YAML, per-project requirements.txt, figures under reports/figures/
@@ -104,7 +104,7 @@
 | QBT-06 | Phase 1 — QBacktest | Complete |
 | QBT-07 | Phase 1 — QBacktest | Complete |
 | QBT-08 | Phase 1 — QBacktest | Pending |
-| QBT-09 | Phase 1 — QBacktest | Pending |
+| QBT-09 | Phase 1 — QBacktest | Complete |
 | QBT-10 | Phase 1 — QBacktest | Pending |
 | ALR-01 | Phase 2 — AlphaRank | Pending |
 | ALR-02 | Phase 2 — AlphaRank | Pending |
@@ -139,7 +139,7 @@
 | DFR-06 | Phase 5 — DeFiRegimeNet | Pending |
 | DFR-07 | Phase 5 — DeFiRegimeNet | Pending |
 | QUAL-01 | Phase 1 (established); recurs in Phases 2-5 | Pending |
-| QUAL-02 | Phase 1 (established); recurs in Phases 2-5 | Pending |
+| QUAL-02 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-03 | Phase 1 (established); recurs in Phases 2-5 | Pending |
 | QUAL-04 | Phase 1 (established); recurs in Phases 2-5 | Pending |
 | QUAL-05 | Phase 1 (established); recurs in Phases 2-5 | Pending |
