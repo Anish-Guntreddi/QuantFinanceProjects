@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-alpharank-04-PLAN.md (PurgedCVEvaluator, panel expansion, purge/embargo tests)
-last_updated: "2026-06-10T22:17:29.404Z"
+stopped_at: Completed 02-alpharank-03-PLAN.md (labels, IC analytics, IC decay, factor attribution)
+last_updated: "2026-06-10T22:20:34.476Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 17
-  completed_plans: 13
+  completed_plans: 14
   percent: 33
 ---
 
@@ -64,6 +64,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02-alpharank P02 | 5 | 2 tasks | 4 files |
 | Phase 02-alpharank P05 | 4 | 2 tasks | 5 files |
 | Phase 02-alpharank P04 | 4 | 2 tasks | 3 files |
+| Phase 02-alpharank P03 | 8 | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,10 @@ Recent decisions affecting current work:
 - [Phase 02-alpharank]: CPCV test side is list[ndarray] — np.concatenate(test_sets) required before any index arithmetic
 - [Phase 02-alpharank]: Panel expansion via flatnonzero dict NOT n_assets arithmetic — variable universe after delistings
 - [Phase 02-alpharank]: CPCV aggregation: average predictions across paths before IC computation (not average IC values)
+- [Phase 02-alpharank]: pct_change(fill_method=None) required — default pad fill triggers FutureWarning-as-error with delist NaN gaps
+- [Phase 02-alpharank]: maxlags=floor(4*(T/100)^0.25): T=60 gives 3 not 4 (plan doc arithmetic error corrected)
+- [Phase 02-alpharank]: min_obs=3 for compute_ic_series — minimum for valid Spearman (plan spec said 5 but test uses 3-asset input)
+- [Phase 02-alpharank]: icir zero-std guard: std < 1e-14 (not == 0.0) — floating point makes constant arrays non-zero std ~1e-18
 
 ### Pending Todos
 
@@ -117,6 +122,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T22:17:29.401Z
-Stopped at: Completed 02-alpharank-04-PLAN.md (PurgedCVEvaluator, panel expansion, purge/embargo tests)
+Last session: 2026-06-10T22:20:34.474Z
+Stopped at: Completed 02-alpharank-03-PLAN.md (labels, IC analytics, IC decay, factor attribution)
 Resume file: None
