@@ -1,0 +1,5 @@
+initial_capital: 100000.0
+position_size: 0.1
+cost_bps: 10
+slippage_model: fixed
+commission_model: percentage
