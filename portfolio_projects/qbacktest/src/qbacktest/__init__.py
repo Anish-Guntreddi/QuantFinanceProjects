@@ -52,13 +52,22 @@ from qbacktest.data.synthetic import SyntheticOHLCVGenerator
 from qbacktest.risk.manager import RiskManager
 from qbacktest.execution.handler import SimulatedExecutionHandler
 from qbacktest.metrics.performance import MetricsReport
-from qbacktest.tearsheet import TearsheetRenderer
 from qbacktest.walk_forward.runner import (
     WalkForwardWindow,
     WalkForwardResults,
     generate_windows,
     WalkForwardRunner,
 )
+
+def __getattr__(name: str):
+    # Lazy export: TearsheetRenderer pulls in matplotlib, which must not load
+    # at package init (keeps `import qbacktest` lightweight and headless-safe).
+    if name == "TearsheetRenderer":
+        from qbacktest.tearsheet import TearsheetRenderer
+
+        return TearsheetRenderer
+    raise AttributeError(f"module 'qbacktest' has no attribute {name!r}")
+
 
 __all__ = [
     "__version__",

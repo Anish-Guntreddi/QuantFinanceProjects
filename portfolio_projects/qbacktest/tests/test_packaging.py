@@ -33,3 +33,39 @@ def test_import_pulls_no_network_modules():
         timeout=60,
     )
     assert result.returncode == 0, "qbacktest import pulled in network modules"
+
+
+def test_public_api_complete():
+    """Every name in __all__ resolves from the qbacktest top level."""
+    import qbacktest
+
+    for name in qbacktest.__all__:
+        assert getattr(qbacktest, name, None) is not None, f"missing export: {name}"
+
+
+def test_import_does_not_load_matplotlib():
+    """matplotlib loads lazily (only when TearsheetRenderer is accessed)."""
+    code = (
+        "import sys; import qbacktest; "
+        "sys.exit(1 if 'matplotlib' in sys.modules else 0)"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=tempfile.mkdtemp(),
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0, "import qbacktest eagerly loaded matplotlib"
+
+
+def test_no_skipped_stubs_remain():
+    """All Wave 0 skip stubs have been replaced by real tests."""
+    import pathlib
+
+    tests_dir = pathlib.Path(__file__).parent
+    marker = "W0 " + "stub"  # split so this file's own source doesn't match
+    offenders = [
+        p.name for p in tests_dir.glob("test_*.py") if marker in p.read_text()
+    ]
+    assert offenders == [], f"Wave-0 skip markers remain in: {offenders}"
