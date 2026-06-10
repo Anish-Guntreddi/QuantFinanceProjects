@@ -12,7 +12,7 @@ Five research-grade quantitative finance projects built sequentially under `port
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: QBacktest** - Build the pip-installable event-driven backtesting engine that all other projects depend on
+- [x] **Phase 1: QBacktest** - Build the pip-installable event-driven backtesting engine that all other projects depend on (completed 2026-06-10)
 - [ ] **Phase 2: AlphaRank** - Build the ML cross-sectional equity ranking pipeline using QBacktest as the portfolio execution layer
 - [ ] **Phase 3: MacroRegime** - Build the regime-switching macro asset allocation system with point-in-time FRED data and HMM/GMM regime detection
 - [ ] **Phase 4: VolSurfaceLab** - Build the options volatility research system with IV surface fitting, RV forecasting, and standalone strategy P&L
@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. An oracle test demonstrates that signal generated at bar T fills at T+1 open price — not the same-bar close — under all slippage/spread model configurations
   4. WalkForwardRunner produces aggregated out-of-sample results with no state bleed between windows (verified by injecting a sentinel into engine state and confirming it does not appear in the next window)
   5. One-command runner (`python run_demo.py`) produces a tearsheet PNG and summary table with gross and net-of-cost Sharpe side by side on synthetic data; codex read-only review passes with no unresolved findings
-**Plans:** 8/9 plans executed
+**Plans:** 9/9 plans complete
 
 Plans:
 - [ ] 01-01-PLAN.md — Package skeleton, synthetic OHLCV generator, conftest + Wave 0 test stubs (wave 1)
@@ -105,7 +105,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. QBacktest | 8/9 | In Progress|  |
+| 1. QBacktest | 8/9 | Complete    | 2026-06-10 |
 | 2. AlphaRank | 0/TBD | Not started | - |
 | 3. MacroRegime | 0/TBD | Not started | - |
 | 4. VolSurfaceLab | 0/TBD | Not started | - |
