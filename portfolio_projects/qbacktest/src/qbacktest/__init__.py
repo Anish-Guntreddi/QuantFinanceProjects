@@ -33,6 +33,13 @@ Public API:
   Tearsheet
   ---------
   TearsheetRenderer       — 3-panel matplotlib PNG + summary table
+
+  Walk-Forward
+  ------------
+  WalkForwardWindow       — dataclass with train/test date ranges
+  WalkForwardResults      — dataclass with per-window and aggregate OOS results
+  generate_windows        — rolling train/test window generator
+  WalkForwardRunner       — orchestrator calling engine_factory per window
 """
 
 __version__ = "0.1.0"
@@ -46,6 +53,12 @@ from qbacktest.risk.manager import RiskManager
 from qbacktest.execution.handler import SimulatedExecutionHandler
 from qbacktest.metrics.performance import MetricsReport
 from qbacktest.tearsheet import TearsheetRenderer
+from qbacktest.walk_forward.runner import (
+    WalkForwardWindow,
+    WalkForwardResults,
+    generate_windows,
+    WalkForwardRunner,
+)
 
 __all__ = [
     "__version__",
@@ -60,4 +73,8 @@ __all__ = [
     "SimulatedExecutionHandler",
     "MetricsReport",
     "TearsheetRenderer",
+    "WalkForwardWindow",
+    "WalkForwardResults",
+    "generate_windows",
+    "WalkForwardRunner",
 ]
