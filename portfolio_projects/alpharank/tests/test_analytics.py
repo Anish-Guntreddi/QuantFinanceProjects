@@ -92,7 +92,9 @@ def test_nw_tstat():
     # Inline statsmodels reference
     T = len(ic_series)
     maxlags = int(np.floor(4 * (T / 100) ** 0.25))
-    assert maxlags == 4, f"Expected maxlags=4 for T=60, got {maxlags}"
+    # Verified: floor(4 * (60/100)^0.25) = floor(3.52) = 3 for T=60
+    # (The plan doc said 4, but the actual formula gives 3 — we match the formula)
+    assert maxlags == 3, f"Expected maxlags=3 for T=60, got {maxlags}"
 
     X = sm.add_constant(np.ones(T))
     ols = sm.OLS(ic_series.values, X).fit()
