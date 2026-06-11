@@ -75,7 +75,7 @@ def run_walk_forward(
         Per-window BacktestResults, OOS equity curve, and aggregate OOS metrics.
     """
     from qbacktest import WalkForwardRunner, generate_windows
-    from macroregime.benchmarks.benchmarks import run_strategy_backtest, load_run_params
+    from macroregime.benchmarks.benchmarks import build_strategy_engine, load_run_params
     from macroregime.allocation.weights import build_weight_schedule, month_end_rebalance_dates
 
     # Use the daily index from the first asset
@@ -111,59 +111,16 @@ def run_walk_forward(
         # as-of lookup here is safe (no look-ahead).
         window_schedule = build_weight_schedule(combined_regimes, rebal_dates, regime_weights)
 
-        # Assemble a fresh engine via the shared engine-assembly path (cost parity)
-        from macroregime.benchmarks.benchmarks import (
-            load_run_params,
-            TargetWeightStrategy,
-            TargetWeightPortfolio,
-            HistoricalDataHandler,
-            BacktestConfig,
-            EventDrivenBacktester,
-            SimulatedExecutionHandler,
-            SpreadSlippage,
-            PercentageCommission,
-            RiskManager,
-        )
-
-        spread_bps = params["spread_bps"]
-        commission_rate = params["commission_rate"]
-        initial_capital = params["initial_capital"]
-        max_gross_exposure = params["max_gross_exposure"]
-        max_position_weight = params["max_position_weight"]
-
-        data_handler = HistoricalDataHandler(
-            window_ohlcv,
+        # Assemble a fresh engine via the SINGLE shared engine-assembly path
+        # (build_strategy_engine) — same costs and engine params as every
+        # benchmark and the full-period regime backtest (MCR-07 cost parity).
+        return build_strategy_engine(
+            asset_ohlcv=window_ohlcv,
+            weight_schedule=window_schedule,
+            params=params,
             start=window.test_start,
             end=window.test_end,
         )
-        strategy = TargetWeightStrategy(window_schedule)
-        risk_manager = RiskManager(
-            max_position_weight=max_position_weight,
-            max_gross_exposure=max_gross_exposure,
-        )
-        portfolio = TargetWeightPortfolio(
-            initial_capital=initial_capital,
-            risk_manager=risk_manager,
-        )
-        execution_handler = SimulatedExecutionHandler(
-            slippage_model=SpreadSlippage(spread_bps=spread_bps),
-            commission_model=PercentageCommission(rate=commission_rate),
-        )
-        config = BacktestConfig(
-            initial_capital=initial_capital,
-            max_gross_exposure=max_gross_exposure,
-            max_position_weight=max_position_weight,
-            start=window.test_start,
-            end=window.test_end,
-        )
-        engine = EventDrivenBacktester(
-            data_handler=data_handler,
-            strategy=strategy,
-            portfolio=portfolio,
-            execution_handler=execution_handler,
-            config=config,
-        )
-        return engine
 
     runner = WalkForwardRunner(engine_factory=engine_factory, windows=windows)
     return runner.run()
@@ -214,7 +171,10 @@ def regime_stability_report(
     """
     from macroregime.regime.causal import CausalRegimeDetector
     from macroregime.regime.diagnostics import dwell_times
-    from macroregime.regime.alignment import align_regime_labels
+
+    # NOTE on alignment: CausalRegimeDetector aligns labels internally after
+    # every refit (argsort of state means on observable_dim), so HMM and GMM
+    # label sequences are directly comparable here — no extra alignment step.
 
     refit_every = 63 if quick else 21
     n_restarts = 2 if quick else 3
@@ -363,7 +323,6 @@ def k_sensitivity(
     # Second pass: compute metrics and agreement vs baseline
     for k in sorted(ks):
         labels = all_labels[k]
-        valid = labels >= 0
 
         dt = dwell_times(labels, k)
         tm = transition_matrix(labels, k)

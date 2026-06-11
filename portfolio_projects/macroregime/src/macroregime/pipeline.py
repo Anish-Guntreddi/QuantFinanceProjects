@@ -197,7 +197,10 @@ class MacroRegimePipeline:
         # -----------------------------------------------------------------
         # Step 5: ALLOCATE
         # -----------------------------------------------------------------
-        from macroregime.benchmarks.benchmarks import run_strategy_backtest  # function-level import
+        from macroregime.benchmarks.benchmarks import (  # function-level import
+            load_run_params,
+            run_strategy_backtest,
+        )
         from macroregime.allocation.weights import (
             load_regime_weights,
             build_weight_schedule,
@@ -211,10 +214,14 @@ class MacroRegimePipeline:
         regime_weights = load_regime_weights(self.params_path)
         weight_schedule = build_weight_schedule(combined_regimes, rebal_dates, regime_weights)
 
+        # A custom params_path must govern BOTH regime weights (above) and
+        # cost/engine params — otherwise overrides silently apply to only half
+        # the configuration.
+        run_params = None if self.params_path is None else load_run_params(self.params_path)
         regime_backtest = run_strategy_backtest(
             asset_ohlcv=asset_ohlcv,
             weight_schedule=weight_schedule,
-            params=None if self.params_path is None else None,  # always default path
+            params=run_params,
         )
 
         # -----------------------------------------------------------------

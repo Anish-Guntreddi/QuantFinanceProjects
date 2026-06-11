@@ -8,7 +8,8 @@ COST-PARITY GUARANTEE (MCR-07):
   from configs/strategy_params.yml via load_run_params(). No inline literals.
 
 Exports:
-  run_strategy_backtest         — single engine-assembly path (cost parity)
+  build_strategy_engine         — single engine-assembly path (cost parity)
+  run_strategy_backtest         — build_strategy_engine + run (cost parity)
   load_run_params               — single source of truth for cost/engine params
   build_60_40_weights           — {EQUITY:0.60, BONDS:0.40, COMMODITY:0.0, CASH:0.0}
   build_equal_weight_weights    — 0.25 each (4-asset universe)
@@ -105,18 +106,19 @@ def load_run_params(path: str | Path | None = None) -> dict[str, Any]:
     }
 
 
-def run_strategy_backtest(
+def build_strategy_engine(
     asset_ohlcv: dict[str, pd.DataFrame],
     weight_schedule: dict[pd.Timestamp, dict[str, float]],
     params: dict[str, Any] | None = None,
     start: pd.Timestamp | None = None,
     end: pd.Timestamp | None = None,
-) -> Any:
-    """Assemble and run an event-driven backtest via a single shared engine path.
+) -> EventDrivenBacktester:
+    """Assemble an event-driven backtest engine via the single shared path.
 
     This is THE ONLY engine-assembly function in the macroregime package.
-    Every benchmark AND the regime strategy MUST route through here so that
-    cost and engine parameters are provably identical across comparisons.
+    Every benchmark, the regime strategy, AND walk-forward engine factories
+    MUST route through here so that cost and engine parameters are provably
+    identical across comparisons.
 
     Parameters
     ----------
@@ -137,9 +139,8 @@ def run_strategy_backtest(
 
     Returns
     -------
-    BacktestResults
-        Engine results including equity_curve, trades, and metrics (gross/net
-        Sharpe ratios).
+    EventDrivenBacktester
+        A fully assembled, un-run engine. Call ``.run()`` to execute.
     """
     if params is None:
         params = load_run_params()
@@ -172,12 +173,39 @@ def run_strategy_backtest(
         end=end,
     )
 
-    engine = EventDrivenBacktester(
+    return EventDrivenBacktester(
         data_handler=data_handler,
         strategy=strategy,
         portfolio=portfolio,
         execution_handler=execution_handler,
         config=config,
+    )
+
+
+def run_strategy_backtest(
+    asset_ohlcv: dict[str, pd.DataFrame],
+    weight_schedule: dict[pd.Timestamp, dict[str, float]],
+    params: dict[str, Any] | None = None,
+    start: pd.Timestamp | None = None,
+    end: pd.Timestamp | None = None,
+) -> Any:
+    """Assemble (via build_strategy_engine) and run an event-driven backtest.
+
+    See build_strategy_engine for parameter documentation — this is a thin
+    wrapper that preserves the cost-parity guarantee.
+
+    Returns
+    -------
+    BacktestResults
+        Engine results including equity_curve, trades, and metrics (gross/net
+        Sharpe ratios).
+    """
+    engine = build_strategy_engine(
+        asset_ohlcv=asset_ohlcv,
+        weight_schedule=weight_schedule,
+        params=params,
+        start=start,
+        end=end,
     )
     return engine.run()
 
