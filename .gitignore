@@ -86,6 +86,10 @@ desktop.ini
 
 # Data files and databases
 data/
+# ...but source subpackages named `data` inside src layouts are CODE, not data
+!**/src/**/data/
+!**/src/**/data/**
+**/src/**/data/**/__pycache__/
 *.csv
 *.parquet
 *.h5

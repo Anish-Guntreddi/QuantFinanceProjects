@@ -78,8 +78,8 @@ def test_vol_clustering(seeded_crypto_panel):
     close = panel.ohlcv[token]["close"]
     log_returns = np.log(close).diff().dropna()
 
-    result = fit_garch_robust(log_returns)
-    assert result.converged, f"{token}: GARCH did not converge"
+    result, converged = fit_garch_robust(log_returns)
+    assert converged, f"{token}: GARCH did not converge"
     params = result.params
     # alpha = arch[1], beta = garch[1]
     alpha = params.get("alpha[1]", params.get("alpha1", None))
