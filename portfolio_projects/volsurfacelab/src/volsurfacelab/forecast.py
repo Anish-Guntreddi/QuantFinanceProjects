@@ -277,8 +277,16 @@ def garch_oos_forecast(
             f"(first {split_idx} observations)."
         )
 
-    # One-step-ahead forecasts for the OOS window
-    # arch forecast with start=split_idx returns h=1 forecast at each OOS step
+    # One-step-ahead forecasts for the OOS window.
+    #
+    # ALIGNMENT (verified empirically against a manual GARCH filter): arch
+    # labels h=1 forecasts by their ORIGIN date — the row labeled t contains
+    # E[h_{t+1} | F_t], which already includes r_t^2 in its recursion.  Keeping
+    # the origin label and evaluating against rv_t (= r_t^2 under the daily
+    # squared-return proxy) would put the evaluation target INSIDE the
+    # forecast — same-day look-ahead that flatters GARCH/EGARCH vs HAR.
+    # Re-label each forecast to its TARGET date (origin + 1) and drop the
+    # final forecast whose target falls beyond the sample.
     n_oos = len(returns) - split_idx
     fc = best_result.forecast(horizon=1, start=split_idx, reindex=False)
     # fc.variance is a DataFrame; h.1 column contains the h=1 forecasts
@@ -287,8 +295,9 @@ def garch_oos_forecast(
     # Rescale from %-squared to decimal units
     var_decimal = var_pct_sq / 1e4
 
-    oos_index = returns.index[split_idx: split_idx + len(var_decimal)]
-    return pd.Series(var_decimal, index=oos_index, name=vol)
+    target_index = returns.index[split_idx + 1:]
+    var_decimal = var_decimal[: len(target_index)]
+    return pd.Series(var_decimal, index=target_index, name=vol)
 
 
 # ---------------------------------------------------------------------------

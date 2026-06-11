@@ -243,3 +243,61 @@ def test_compare_forecasts_table(underlying_returns):
         assert model in fc.forecasts
         assert isinstance(fc.forecasts[model], pd.Series)
         assert len(fc.forecasts[model]) > 0
+
+
+# ---------------------------------------------------------------------------
+# GARCH forecast alignment oracle (regression for origin-vs-target labeling)
+# ---------------------------------------------------------------------------
+
+
+def test_garch_forecast_aligned_to_target_date():
+    """A forecast labeled t must NOT contain information from day t.
+
+    arch labels h=1 forecasts by ORIGIN date (row t = E[h_{t+1} | F_t], which
+    includes r_t^2). If those labels are kept, the forecast labeled t contains
+    rv_t itself — same-day look-ahead that flatters GARCH/EGARCH vs HAR in the
+    QLIKE/MSE comparison. garch_oos_forecast must re-label forecasts to their
+    TARGET date.
+
+    Oracle: plant one huge shock in the OOS window of an otherwise calm
+    series. Realized variance spikes at the shock date; the GARCH forecast
+    can only react the NEXT day. The forecast's spike date must therefore be
+    strictly AFTER the rv spike date — equality means look-ahead.
+    """
+    from volsurfacelab.forecast import garch_oos_forecast
+
+    # GARCH(1,1) path so the fitted alpha is meaningfully > 0 and the model
+    # actually reacts to shocks (a calm iid training window fits alpha ~ 0,
+    # muting the response this oracle depends on).
+    rng = np.random.default_rng(123)
+    n, split = 600, 500
+    omega_t, alpha_t, beta_t = 2e-6, 0.10, 0.85
+    h = np.empty(n)
+    r_arr = np.empty(n)
+    h[0] = omega_t / (1 - alpha_t - beta_t)
+    r_arr[0] = np.sqrt(h[0]) * rng.standard_normal()
+    for t in range(1, n):
+        h[t] = omega_t + alpha_t * r_arr[t - 1] ** 2 + beta_t * h[t - 1]
+        r_arr[t] = np.sqrt(h[t]) * rng.standard_normal()
+    r = pd.Series(r_arr, index=pd.bdate_range("2015-01-01", periods=n))
+    shock_pos = 550
+    r.iloc[shock_pos] = 0.20  # massive shock, far beyond path scale
+
+    fcst = garch_oos_forecast(r, vol="GARCH", split_idx=split)
+    rv = realized_variance(r).reindex(fcst.index)
+
+    shock_date = r.index[shock_pos]
+    day_after = r.index[shock_pos + 1]
+
+    assert rv.idxmax() == shock_date
+
+    # Alignment property: the forecast labeled with the shock date was made
+    # the prior evening and CANNOT know the shock; the forecast labeled the
+    # day after must have absorbed it. Origin-labeled (leaky) forecasts would
+    # spike ON the shock date instead.
+    assert fcst.loc[day_after] > 10 * fcst.loc[shock_date], (
+        f"Forecast at {day_after} ({fcst.loc[day_after]:.3e}) should dwarf "
+        f"the forecast at {shock_date} ({fcst.loc[shock_date]:.3e}) — if it "
+        "spikes ON the shock date the labels contain same-day information."
+    )
+    assert fcst.idxmax() == day_after
