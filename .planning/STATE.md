@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-macroregime-05-PLAN.md (TargetWeightPortfolio, TargetWeightStrategy, regime weights YAML)
-last_updated: "2026-06-11T00:19:24.366Z"
+stopped_at: Completed 03-macroregime-07-PLAN.md (MacroRegimePipeline, evaluation, walk-forward)
+last_updated: "2026-06-11T13:42:26.015Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 26
-  completed_plans: 22
+  completed_plans: 24
   percent: 33
 ---
 
@@ -72,6 +72,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 03-macroregime P03 | 6 | 2 tasks | 3 files |
 | Phase 03-macroregime P04 | 6 | 2 tasks | 5 files |
 | Phase 03-macroregime P05 | 6 | 2 tasks | 5 files |
+| Phase 03-macroregime P07 | 12 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -133,6 +134,10 @@ Recent decisions affecting current work:
 - [Phase 03-macroregime]: transition_matrix unvisited rows = uniform 1/K (not zero/NaN) to keep matrix row-stochastic for all downstream consumers
 - [Phase 03-macroregime]: TargetWeightPortfolio overrides generate_orders only — on_fill/invariant inherited from qbacktest unchanged (locked: qbacktest never modified)
 - [Phase 03-macroregime]: TargetWeightStrategy tracks _last_emitted signed weight (not direction): |new-last|>1e-9 re-emission closes PrecomputedWeightsStrategy direction-only gap
+- [Phase 03-macroregime]: Expanding z-score (not full-sample): full-sample standardization leaks future mean/std into historical feature values, breaking causality
+- [Phase 03-macroregime]: Two separate CausalRegimeDetector instances for macro and market: mixing monthly + daily features into one matrix creates frequency-alignment artifacts and is semantically wrong
+- [Phase 03-macroregime]: K sensitivity by Sharpe forbidden (anti-feature): selecting K to maximize Sharpe overfits regime model to backtest period
+- [Phase 03-macroregime]: Regime reuse across walk-forward windows is safe: CausalRegimeDetector oracle guarantee proves label at t is window-invariant
 
 ### Pending Todos
 
@@ -146,6 +151,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-11T00:19:24.359Z
-Stopped at: Completed 03-macroregime-05-PLAN.md (TargetWeightPortfolio, TargetWeightStrategy, regime weights YAML)
+Last session: 2026-06-11T13:42:26.012Z
+Stopped at: Completed 03-macroregime-07-PLAN.md (MacroRegimePipeline, evaluation, walk-forward)
 Resume file: None

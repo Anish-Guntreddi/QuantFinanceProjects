@@ -39,7 +39,7 @@
 - [x] **MCR-05**: Regime labels are aligned across re-fits (states ordered by economically meaningful quantity); persistence diagnostics (transition matrix, dwell times) reported
 - [x] **MCR-06**: Allocation layer maps regimes to portfolio weights across equities/bonds/commodities/cash and rebalances through qbacktest with costs
 - [ ] **MCR-07**: Strategy is benchmarked against 60/40, equal weight, and risk parity over identical periods with identical costs
-- [ ] **MCR-08**: Walk-forward evaluation with out-of-sample regime stability analysis; one-command runner produces the research report
+- [x] **MCR-08**: Walk-forward evaluation with out-of-sample regime stability analysis; one-command runner produces the research report
 
 ### VolSurfaceLab — IV Surface & Options Mispricing (VSL)
 
@@ -122,7 +122,7 @@
 | MCR-05 | Phase 3 — MacroRegime | Complete |
 | MCR-06 | Phase 3 — MacroRegime | Complete |
 | MCR-07 | Phase 3 — MacroRegime | Pending |
-| MCR-08 | Phase 3 — MacroRegime | Pending |
+| MCR-08 | Phase 3 — MacroRegime | Complete |
 | VSL-01 | Phase 4 — VolSurfaceLab | Pending |
 | VSL-02 | Phase 4 — VolSurfaceLab | Pending |
 | VSL-03 | Phase 4 — VolSurfaceLab | Pending |
