@@ -103,7 +103,17 @@ Plans:
   3. Smile/skew plots per maturity and a 3D/heatmap surface plot are produced and appear in the research report; surface covers the moneyness/maturity range specified in the synthetic chain
   4. RV forecasting comparison table shows QLIKE and MSE for HAR baseline vs GARCH vs EGARCH with Diebold-Mariano test p-values; GARCH fitting uses multi-restart robust wrapper with convergence flags asserted
   5. One-command runner (`python run_pipeline.py`) produces the research report with surface figures, forecast comparison, and strategy P&L with Greeks risk summary; codex review passes with no unresolved findings
-**Plans**: TBD
+**Plans:** 8 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Package skeleton, synthetic SVI-surface chain + GARCH underlying path, Wave-0 test stubs (wave 1)
+- [ ] 04-02-PLAN.md — Robust IV solver: LetsBeRational + brentq fallback, 1e-6 round-trip oracle (wave 2)
+- [ ] 04-03-PLAN.md — SVI calibration (butterfly-constrained SLSQP) + static no-arb gate with planted-arb tests (wave 2)
+- [ ] 04-04-PLAN.md — RV forecasting: HAR/GARCH/EGARCH, QLIKE + MSE, Diebold-Mariano (wave 2)
+- [ ] 04-05-PLAN.md — VRP delta-hedged straddle strategy, standalone P&L accounting, Greeks (wave 2)
+- [ ] 04-06-PLAN.md — Pipeline assembly + ReportBuilder: smile/3D/heatmap figures, tables (wave 3)
+- [ ] 04-07-PLAN.md — run_pipeline.py runner, README research report, integration tests (wave 4)
+- [ ] 04-08-PLAN.md — Quality gate: API freeze, strict suite x2, codex read-only audit (wave 5)
 
 ### Phase 5: DeFiRegimeNet
 **Goal**: A complete hybrid ML + econometric regime detection system for DeFi/crypto markets exists — deterministic synthetic crypto data, causal HMM/GMM + ML classifiers, GARCH vol forecasting, purged/embargoed CV, per-token diagnostics — with a publication-style research report from one runner command
