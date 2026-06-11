@@ -96,7 +96,10 @@ def test_identical_costs_across_strategies():
     sched_ew = build_equal_weight_weights(rebalance_dates)
     sched_rp = build_risk_parity_weights(asset_returns, rebalance_dates)
     # Dummy regime schedule (simulate regime strategy output)
-    sched_dummy = {ts: {"EQUITY": 0.40, "BONDS": 0.40, "COMMODITY": 0.10, "CASH": 0.10}
+    # Normalise to pd.Timestamp — rebalance_dates from month_end_rebalance_dates()
+    # returns numpy int64 epoch-nanosecond values; TargetWeightStrategy requires
+    # pd.Timestamp-comparable keys for bisect_right.
+    sched_dummy = {pd.Timestamp(ts): {"EQUITY": 0.40, "BONDS": 0.40, "COMMODITY": 0.10, "CASH": 0.10}
                    for ts in rebalance_dates}
 
     schedules = [sched_60_40, sched_ew, sched_rp, sched_dummy]
@@ -215,7 +218,8 @@ def test_risk_parity_weights():
     # Panel vols: EQUITY=0.015, BONDS=0.005, COMMODITY=0.012, CASH=0.002
     # Expected order: CASH > BONDS > COMMODITY > EQUITY (roughly)
     # Check at a late rebalance date (enough history for good estimation)
-    late_dates = [d for d in rebalance_dates if d >= pd.Timestamp("2021-07-01")]
+    # schedule keys are pd.Timestamp (normalised by build_risk_parity_weights)
+    late_dates = [d for d in schedule.keys() if d >= pd.Timestamp("2021-07-01")]
     assert len(late_dates) > 0, "No late rebalance dates found for vol ordering check"
 
     late_ts = late_dates[0]
@@ -235,7 +239,10 @@ def test_risk_parity_weights():
     # --- Assertion 3: as-of property ---
     # Pick a mid-point rebalance date.
     mid_idx = len(rebalance_dates) // 2
-    mid_date = rebalance_dates[mid_idx]
+    # Normalise to pd.Timestamp — raw rebalance_dates entries may be numpy
+    # int64 epoch-nanoseconds, which cannot slice a DatetimeIndex and would
+    # not match the pd.Timestamp keys of the returned schedules.
+    mid_date = pd.Timestamp(rebalance_dates[mid_idx])
 
     # Compute weights using only returns up to mid_date
     truncated_returns = asset_returns.loc[:mid_date]

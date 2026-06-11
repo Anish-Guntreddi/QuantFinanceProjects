@@ -208,7 +208,7 @@ def build_60_40_weights(
         rebalance date.
     """
     weights = {EQUITY: 0.60, BONDS: 0.40, COMMODITY: 0.0, CASH: 0.0}
-    return {ts: dict(weights) for ts in rebalance_dates}
+    return {pd.Timestamp(ts): dict(weights) for ts in rebalance_dates}
 
 
 def build_equal_weight_weights(
@@ -232,7 +232,7 @@ def build_equal_weight_weights(
     """
     w = 1.0 / len(_UNIVERSE)
     weights = {sym: w for sym in _UNIVERSE}
-    return {ts: dict(weights) for ts in rebalance_dates}
+    return {pd.Timestamp(ts): dict(weights) for ts in rebalance_dates}
 
 
 def build_risk_parity_weights(
@@ -273,12 +273,17 @@ def build_risk_parity_weights(
     symbols = list(asset_returns.columns)
 
     for ts in rebalance_dates:
+        # Normalise ts to pd.Timestamp: month_end_rebalance_dates returns
+        # numpy int64 epoch-nanoseconds from .values.tolist(); pandas .loc
+        # cannot slice a DatetimeIndex with int keys, so convert here.
+        ts_pd = pd.Timestamp(ts)
+
         # Strict as-of: slice up to ts, then exclude ts itself to avoid
         # same-day information leakage.
-        trailing_raw = asset_returns.loc[:ts]
-        # Drop the row at ts (same-day info) if present
-        if ts in trailing_raw.index:
-            trailing_raw = trailing_raw.drop(ts)
+        trailing_raw = asset_returns.loc[:ts_pd]
+        # Drop the row at ts_pd (same-day info) if present
+        if ts_pd in trailing_raw.index:
+            trailing_raw = trailing_raw.drop(ts_pd)
         # Apply lookback window
         trailing = trailing_raw.tail(lookback_bars)
 
@@ -286,14 +291,14 @@ def build_risk_parity_weights(
             # Not enough history — fall back to equal weight
             logger.debug(
                 "Risk parity: fewer than 20 trailing bars at %s, using equal weight",
-                ts,
+                ts_pd,
             )
             w = 1.0 / len(symbols)
-            schedule[ts] = {sym: w for sym in symbols}
+            schedule[ts_pd] = {sym: w for sym in symbols}
             continue
 
         weights_arr = _fit_inverse_vol(trailing.values)
-        schedule[ts] = dict(zip(symbols, weights_arr))
+        schedule[ts_pd] = dict(zip(symbols, weights_arr))
 
     return schedule
 
