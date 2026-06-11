@@ -160,6 +160,10 @@ def build_strategy_engine(
     portfolio = TargetWeightPortfolio(
         initial_capital=initial_capital,
         risk_manager=risk_manager,
+        # Schedule-aware risk projections: gross-exposure checks at rebalance
+        # bars use the bar's full target vector, so validation is independent
+        # of within-bar symbol processing order.
+        weight_schedule=weight_schedule,
     )
     execution_handler = SimulatedExecutionHandler(
         slippage_model=SpreadSlippage(spread_bps=spread_bps),

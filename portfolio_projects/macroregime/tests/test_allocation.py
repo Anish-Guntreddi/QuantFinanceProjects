@@ -36,6 +36,60 @@ def _make_fill(symbol, quantity, fill_price, commission=0.0, slippage=0.0):
 # ---------------------------------------------------------------------------
 
 
+def test_fully_invested_portfolio_can_rebalance():
+    """Regression: a fully-invested portfolio must still generate rebalance orders.
+
+    The qbacktest RiskManager projects exposure ADDITIVELY (current + |order|),
+    so a naive integration rejects every order once gross is near the limit —
+    including sells — silently degrading every strategy to buy-and-hold after
+    the first rebalance. TargetWeightPortfolio must feed POST-TRADE projections
+    instead, including pending sibling orders from the same rebalance bar.
+    """
+    from macroregime.allocation import TargetWeightPortfolio
+    from qbacktest.events import SignalEvent
+    from qbacktest.risk.manager import RiskManager
+
+    risk = RiskManager(max_position_weight=0.70, max_gross_exposure=1.05)
+    portfolio = TargetWeightPortfolio(initial_capital=1_000_000, risk_manager=risk)
+    price = 100.0
+
+    # Bar 1: fully invest at 60/40
+    ts1 = pd.Timestamp("2023-01-02")
+    for sym, w in [("EQUITY", 0.60), ("BONDS", 0.40)]:
+        sig = SignalEvent(timestamp=ts1, symbol=sym, direction="LONG", strength=w)
+        orders = portfolio.generate_orders(sig, price)
+        assert len(orders) == 1, f"Initial allocation order for {sym} was rejected"
+        signed = orders[0].quantity if orders[0].direction == "BUY" else -orders[0].quantity
+        portfolio.on_fill(_make_fill(sym, quantity=signed, fill_price=price))
+
+    # Portfolio is now ~fully invested (gross ≈ 1.0, near the 1.05 limit).
+    # Bar 2: regime flips — rebalance to 10/55 plus new 30% CASH sleeve.
+    ts2 = pd.Timestamp("2023-02-01")
+    targets = [("EQUITY", 0.10), ("BONDS", 0.55), ("CASH", 0.30)]
+    emitted = {}
+    for sym, w in targets:
+        sig = SignalEvent(timestamp=ts2, symbol=sym, direction="LONG", strength=w)
+        orders = portfolio.generate_orders(sig, price)
+        assert len(orders) == 1, (
+            f"Rebalance order for {sym} (target {w}) was rejected — "
+            "fully-invested portfolio cannot rebalance (additive-projection bug)"
+        )
+        emitted[sym] = orders[0]
+
+    assert emitted["EQUITY"].direction == "SELL", "EQUITY 0.60→0.10 must be a SELL"
+    assert emitted["BONDS"].direction == "BUY", "BONDS 0.40→0.55 must be a BUY"
+    assert emitted["CASH"].direction == "BUY", "CASH 0→0.30 must be a BUY"
+
+    # Risk limits still bind on true post-trade violations:
+    portfolio2 = TargetWeightPortfolio(initial_capital=1_000_000, risk_manager=risk)
+    sig_big = SignalEvent(
+        timestamp=ts1, symbol="CASH", direction="LONG", strength=0.90
+    )
+    assert portfolio2.generate_orders(sig_big, price) == [], (
+        "Target weight 0.90 must be rejected (max_position_weight=0.70)"
+    )
+
+
 def test_target_weight_portfolio_sizes_position():
     """TargetWeightPortfolio uses signal.strength as target weight fraction.
 

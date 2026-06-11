@@ -10,8 +10,13 @@ Design notes (MCR-06):
     See docstring note below.
   - strength is clamped to [0, 1] before use: negative → 0.0 (no position),
     above 1 → 1.0 (fully invested in this symbol).
-  - Risk manager seam is identical to the base class: same duck-typed
-    validate_order call with the same primitive arguments.
+  - Risk manager seam is duck-typed validate_order with the same primitive
+    arguments as the base class, but fed POST-TRADE projections (see
+    generate_orders). The base class's additive projection (current + |order|)
+    treats rebalancing sells as exposure ADDITIONS: once fully invested, every
+    subsequent order — including trims — is rejected and the portfolio
+    silently degrades to buy-and-hold. A target-weight portfolio must project
+    the post-trade state instead.
 
 LOCKED DECISION: qbacktest package is never modified. This subclass is the
 adaptation layer between the macroregime regime-weight allocation logic and
@@ -20,6 +25,7 @@ the qbacktest event engine.
 
 from __future__ import annotations
 
+import bisect
 import logging
 import math
 
@@ -61,6 +67,34 @@ class TargetWeightPortfolio(Portfolio):
         Pass None to skip pre-trade risk checks.
     """
 
+    def __init__(self, *args, weight_schedule=None, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        # Per-bar pending post-trade position values for rebalance batches.
+        # A monthly rebalance emits one signal per symbol at the SAME bar;
+        # with T+1 fills, positions do not update between those signals, so
+        # gross-exposure projections must use the already-targeted values of
+        # sibling symbols (their pending sells/buys), not stale current values.
+        self._pending_bar_ts: pd.Timestamp | None = None
+        self._pending_post_values: dict[str, float] = {}
+        # Optional weight schedule ({rebalance_ts: {symbol: weight}}) — the
+        # same dict given to TargetWeightStrategy. When provided, gross
+        # projections for siblings NOT yet processed this bar use the bar's
+        # target weights instead of stale current values, making the risk
+        # check independent of within-bar symbol processing order (the engine
+        # delivers per-symbol MarketEvents in arbitrary order; without this, a
+        # large buy validated before its sibling sells is spuriously rejected).
+        self._schedule: dict = weight_schedule or {}
+        self._schedule_keys: list = sorted(self._schedule.keys())
+
+    def _bar_target_weights(self, ts) -> dict:
+        """As-of lookup of the target weight map applicable at bar ``ts``."""
+        if not self._schedule_keys:
+            return {}
+        idx = bisect.bisect_right(self._schedule_keys, ts) - 1
+        if idx < 0:
+            return {}
+        return self._schedule[self._schedule_keys[idx]]
+
     def generate_orders(
         self, signal: SignalEvent, price: float
     ) -> list[OrderEvent]:
@@ -100,30 +134,77 @@ class TargetWeightPortfolio(Portfolio):
 
         delta = target_qty - current_qty_val
 
+        # Reset the pending-batch tracker on a new bar
+        if self._pending_bar_ts != signal.timestamp:
+            self._pending_bar_ts = signal.timestamp
+            self._pending_post_values = {}
+
+        post_value = abs(target_qty) * price
+
         if abs(delta) < 1e-9:
-            # Already at target — no order needed
+            # Already at target — no order needed. Record the (unchanged)
+            # post-trade value so sibling orders this bar project against it.
+            self._pending_post_values[symbol] = post_value
             return []
 
         direction = "BUY" if delta > 0 else "SELL"
         abs_delta = abs(delta)
-        order_value = abs_delta * price
 
-        # Pre-trade risk check (same duck-typed seam as base class)
+        # Pre-trade risk check — POST-TRADE projection, rebalance-aware.
+        # RiskManager's math is additive:
+        #     projected_weight = (current_position_value + order_value) / equity
+        #     projected_gross  = gross_exposure + order_value / equity
+        # We pass current_position_value=0 and order_value=|post-trade value|
+        # so both formulas evaluate to the TRUE post-trade state:
+        #     projected_weight = |target_qty * price| / equity
+        #     projected_gross  = (gross of other symbols + |post value|) / equity
+        # Other symbols already re-targeted this bar contribute their pending
+        # post-trade values (their sells/buys fill at the same T+1 open).
         if self.risk_manager is not None:
-            gross_exp = self._gross_exposure(price, symbol, delta)
-            current_pos_value = abs(current_qty_val * price)
+            gross_other = 0.0
+            counted = {symbol}
+            # 1. Exact post-trade values of siblings already processed this bar
+            #    (includes rejected siblings, recorded at their current value).
+            for sym, pv in self._pending_post_values.items():
+                if sym in counted:
+                    continue
+                gross_other += pv
+                counted.add(sym)
+            # 2. Siblings that WILL be re-targeted this bar (per the schedule)
+            #    but have not been processed yet: project their target value.
+            for sym, w in self._bar_target_weights(signal.timestamp).items():
+                if sym in counted:
+                    continue
+                gross_other += min(1.0, abs(w)) * current_equity
+                counted.add(sym)
+            # 3. Everything else: current book value.
+            for sym, pos in self.positions.items():
+                if sym in counted:
+                    continue
+                gross_other += abs(pos.quantity) * pos.avg_fill_price
+
             ok, reason = self.risk_manager.validate_order(
                 symbol=symbol,
-                order_value=order_value,
-                current_position_value=current_pos_value,
-                gross_exposure=gross_exp,
+                order_value=post_value,
+                current_position_value=0.0,
+                gross_exposure=(
+                    gross_other / current_equity
+                    if current_equity > 0
+                    else float("inf")
+                ),
                 equity=current_equity,
             )
             if not ok:
                 logger.warning(
                     "Order rejected by risk manager for %s: %s", symbol, reason
                 )
+                # Rebalance for this symbol failed — its post-trade value is
+                # its CURRENT value, not the target. Record it so later
+                # siblings this bar project against reality.
+                self._pending_post_values[symbol] = abs(current_qty_val) * price
                 return []
+
+        self._pending_post_values[symbol] = post_value
 
         order = OrderEvent(
             timestamp=signal.timestamp,
