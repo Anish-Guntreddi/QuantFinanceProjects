@@ -437,7 +437,16 @@ class MacroRegimePipeline:
         # Reindex macro_regimes to the full daily_index then ffill.
         # This is safe because the macro series already has publication-date index
         # (lag was applied by the loader in step 1 of the chain).
-        macro_daily = macro_regimes.reindex(daily_index, method=None).ffill()
+        #
+        # Bug fix (codex audit MCR-09): publication dates that fall on weekends are
+        # not present in daily_index (business-day calendar).  A plain
+        # reindex(daily_index, method=None).ffill() silently drops those weekend
+        # rows before the fill, leaving the first trading day of the following week
+        # with the stale prior regime instead of the newly-published one.
+        # Fix: union the publication-date index with daily_index, ffill across the
+        # union (which includes the weekend dates), then restrict to daily_index.
+        combined_idx = daily_index.union(macro_regimes.index).sort_values()
+        macro_daily = macro_regimes.reindex(combined_idx).ffill().reindex(daily_index)
         # Convert to int-friendly: NaN → -1 sentinel
         macro_daily = macro_daily.fillna(-1).astype(int)
 
