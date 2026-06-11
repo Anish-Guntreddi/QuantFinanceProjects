@@ -47,7 +47,7 @@
 - [x] **VSL-02**: Implied-vol solver (py_vollib LetsBeRational + scipy brentq fallback) recovers known vols round-trip to 1e-6 and handles deep OTM/ITM gracefully
 - [x] **VSL-03**: SVI surface calibration per maturity slice with static no-arbitrage validation (butterfly convexity, calendar monotonicity) gating downstream analysis
 - [ ] **VSL-04**: Surface visualization: smile/skew per maturity and 3D/heatmap surface plots
-- [ ] **VSL-05**: Realized-vol forecasting with HAR baseline then GARCH/EGARCH (robust multi-restart fitting with convergence checks); evaluated with QLIKE and MSE, Diebold-Mariano test between models
+- [x] **VSL-05**: Realized-vol forecasting with HAR baseline then GARCH/EGARCH (robust multi-restart fitting with convergence checks); evaluated with QLIKE and MSE, Diebold-Mariano test between models
 - [ ] **VSL-06**: IV-vs-RV spread analysis (variance risk premium) with delta-hedged straddle/strangle strategy P&L using standalone accounting (not the event engine), including costs
 - [ ] **VSL-07**: Greeks (delta, gamma, vega, theta) computed for strategy positions; risk summary in report
 - [ ] **VSL-08**: One-command runner produces the research report with surface figures, forecast comparison tables, and strategy results
@@ -127,7 +127,7 @@
 | VSL-02 | Phase 4 — VolSurfaceLab | Complete |
 | VSL-03 | Phase 4 — VolSurfaceLab | Complete |
 | VSL-04 | Phase 4 — VolSurfaceLab | Pending |
-| VSL-05 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-05 | Phase 4 — VolSurfaceLab | Complete |
 | VSL-06 | Phase 4 — VolSurfaceLab | Pending |
 | VSL-07 | Phase 4 — VolSurfaceLab | Pending |
 | VSL-08 | Phase 4 — VolSurfaceLab | Pending |

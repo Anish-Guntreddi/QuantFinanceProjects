@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 04-volsurfacelab-03-PLAN.md (SVI calibration + no-arb gate)
-last_updated: "2026-06-11T15:59:59.548Z"
+stopped_at: "Completed 04-volsurfacelab-04-PLAN.md (RV forecasting stack: HAR/GARCH/EGARCH + QLIKE + DM)"
+last_updated: "2026-06-11T16:00:49.088Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 34
-  completed_plans: 30
+  completed_plans: 31
   percent: 33
 ---
 
@@ -78,6 +78,8 @@ Progress: [███░░░░░░░] 33%
 | Phase 04-volsurfacelab P01 | 9 | 2 tasks | 12 files |
 | Phase 04-volsurfacelab P02 | 3 | 2 tasks | 2 files |
 | Phase 04-volsurfacelab P03 | 4 | 2 tasks | 2 files |
+| Phase 04-volsurfacelab P04 | 4 | 2 tasks | 2 files |
+| Phase 04-volsurfacelab P05 | 5 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -155,6 +157,12 @@ Recent decisions affecting current work:
 - [Phase 04-volsurfacelab]: Calendar check restricted to linspace(-1.5, 1.5, 200) by default — deep-wing violations are parameterization artifacts, not actionable arbitrage
 - [Phase 04-volsurfacelab]: validate_surface uses warnings.warn(UserWarning) never raises — gate behavior: exclude and continue
 - [Phase 04-volsurfacelab]: w(k) > 0 positivity constraint added alongside g(k) >= 0 in SLSQP — handles negative-a edge case (pitfall 7)
+- [Phase 04-volsurfacelab]: statsmodels OLS for HAR-RV (not arch HARX) — DataScaleWarning on raw RV; cleaner parameter names
+- [Phase 04-volsurfacelab]: QLIKE convention: L(h,rv)=rv/h-log(rv/h)-1 (Patton 2011); under-forecast penalized more; oracle test asserts qlike(rv,2rv)<qlike(rv,0.5rv)
+- [Phase 04-volsurfacelab]: HAR no-look-ahead: single-point perturbation oracle (rv[t] change must not affect forecast at t; t+1 may change — that is correct causal behavior)
+- [Phase 04-volsurfacelab]: StandalonePortfolio does NOT import qbacktest — locked roadmap decision; standalone accounting for VolSurfaceLab
+- [Phase 04-volsurfacelab]: Straddle delta test uses r=0 for ATM delta cancellation; at r>0 carry term shifts net delta above 0.15 threshold by design
+- [Phase 04-volsurfacelab]: theta_daily = vollib_theta / 252 (business-day convention); VRP series is point-in-time IV^2 - r_t^2*252 (no look-ahead)
 
 ### Pending Todos
 
@@ -168,6 +176,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-11T15:59:59.546Z
-Stopped at: Completed 04-volsurfacelab-03-PLAN.md (SVI calibration + no-arb gate)
+Last session: 2026-06-11T16:00:32.936Z
+Stopped at: Completed 04-volsurfacelab-04-PLAN.md (RV forecasting stack: HAR/GARCH/EGARCH + QLIKE + DM)
 Resume file: None
