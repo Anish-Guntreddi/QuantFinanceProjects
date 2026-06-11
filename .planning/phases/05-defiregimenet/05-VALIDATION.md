@@ -38,7 +38,7 @@ created: 2026-06-11
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| Skeleton + editable install | 05-01 T1 | 1 | DFR-01 | smoke | `python -c "import defiregimenet"` (from /tmp) | n/a | ⬜ pending |
+| Skeleton + editable install | 05-01 T1 | 1 | DFR-01, QUAL-05 | smoke | `python -c "import defiregimenet"` (from /tmp) | n/a | ⬜ pending |
 | CryptoGenerator + data quality + ccxt | 05-01 T2 | 1 | DFR-01 | unit | `python -m pytest tests/test_synthetic.py -q` | created in task | ⬜ pending |
 | conftest + Wave-0 stubs + live AST guard | 05-01 T3 | 1 | DFR-01, DFR-02 | unit | `python -m pytest tests/ -q` | created in task | ⬜ pending |
 | Quarantined labels + forward tests | 05-02 T1 | 2 | DFR-02 | unit | `python -m pytest tests/test_labels.py -q` | ✅ W0 stub (05-01) | ⬜ pending |
@@ -51,10 +51,10 @@ created: 2026-06-11
 | StudentsT GARCH robustness variant | 05-05 T2 | 2 | DFR-05 | unit | `python -m pytest tests/test_forecast.py -q` | ✅ W0 stub (05-01) | ⬜ pending |
 | Cramér's V + cross-token matrix | 05-06 T1 | 2 | DFR-06 | unit | `python -m pytest tests/test_cross_token.py -q` | ✅ W0 stub (05-01) | ⬜ pending |
 | DGP shared-regime association | 05-06 T2 | 2 | DFR-06, DFR-01 | integration | `python -m pytest tests/test_cross_token.py -q` | ✅ W0 stub (05-01) | ⬜ pending |
-| Pipeline assembly + frozen results | 05-07 T1 | 3 | DFR-07, DFR-04 | integration | `python -m pytest tests/test_pipeline.py tests/test_labels.py -q` | ✅ W0 stub (05-01) | ⬜ pending |
+| Pipeline assembly + frozen results | 05-07 T1 | 3 | DFR-07, DFR-04, DFR-06 | integration | `python -m pytest tests/test_pipeline.py tests/test_labels.py -q` | ✅ W0 stub (05-01) | ⬜ pending |
 | ReportBuilder figures + summary.md | 05-07 T2 | 3 | DFR-07, DFR-06 | integration | `python -m pytest tests/test_pipeline.py -q` | ✅ W0 stub (05-01) | ⬜ pending |
 | Runner + integration tests | 05-08 T1 | 4 | DFR-07 | integration | `python -m pytest tests/test_report.py -q` | ✅ W0 stub (05-01) | ⬜ pending |
-| Publication-style README | 05-08 T2 | 4 | DFR-07 | smoke | inline python check: sections + >= 6 figures | n/a | ⬜ pending |
+| Publication-style README | 05-08 T2 | 4 | DFR-07, QUAL-02 | smoke | inline python check: sections + >= 6 figures | n/a | ⬜ pending |
 | API freeze + lazy imports | 05-09 T1 | 5 | QUAL-01 | unit | `python -m pytest tests/test_api.py -q` | created in task | ⬜ pending |
 | Strict suite x2 + codex audit | 05-09 T2 | 5 | QUAL-01, QUAL-04 | gate | `python -m pytest tests/ -q --tb=short` (twice) + `codex exec --sandbox read-only` | n/a | ⬜ pending |
 
