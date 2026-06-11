@@ -46,15 +46,23 @@ def test_pipeline_results_fields():
 
 
 def test_pipeline_macro_regimes_are_monthly():
-    """Macro regimes are indexed at monthly frequency (publication dates)."""
+    """Macro regimes are much sparser than daily market regimes (publication-date indexed)."""
     from macroregime import MacroRegimePipeline
 
     r = MacroRegimePipeline(seed=42, quick=True).run()
 
-    # Macro regimes should be sparse (monthly) — not daily
-    # The daily data spans ~10 years * 252 bars; macro panel ~120 monthly bars
-    assert len(r.macro_regimes) <= 200, (
-        f"macro_regimes has {len(r.macro_regimes)} rows — expected monthly (<=200 for 10-year panel)"
+    # Macro regimes are publication-date indexed: 4 series × ~120 months × staggered lags.
+    # They should be at least 10× sparser than the daily market_regimes.
+    # 10-year daily: ~2520 bars; macro panel after outer-join: a few hundred rows.
+    assert len(r.macro_regimes) < len(r.market_regimes), (
+        f"macro_regimes ({len(r.macro_regimes)}) should be sparser than "
+        f"market_regimes ({len(r.market_regimes)})"
+    )
+    # Macro regimes index should not be business-day frequency — it's sparse
+    # (publication dates, not daily). Check that macro has fewer rows than 80% of market.
+    assert len(r.macro_regimes) < 0.80 * len(r.market_regimes), (
+        f"macro_regimes ({len(r.macro_regimes)}) not sufficiently sparser than "
+        f"daily market_regimes ({len(r.market_regimes)})"
     )
     # Values must be >= -1 (sentinel) and < n_components
     non_sentinel = r.macro_regimes[r.macro_regimes >= 0]
