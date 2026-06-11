@@ -1,12 +1,14 @@
 """Integration tests for plan 04-07: one-command runner (VSL-08).
 
 Tests call main() in-process (no subprocess) to keep CI fast and offline.
-Every test uses tmp_path so parallel workers never collide on outputs.
+run_pipeline.py lives at portfolio_projects/volsurfacelab/run_pipeline.py
+(project root, one level above tests/).  It is imported via importlib to
+avoid sys.path hacks, following the locked macroregime test pattern.
 
 Tests
 -----
 test_runner_quick
-    main(["--quick", "--output-dir", str(tmp_path)]) returns 0; expected
+    main(["--quick", "--output-dir", str(figures_dir)]) returns 0; expected
     PNG files exist; summary.md mentions QLIKE and Greeks.
 
 test_runner_seed_determinism
@@ -22,8 +24,27 @@ test_no_network
 
 from __future__ import annotations
 
+import importlib.util
 import sys
+from pathlib import Path
+
 import pytest
+
+# ---------------------------------------------------------------------------
+# Shared helper: import run_pipeline.main by file path (no sys.path hack)
+# ---------------------------------------------------------------------------
+
+def _load_main():
+    """Load run_pipeline.main from the project root via importlib."""
+    runner_path = Path(__file__).parents[1] / "run_pipeline.py"
+    assert runner_path.exists(), (
+        f"run_pipeline.py not found at {runner_path}. "
+        "Implement it in the project root (portfolio_projects/volsurfacelab/)."
+    )
+    spec = importlib.util.spec_from_file_location("run_pipeline", runner_path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.main
 
 
 # ---------------------------------------------------------------------------
@@ -32,7 +53,7 @@ import pytest
 
 def test_runner_quick(tmp_path):
     """main() returns 0; expected figures + summary.md are created."""
-    from run_pipeline import main  # noqa: E402 — runner at project root
+    main = _load_main()
 
     figures_dir = tmp_path / "figures"
     rc = main(["--quick", "--output-dir", str(figures_dir)])
@@ -67,7 +88,7 @@ def test_runner_quick(tmp_path):
 
 def test_runner_seed_determinism(tmp_path):
     """Two runs with the same seed produce identical summary.md net P&L lines."""
-    from run_pipeline import main
+    main = _load_main()
 
     dir_a = tmp_path / "run_a" / "figures"
     dir_b = tmp_path / "run_b" / "figures"
@@ -98,7 +119,7 @@ def test_runner_seed_determinism(tmp_path):
 
 def test_runner_bad_args():
     """main(["--seed", "not-an-int"]) raises SystemExit with code != 0."""
-    from run_pipeline import main
+    main = _load_main()
 
     with pytest.raises(SystemExit) as exc_info:
         main(["--seed", "not-an-int"])
@@ -118,7 +139,7 @@ def test_no_network(tmp_path):
     for mod in ("yfinance", "fredapi"):
         sys.modules.pop(mod, None)
 
-    from run_pipeline import main
+    main = _load_main()
 
     figures_dir = tmp_path / "figures"
     rc = main(["--quick", "--output-dir", str(figures_dir)])
