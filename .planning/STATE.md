@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 04-volsurfacelab-06-PLAN.md (Pipeline assembly + ReportBuilder)
-last_updated: "2026-06-11T16:17:22.880Z"
+stopped_at: Completed 04-volsurfacelab-07-PLAN.md (Runner + README research report)
+last_updated: "2026-06-11T16:30:18.007Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 34
-  completed_plans: 32
+  completed_plans: 33
   percent: 33
 ---
 
@@ -81,6 +81,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 04-volsurfacelab P04 | 4 | 2 tasks | 2 files |
 | Phase 04-volsurfacelab P05 | 5 | 2 tasks | 2 files |
 | Phase 04-volsurfacelab P06 | 6 | 2 tasks | 4 files |
+| Phase 04-volsurfacelab P07 | 8 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -167,6 +168,8 @@ Recent decisions affecting current work:
 - [Phase 04-volsurfacelab]: Honest-path discipline: pipeline uses solve_chain_iv on OPTION PRICES; chain.options['true_iv'] is a test oracle only — using it would bypass the IV estimation problem
 - [Phase 04-volsurfacelab]: svi_surface dependency injection for arb-gate testing via __init__ param; uses context manager to temporarily override SYNTHETIC_SVI_SURFACE in chain module
 - [Phase 04-volsurfacelab]: summary.md location: output_dir.parent (beside figures/); matches locked Phase 3 macroregime decision
+- [Phase 04-volsurfacelab]: importlib.util.spec_from_file_location for runner import: no sys.path hacks in test, mirrors macroregime locked pattern
+- [Phase 04-volsurfacelab]: main() catches Exception returning 1; argparse SystemExit propagated directly for test_runner_bad_args to assert on exit code 2
 
 ### Pending Todos
 
@@ -180,6 +183,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-11T16:17:22.878Z
-Stopped at: Completed 04-volsurfacelab-06-PLAN.md (Pipeline assembly + ReportBuilder)
+Last session: 2026-06-11T16:30:18.005Z
+Stopped at: Completed 04-volsurfacelab-07-PLAN.md (Runner + README research report)
 Resume file: None

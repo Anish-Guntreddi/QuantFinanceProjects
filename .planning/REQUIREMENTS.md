@@ -50,7 +50,7 @@
 - [x] **VSL-05**: Realized-vol forecasting with HAR baseline then GARCH/EGARCH (robust multi-restart fitting with convergence checks); evaluated with QLIKE and MSE, Diebold-Mariano test between models
 - [x] **VSL-06**: IV-vs-RV spread analysis (variance risk premium) with delta-hedged straddle/strangle strategy P&L using standalone accounting (not the event engine), including costs
 - [x] **VSL-07**: Greeks (delta, gamma, vega, theta) computed for strategy positions; risk summary in report
-- [ ] **VSL-08**: One-command runner produces the research report with surface figures, forecast comparison tables, and strategy results
+- [x] **VSL-08**: One-command runner produces the research report with surface figures, forecast comparison tables, and strategy results
 
 ### DeFiRegimeNet — Hybrid Regime Detection in DeFi Markets (DFR)
 
@@ -130,7 +130,7 @@
 | VSL-05 | Phase 4 — VolSurfaceLab | Complete |
 | VSL-06 | Phase 4 — VolSurfaceLab | Complete |
 | VSL-07 | Phase 4 — VolSurfaceLab | Complete |
-| VSL-08 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-08 | Phase 4 — VolSurfaceLab | Complete |
 | DFR-01 | Phase 5 — DeFiRegimeNet | Pending |
 | DFR-02 | Phase 5 — DeFiRegimeNet | Pending |
 | DFR-03 | Phase 5 — DeFiRegimeNet | Pending |
