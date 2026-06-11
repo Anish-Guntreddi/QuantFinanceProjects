@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-alpharank-07-PLAN.md (runner, report builder, README, integration tests)
-last_updated: "2026-06-10T23:20:42.656Z"
+stopped_at: Completed 03-macroregime-01-PLAN.md (package skeleton, SyntheticMacroGenerator)
+last_updated: "2026-06-11T00:08:23.002Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 17
-  completed_plans: 17
+  total_plans: 26
+  completed_plans: 18
   percent: 33
 ---
 
@@ -67,6 +67,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02-alpharank P03 | 8 | 3 tasks | 8 files |
 | Phase 02-alpharank P06 | 18 | 2 tasks | 10 files |
 | Phase 02-alpharank P07 | 11 | 3 tasks | 5 files |
+| Phase 03-macroregime P01 | 25 | 2 tasks | 20 files |
 
 ## Accumulated Context
 
@@ -116,6 +117,9 @@ Recent decisions affecting current work:
 - [Phase 02-alpharank]: Leakage validator threshold raised to 0.5 — catches IC~1.0 look-ahead bugs without falsely rejecting genuinely predictive factors
 - [Phase 02-alpharank]: PipelineResults dataclass returned by run(): in-process testing without subprocess
 - [Phase 02-alpharank]: Quick mode CV params: n_folds=5/n_test_folds=2/purged=1/embargo=0 — skfolio requires purge+embargo < fold_size
+- [Phase 03-macroregime]: TRANSITION_MATRIX ergodicity: Stagflation->Recovery path added (0.01) to guarantee all 4 regimes visited; initial matrix had 0-prob path causing state dropout
+- [Phase 03-macroregime]: SyntheticMacroPanel convention: observation-date macro panel only; release-lag application is MacroDataLoader's responsibility (plan 03-02)
+- [Phase 03-macroregime]: No pct_change in macroregime package: cumulative cumprod for OHLCV construction avoids FutureWarning-as-error in CI
 
 ### Pending Todos
 
@@ -129,6 +133,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-10T22:55:56.828Z
-Stopped at: Completed 02-alpharank-07-PLAN.md (runner, report builder, README, integration tests)
+Last session: 2026-06-11T00:08:22.999Z
+Stopped at: Completed 03-macroregime-01-PLAN.md (package skeleton, SyntheticMacroGenerator)
 Resume file: None
