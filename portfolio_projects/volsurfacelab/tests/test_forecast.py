@@ -149,44 +149,51 @@ def test_garch_persistence_recovered(underlying_returns):
 
 
 def test_har_no_look_ahead(underlying_returns):
-    """HAR forecasts are strictly causal: perturbing future RV values does not
-    change the forecast FOR those dates.
+    """HAR forecast for date t is NOT affected by rv[t] (same-day value).
 
-    Method: fit HARForecaster on a common train set; generate OOS forecasts on
-    both the original RV series and a perturbed version (rv[t:] replaced by
-    large outlier). Forecasts on the OOS window must be IDENTICAL because all
-    regressors use shift(1) — rv[t] can only affect the forecast at t+1, not t.
+    Causality invariant: the regressor for date t's forecast is rv[t-1] (daily),
+    rv[t-5:t-1].mean() (weekly), rv[t-22:t-1].mean() (monthly) — all shift(1),
+    so rv[t] is never a regressor for the forecast at t.
+
+    Test method: for each of several OOS dates t, replace rv[t] with an outlier
+    (1000x), then verify the forecast at THAT DATE is unchanged.  Forecasts at
+    t+1, t+2 etc. will change (they use rv[t] as a lagged input) — that is
+    correct and expected behavior.  Only the forecast AT t must be invariant to
+    perturbations in rv[t].
     """
     rv = realized_variance(underlying_returns)
     n = len(rv)
     split = int(0.67 * n)
     oos_start = split
 
-    forecaster_orig = HARForecaster()
-    forecaster_orig.fit(rv.iloc[:split])
+    forecaster = HARForecaster()
+    forecaster.fit(rv.iloc[:split])
 
-    # Perturb ALL future values (indices >= oos_start) by 1000x
-    rv_perturbed = rv.copy()
-    rv_perturbed.iloc[oos_start:] = rv_perturbed.iloc[oos_start:] * 1000.0
+    # Get original forecasts for reference
+    fcst_orig = forecaster.predict(rv, oos_start)
 
-    forecaster_pert = HARForecaster()
-    forecaster_pert.fit(rv.iloc[:split])  # same train data — same coefficients
+    # For each test date, replace ONLY rv at that date by a large outlier,
+    # then verify the forecast at that date is unchanged (shift(1) means rv[t]
+    # is only in the regressor for t+1, not t).
+    test_positions = [oos_start, oos_start + 5, oos_start + 20, oos_start + 50]
+    for pos in test_positions:
+        if pos >= n:
+            continue
+        rv_perturbed = rv.copy()
+        rv_perturbed.iloc[pos] = rv_perturbed.iloc[pos] * 1000.0  # outlier at pos only
 
-    # Generate OOS forecasts using the full series for regressor construction
-    fcst_orig = forecaster_orig.predict(rv, oos_start)
-    fcst_pert = forecaster_pert.predict(rv_perturbed, oos_start)
+        fcst_pert = forecaster.predict(rv_perturbed, oos_start)
 
-    # The FIRST OOS forecast (at oos_start) uses rv[oos_start-1] as the daily
-    # regressor — not rv[oos_start], so it must be unaffected by the perturbation.
-    # All subsequent forecasts also rely only on lagged values.
-    pd.testing.assert_series_equal(
-        fcst_orig,
-        fcst_pert,
-        check_exact=False,
-        atol=1e-12,
-        check_names=False,
-        obj="HAR OOS forecasts (original vs perturbed future)",
-    )
+        # Forecast AT pos must be identical to original — rv[pos] is not a regressor
+        # for the forecast at pos (it's shifted by 1, so used at pos+1 onward).
+        orig_val = fcst_orig.iloc[pos - oos_start] if pos - oos_start < len(fcst_orig) else None
+        pert_val = fcst_pert.iloc[pos - oos_start] if pos - oos_start < len(fcst_pert) else None
+        if orig_val is not None and pert_val is not None:
+            assert abs(orig_val - pert_val) < 1e-12, (
+                f"HAR look-ahead detected at position {pos}: "
+                f"perturbing rv[{pos}] changed forecast at {pos} from "
+                f"{orig_val:.6e} to {pert_val:.6e}"
+            )
 
 
 # ---------------------------------------------------------------------------
