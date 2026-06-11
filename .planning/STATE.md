@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: "Completed 03-macroregime-02-PLAN.md (PIT macro data layer: loader_base, fred_loader)"
-last_updated: "2026-06-11T00:16:20.955Z"
+stopped_at: "Completed 03-macroregime-03-PLAN.md (causal market features: realized vol, momentum, drawdown, rolling corr)"
+last_updated: "2026-06-11T00:16:54.511Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
@@ -69,6 +69,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02-alpharank P07 | 11 | 3 tasks | 5 files |
 | Phase 03-macroregime P01 | 25 | 2 tasks | 20 files |
 | Phase 03-macroregime P02 | 5 | 2 tasks | 4 files |
+| Phase 03-macroregime P03 | 6 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -123,6 +124,8 @@ Recent decisions affecting current work:
 - [Phase 03-macroregime]: No pct_change in macroregime package: cumulative cumprod for OHLCV construction avoids FutureWarning-as-error in CI
 - [Phase 03-macroregime]: attrs cleared on Series copy before pd.concat: DatetimeIndex in attrs causes ValueError; cleared on copy, original Series retains attrs
 - [Phase 03-macroregime]: no ffill in load_panel: frequency alignment deferred to plan 03-07 pipeline — ffill must happen AFTER lag
+- [Phase 03-macroregime]: rolling_corr warm-up is window+1 (not window+2): first valid corr at bar window, shift pushes to bar window+1; corrected from plan docstring
+- [Phase 03-macroregime]: pct_change(fill_method=None) + shift(1) is the locked causal feature pattern for all market features
 
 ### Pending Todos
 
@@ -136,6 +139,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-11T00:16:20.951Z
-Stopped at: Completed 03-macroregime-02-PLAN.md (PIT macro data layer: loader_base, fred_loader)
+Last session: 2026-06-11T00:16:54.509Z
+Stopped at: Completed 03-macroregime-03-PLAN.md (causal market features: realized vol, momentum, drawdown, rolling corr)
 Resume file: None
