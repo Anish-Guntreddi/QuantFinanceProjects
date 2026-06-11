@@ -208,11 +208,15 @@ def test_greeks_scaled_by_qty():
 def test_short_straddle_greeks_aggregate():
     """Short 1 ATM call + short 1 ATM put:
     net delta near 0 (|delta| < 0.15), gamma < 0, vega < 0.
+
+    Use r=0 so that ATM call delta + ATM put delta cancel exactly (no carry shift).
+    At r>0 the carry term makes call delta > |put delta|, so the straddle has a
+    non-zero net delta even when K == S; this is by design, not a bug.
     """
     call_leg = OptionLeg("short_call", "c", 100.0, 0.5, -1.0, 5.0, 0.20)
     put_leg = OptionLeg("short_put", "p", 100.0, 0.5, -1.0, 4.0, 0.20)
-    gc = compute_leg_greeks(call_leg, S=100.0, t_remaining=0.5, r=0.05, sigma=0.20)
-    gp = compute_leg_greeks(put_leg, S=100.0, t_remaining=0.5, r=0.05, sigma=0.20)
+    gc = compute_leg_greeks(call_leg, S=100.0, t_remaining=0.5, r=0.0, sigma=0.20)
+    gp = compute_leg_greeks(put_leg, S=100.0, t_remaining=0.5, r=0.0, sigma=0.20)
     net_delta = gc["delta"] + gp["delta"]
     net_gamma = gc["gamma"] + gp["gamma"]
     net_vega = gc["vega"] + gp["vega"]
