@@ -130,10 +130,44 @@ def test_pipeline_diagnostics_structure():
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skip(reason="Wave 0 stub — implemented in plan 03-08")
-def test_runner_quick():
-    """Quick runner mode completes end-to-end with default parameters."""
-    pass
+def test_runner_quick(tmp_path):
+    """Quick runner mode: exits 0, writes >=4 PNGs + summary.md, summary contains strategy names."""
+    import sys
+    from pathlib import Path
+
+    # run_macroregime.py lives one level above the tests/ directory (project root)
+    runner_path = Path(__file__).parents[1] / "run_macroregime.py"
+    assert runner_path.exists(), (
+        f"run_macroregime.py not found at {runner_path}. "
+        "Implement the runner in plan 03-08 Task 2."
+    )
+
+    # Dynamically import the module so we call main() in-process (no subprocess)
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("run_macroregime", runner_path)
+    run_mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(run_mod)
+
+    output_dir = tmp_path / "figures"
+    exit_code = run_mod.main(["--quick", "--output-dir", str(output_dir)])
+    assert exit_code == 0, f"main() returned non-zero: {exit_code}"
+
+    # At least 4 PNG files must exist
+    pngs = list(output_dir.glob("*.png"))
+    assert len(pngs) >= 4, (
+        f"Expected >=4 PNG files in {output_dir}, found {len(pngs)}: {[p.name for p in pngs]}"
+    )
+
+    # summary.md must exist in the parent of the output_dir (i.e. tmp_path)
+    summary_md = tmp_path / "summary.md"
+    assert summary_md.exists(), f"summary.md not found at {summary_md}"
+
+    content = summary_md.read_text()
+    # Must contain all four strategy names
+    for name in ("Regime", "60/40", "EqualWeight", "RiskParity"):
+        assert name in content, f"summary.md missing strategy name: {name!r}"
+    # Must contain a Net Sharpe column header
+    assert "Net Sharpe" in content, "summary.md missing 'Net Sharpe' column"
 
 
 def test_walk_forward_oos():
