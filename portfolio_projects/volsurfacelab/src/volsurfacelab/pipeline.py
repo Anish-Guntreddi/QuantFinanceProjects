@@ -354,8 +354,17 @@ class VolSurfacePipeline:
         # ------------------------------------------------------------------
         cost_rate = float(strategy_cfg.get("cost_rate", 0.001))
         delta_hedge_cost_rate = float(strategy_cfg.get("delta_hedge_cost_rate", 0.001))
+        # Hand the strategy the IV-ENRICHED chain (iv_frame carries the solved
+        # 'iv' column) so its entry IV comes from the honest solve-from-prices
+        # path rather than the true_iv oracle column.
+        chain_with_solved_iv = ChainData(
+            options=iv_frame,
+            spot=chain.spot,
+            risk_free=chain.risk_free,
+            seed=chain.seed,
+        )
         vrp = run_vrp_strategy(
-            chain=chain,
+            chain=chain_with_solved_iv,
             returns=returns,
             cost_rate=cost_rate,
             delta_hedge_cost_rate=delta_hedge_cost_rate,

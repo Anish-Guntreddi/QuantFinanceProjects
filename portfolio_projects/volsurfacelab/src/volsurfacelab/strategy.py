@@ -402,13 +402,21 @@ def run_vrp_strategy(
     slice_df["k"] = np.log(slice_df["K"] / forward)
     slice_df["abs_k"] = slice_df["k"].abs()
 
-    # Get ATM IV from the strike nearest to k=0 (call side for IV reference)
+    # Get ATM IV from the strike nearest to k=0 (call side for IV reference).
+    # Prefer the market-solved 'iv' column when present (the pipeline's honest
+    # path enriches the chain via solve_chain_iv); 'true_iv' is only an
+    # acceptable fallback for standalone/unit-test use where the chain has not
+    # been through the solver. Both are entry-time-observable quote IVs — this
+    # is a discipline preference, not a look-ahead issue.
     atm_row_call = (
         slice_df[slice_df["flag"] == "c"]
         .nsmallest(1, "abs_k")
         .iloc[0]
     )
-    entry_iv = float(atm_row_call["true_iv"])
+    if "iv" in slice_df.columns and np.isfinite(atm_row_call.get("iv", np.nan)):
+        entry_iv = float(atm_row_call["iv"])
+    else:
+        entry_iv = float(atm_row_call["true_iv"])
     atm_K = float(atm_row_call["K"])
     entry_call_price = float(atm_row_call["price"])
 
