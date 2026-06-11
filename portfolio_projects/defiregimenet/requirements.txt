@@ -1,0 +1,20 @@
+# Core dependencies (all present in the shared quant venv)
+numpy
+pandas
+scipy
+scikit-learn
+xgboost
+hmmlearn
+skfolio
+arch
+statsmodels
+matplotlib
+pyyaml
+
+# Sibling packages — already editable-installed in the quant venv:
+# -e ../macroregime
+# -e ../alpharank
+# -e ../volsurfacelab
+
+# Optional real-data path (not required for tests):
+# ccxt

@@ -1,0 +1,27 @@
+# DeFiRegimeNet parameters
+# All pipeline stages read from this file for reproducibility
+
+tokens: [BTC, ETH, SOL, AVAX]
+n_years: 3
+seed: 42
+fat_tail_df: 4
+market_factor_weight: 0.7
+
+regime:
+  n_components: 4
+  min_train: 60
+  refit_every: 21
+  n_restarts: 3
+
+labels:
+  horizon: 5
+
+cv:
+  n_folds: 6
+  n_test_folds: 2
+  purged_size: 5
+  embargo_size: 5
+
+forecast:
+  train_frac: 0.67
+  n_restarts: 5
