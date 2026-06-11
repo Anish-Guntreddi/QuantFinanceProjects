@@ -354,11 +354,14 @@ class VolSurfacePipeline:
         # ------------------------------------------------------------------
         cost_rate = float(strategy_cfg.get("cost_rate", 0.001))
         delta_hedge_cost_rate = float(strategy_cfg.get("delta_hedge_cost_rate", 0.001))
-        # Hand the strategy the IV-ENRICHED chain (iv_frame carries the solved
-        # 'iv' column) so its entry IV comes from the honest solve-from-prices
-        # path rather than the true_iv oracle column.
+        # Hand the strategy the IV-ENRICHED chain, BUT restricted to maturities
+        # that survived the no-arb gate (validated_params keys).
+        # This ensures run_vrp_strategy cannot select an excluded maturity as the
+        # strategy entry (no-arb gate finding fixed in plan 04-08).
+        validated_maturities = set(validated_params.keys())
+        iv_frame_gated = iv_frame[iv_frame["T"].isin(validated_maturities)]
         chain_with_solved_iv = ChainData(
-            options=iv_frame,
+            options=iv_frame_gated,
             spot=chain.spot,
             risk_free=chain.risk_free,
             seed=chain.seed,

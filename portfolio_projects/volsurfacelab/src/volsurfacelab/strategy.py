@@ -7,10 +7,16 @@ options research system to the equity event engine and keeps this package self-c
 
 Zero qbacktest imports anywhere in this module — intentional and enforced by test suite.
 
-Greeks convention (Pitfall 8 from RESEARCH.md):
-- vollib.black_scholes.greeks.analytical.theta returns ANNUALIZED theta (per year).
-- All theta_daily values reported here are theta_annual / 252 (business-day convention).
-- Do NOT divide by 365.
+Greeks convention (Pitfall 8 from RESEARCH.md — corrected in plan 04-08):
+- vollib.black_scholes.greeks.analytical.theta already divides by 365 internally
+  (per its docstring: "in practice theta is defined as the change in price for each
+  day change in t, hence we divide by 365").  It returns CALENDAR-DAY theta, NOT
+  annualized theta.
+- To convert from calendar-day to business-day: multiply by 365/252.
+- theta in compute_leg_greeks dict = raw vollib output = per-calendar-day.
+- theta_daily = theta * (365.0 / 252.0)  ← business-day theta (Pitfall 8).
+- theta_daily is REPORTING ONLY: it does NOT enter the P&L calculation.
+  Daily P&L is computed from daily_gamma_pnl() (gamma × return path), not from theta.
 
 Delta-hedged P&L approximation note (Research Open Question 3):
 - The gamma-scalping P&L formula 0.5 * gamma * S^2 * (r_t^2 - IV^2 * dt) assumes
@@ -186,8 +192,9 @@ def compute_leg_greeks(
     -------
     dict with keys: delta, gamma, vega, theta, theta_daily
         All values are scaled by leg.qty.
-        theta is the annualized theta per vollib convention.
-        theta_daily = theta / 252 (Pitfall 8: 252 business days, NOT 365).
+        theta = raw vollib theta = per-calendar-day decay (vollib divides by 365 internally).
+        theta_daily = theta * (365/252) = per-business-day decay.
+        NOTE: theta_daily is REPORTING ONLY — P&L is driven by daily_gamma_pnl(), not theta.
     """
     flag = leg.flag
     qty = leg.qty
@@ -195,16 +202,17 @@ def compute_leg_greeks(
     delta = qty * bs_greeks.delta(flag, S, leg.K, t_remaining, r, sigma)
     gamma = qty * bs_greeks.gamma(flag, S, leg.K, t_remaining, r, sigma)
     vega = qty * bs_greeks.vega(flag, S, leg.K, t_remaining, r, sigma)
-    # vollib theta is annualized (per year) — divide by 252 for per-day decay
-    theta_annual = qty * bs_greeks.theta(flag, S, leg.K, t_remaining, r, sigma)
-    theta_daily = theta_annual / 252.0
+    # vollib.theta() already divides by 365 — returns per-calendar-day theta.
+    # Convert to business-day: multiply by 365/252 (calendar days / business days).
+    theta_per_cal_day = qty * bs_greeks.theta(flag, S, leg.K, t_remaining, r, sigma)
+    theta_daily = theta_per_cal_day * (365.0 / 252.0)
 
     return {
         "delta": delta,
         "gamma": gamma,
         "vega": vega,
-        "theta": theta_annual,
-        "theta_daily": theta_daily,
+        "theta": theta_per_cal_day,  # per-calendar-day (raw vollib output)
+        "theta_daily": theta_daily,  # per-business-day (reporting only)
     }
 
 

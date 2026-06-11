@@ -10,7 +10,7 @@ Requirements (VSL-07):
 - Call delta in (0, 1); put delta in (-1, 0)
 - Gamma > 0 for both calls and puts
 - Vega > 0 for both calls and puts
-- Theta < 0 for long positions (time decay); theta_daily == theta_annual / 252
+- Theta < 0 for long positions (time decay); theta_daily == theta * (365/252) — business-day conversion from vollib per-calendar-day output (corrected plan 04-08)
 - Portfolio Greeks summary DataFrame with per-leg rows and TOTAL row
 
 Plan: 04-05 (Wave 2)
@@ -159,7 +159,11 @@ def test_gamma_pnl_formula_exact():
 # ---------------------------------------------------------------------------
 
 def test_greeks_signs_call():
-    """ATM call: delta in (0,1), gamma>0, vega>0, theta<0; theta_daily == theta/252."""
+    """ATM call: delta in (0,1), gamma>0, vega>0, theta<0.
+
+    theta = raw vollib per-calendar-day decay (vollib divides by 365 internally).
+    theta_daily = theta * (365/252) — business-day conversion (corrected in plan 04-08).
+    """
     leg = OptionLeg(
         option_id="atm_call",
         flag="c",
@@ -174,7 +178,10 @@ def test_greeks_signs_call():
     assert greeks["gamma"] > 0.0, f"gamma={greeks['gamma']}"
     assert greeks["vega"] > 0.0, f"vega={greeks['vega']}"
     assert greeks["theta"] < 0.0, f"theta={greeks['theta']}"
-    assert abs(greeks["theta_daily"] - greeks["theta"] / 252) < 1e-12, "theta_daily != theta/252"
+    # theta_daily = theta * (365/252): vollib already /365, we convert to business-day
+    assert abs(greeks["theta_daily"] - greeks["theta"] * (365.0 / 252.0)) < 1e-12, (
+        "theta_daily != theta * (365/252)"
+    )
 
 
 def test_greeks_signs_put():
