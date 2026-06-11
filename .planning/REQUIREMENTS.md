@@ -43,7 +43,7 @@
 
 ### VolSurfaceLab — IV Surface & Options Mispricing (VSL)
 
-- [ ] **VSL-01**: Options chain layer ingests synthetic deterministic chains (default) and optional yfinance chains; data validated for moneyness/maturity coverage
+- [x] **VSL-01**: Options chain layer ingests synthetic deterministic chains (default) and optional yfinance chains; data validated for moneyness/maturity coverage
 - [ ] **VSL-02**: Implied-vol solver (py_vollib LetsBeRational + scipy brentq fallback) recovers known vols round-trip to 1e-6 and handles deep OTM/ITM gracefully
 - [ ] **VSL-03**: SVI surface calibration per maturity slice with static no-arbitrage validation (butterfly convexity, calendar monotonicity) gating downstream analysis
 - [ ] **VSL-04**: Surface visualization: smile/skew per maturity and 3D/heatmap surface plots
@@ -123,7 +123,7 @@
 | MCR-06 | Phase 3 — MacroRegime | Complete |
 | MCR-07 | Phase 3 — MacroRegime | Pending |
 | MCR-08 | Phase 3 — MacroRegime | Complete |
-| VSL-01 | Phase 4 — VolSurfaceLab | Pending |
+| VSL-01 | Phase 4 — VolSurfaceLab | Complete |
 | VSL-02 | Phase 4 — VolSurfaceLab | Pending |
 | VSL-03 | Phase 4 — VolSurfaceLab | Pending |
 | VSL-04 | Phase 4 — VolSurfaceLab | Pending |

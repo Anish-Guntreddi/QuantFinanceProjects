@@ -103,7 +103,7 @@ Plans:
   3. Smile/skew plots per maturity and a 3D/heatmap surface plot are produced and appear in the research report; surface covers the moneyness/maturity range specified in the synthetic chain
   4. RV forecasting comparison table shows QLIKE and MSE for HAR baseline vs GARCH vs EGARCH with Diebold-Mariano test p-values; GARCH fitting uses multi-restart robust wrapper with convergence flags asserted
   5. One-command runner (`python run_pipeline.py`) produces the research report with surface figures, forecast comparison, and strategy P&L with Greeks risk summary; codex review passes with no unresolved findings
-**Plans:** 8 plans
+**Plans:** 1/8 plans executed
 
 Plans:
 - [ ] 04-01-PLAN.md — Package skeleton, synthetic SVI-surface chain + GARCH underlying path, Wave-0 test stubs (wave 1)
@@ -139,5 +139,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. QBacktest | 8/9 | Complete    | 2026-06-10 |
 | 2. AlphaRank | 7/8 | Complete    | 2026-06-10 |
 | 3. MacroRegime | 9/9 | Complete   | 2026-06-11 |
-| 4. VolSurfaceLab | 0/TBD | Not started | - |
+| 4. VolSurfaceLab | 1/8 | In Progress|  |
 | 5. DeFiRegimeNet | 0/TBD | Not started | - |

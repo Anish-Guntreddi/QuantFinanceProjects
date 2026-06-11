@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: "Completed 03-macroregime-09-PLAN.md (quality gate: API freeze, codex audit, PIT fix)"
-last_updated: "2026-06-11T14:58:42.511Z"
+stopped_at: Completed 04-volsurfacelab-01-PLAN.md (package skeleton, synthetic chain, GARCH path)
+last_updated: "2026-06-11T15:52:54.323Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 26
-  completed_plans: 26
+  total_plans: 34
+  completed_plans: 27
   percent: 33
 ---
 
@@ -75,6 +75,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 03-macroregime P07 | 12 | 2 tasks | 4 files |
 | Phase 03-macroregime P08 | 12 | 3 tasks | 5 files |
 | Phase 03-macroregime P09 | 525804 | 2 tasks | 2 files |
+| Phase 04-volsurfacelab P01 | 9 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -144,6 +145,9 @@ Recent decisions affecting current work:
 - [Phase 03-macroregime]: summary.md written to parent(output_dir): test expects tmp_path/figures/*.png AND tmp_path/summary.md (not tmp_path/figures/summary.md)
 - [Phase 03-macroregime]: Lazy __getattr__ for ReportBuilder, FredMacroLoader, build_strategy_engine in macroregime/__init__: defers matplotlib/pyplot import and optional deps to first access, mirrors qbacktest TearsheetRenderer pattern
 - [Phase 03-macroregime]: PIT fix: union-then-ffill-then-restrict pattern for weekend publication dates in _combine_regimes — daily_index.union(macro_regimes.index) ensures weekend pub-date regime changes reach first Monday
+- [Phase 04-volsurfacelab]: vollib namespace (not py_vollib) used in chain.py to avoid DeprecationWarning
+- [Phase 04-volsurfacelab]: _svi_total_variance in chain.py is independent from svi.py — oracle isolation for VSL-03 calibration tests
+- [Phase 04-volsurfacelab]: ChainData frozen=True dataclass — immutable, safe for session-scope fixtures
 
 ### Pending Todos
 
@@ -157,6 +161,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-11T14:48:32.406Z
-Stopped at: Completed 03-macroregime-09-PLAN.md (quality gate: API freeze, codex audit, PIT fix)
+Last session: 2026-06-11T15:52:54.320Z
+Stopped at: Completed 04-volsurfacelab-01-PLAN.md (package skeleton, synthetic chain, GARCH path)
 Resume file: None
