@@ -8,6 +8,7 @@ Public API (plan 03-04):
     CausalRegimeDetector  — rolling re-fit causal regime detection (HMM+GMM)
 """
 from macroregime.regime.alignment import align_regime_labels
+from macroregime.regime.causal import CausalRegimeDetector
 from macroregime.regime.diagnostics import (
     dwell_times,
     regime_run_lengths,
@@ -19,12 +20,5 @@ __all__ = [
     "transition_matrix",
     "dwell_times",
     "regime_run_lengths",
+    "CausalRegimeDetector",
 ]
-
-# CausalRegimeDetector is imported lazily to avoid pulling in hmmlearn at
-# collection time for tests that only need alignment/diagnostics.
-def __getattr__(name: str):
-    if name == "CausalRegimeDetector":
-        from macroregime.regime.causal import CausalRegimeDetector
-        return CausalRegimeDetector
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
