@@ -1,0 +1,25 @@
+# Release calendar: per-series observation lag from reference period end.
+# lag_days represents calendar days between the end of the reference period
+# and when the data is publicly available (point-in-time safety margin).
+# User decision (locked): CPI lag = 13d; cross-reference research suggested
+# ~15d but user decision takes precedence.
+
+CPIAUCSL:
+  lag_days: 13
+  description: "CPI; BLS release ~mid-following-month"
+
+UNRATE:
+  lag_days: 7
+  description: "Unemployment; BLS first Friday of following month"
+
+GDPC1:
+  lag_days: 30
+  description: "Real GDP quarterly advance estimate"
+
+T10Y2Y:
+  lag_days: 1
+  description: "10Y-2Y spread; daily H.15, 1 business day"
+
+USREC:
+  lag_days: 180
+  description: "NBER recession flag; EVALUATION ONLY — never a feature"

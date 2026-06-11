@@ -1,0 +1,37 @@
+# Strategy parameters — illustrative defaults, NOT tuned for live trading.
+# Regime weights are indicative of economic intuition:
+#   Recession: flight-to-quality (bonds, cash heavy)
+#   Recovery:  transitional (moderate equity, bonds)
+#   Expansion: risk-on (equity heavy)
+# All weights per regime must sum to 1.0.
+
+n_regimes: 3
+refit_every: 21         # bars (approx 1 month of trading days)
+min_train: 60           # minimum observations to fit regime model
+rebalance: "monthly"
+
+regime_weights:
+  0:  # Recession
+    EQUITY: 0.10
+    BONDS: 0.55
+    COMMODITY: 0.05
+    CASH: 0.30
+  1:  # Neutral / Recovery
+    EQUITY: 0.45
+    BONDS: 0.35
+    COMMODITY: 0.10
+    CASH: 0.10
+  2:  # Expansion
+    EQUITY: 0.65
+    BONDS: 0.20
+    COMMODITY: 0.10
+    CASH: 0.05
+
+costs:
+  spread_bps: 5.0
+  commission_rate: 0.001
+
+engine:
+  initial_capital: 1000000
+  max_gross_exposure: 1.05
+  max_position_weight: 0.70
