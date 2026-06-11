@@ -9,28 +9,17 @@ Exports:
 """
 
 from macroregime.allocation.portfolio import TargetWeightPortfolio
+from macroregime.allocation.strategy import TargetWeightStrategy
 from macroregime.allocation.weights import (
     build_weight_schedule,
     load_regime_weights,
     month_end_rebalance_dates,
 )
 
-# TargetWeightStrategy imported lazily after plan 03-05 Task 2 implementation
-try:
-    from macroregime.allocation.strategy import TargetWeightStrategy
-
-    __all__ = [
-        "TargetWeightPortfolio",
-        "TargetWeightStrategy",
-        "load_regime_weights",
-        "build_weight_schedule",
-        "month_end_rebalance_dates",
-    ]
-except ImportError:
-    # strategy.py not yet created — Task 2 will add it
-    __all__ = [
-        "TargetWeightPortfolio",
-        "load_regime_weights",
-        "build_weight_schedule",
-        "month_end_rebalance_dates",
-    ]
+__all__ = [
+    "TargetWeightPortfolio",
+    "TargetWeightStrategy",
+    "load_regime_weights",
+    "build_weight_schedule",
+    "month_end_rebalance_dates",
+]
