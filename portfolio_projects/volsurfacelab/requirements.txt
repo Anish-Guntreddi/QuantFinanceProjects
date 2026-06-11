@@ -1,0 +1,10 @@
+# Pinned versions as installed in quant venv (Python 3.11)
+numpy==2.2.6
+pandas==2.3.2
+scipy==1.16.1
+statsmodels==0.14.5
+arch==7.2.0
+py-vollib==1.0.12
+matplotlib==3.10.6
+seaborn==0.13.2
+pyyaml>=6.0

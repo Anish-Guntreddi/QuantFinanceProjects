@@ -1,0 +1,40 @@
+# VolSurfaceLab configuration
+# All parameters consumed by SyntheticChainGenerator, SVICalibrator, and downstream modules.
+
+chain:
+  spot: 100.0
+  risk_free: 0.05
+  maturities: [0.25, 0.5, 1.0]
+  n_strikes: 13
+  k_min: -1.5
+  k_max: 1.5
+  seed: 42
+
+underlying:
+  n_days: 750
+  seed: 42
+  garch:
+    omega: 2.0e-6
+    alpha: 0.08
+    beta: 0.90
+
+svi:
+  k_constraint:
+    k_min: -3.0
+    k_max: 3.0
+    n_points: 100
+  calendar_k_range: [-1.5, 1.5]
+  n_restarts: 5
+
+forecast:
+  train_frac: 0.67
+  dm_max_lags: 4
+  garch_restarts: 5
+
+strategy:
+  initial_cash: 100000.0
+  cost_rate: 0.001
+  delta_hedge_cost_rate: 0.001
+
+report:
+  output_dir: "reports"
