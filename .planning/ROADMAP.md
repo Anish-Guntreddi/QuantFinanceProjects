@@ -78,7 +78,7 @@ Plans:
   3. Regime diagnostics output includes transition matrix, mean dwell times per regime, and regime-label alignment documentation (states ordered by economically meaningful quantity) — visible in the research report
   4. Walk-forward backtest through qbacktest shows regime-conditional strategy versus 60/40, equal weight, and risk parity benchmarks over identical periods with identical cost assumptions; net-of-cost Sharpe with bootstrap CIs reported for all four strategies
   5. One-command runner (`python run_pipeline.py`) produces the research report; codex leakage audit (FRED release-lag focus) passes with no unresolved findings
-**Plans:** 3/9 plans executed
+**Plans:** 5/9 plans executed
 
 Plans:
 - [ ] 03-01-PLAN.md — Package skeleton, Wave-0 test stubs, SyntheticMacroGenerator (4-state Markov DGP) (wave 1)
@@ -128,6 +128,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. QBacktest | 8/9 | Complete    | 2026-06-10 |
 | 2. AlphaRank | 7/8 | Complete    | 2026-06-10 |
-| 3. MacroRegime | 3/9 | In Progress|  |
+| 3. MacroRegime | 5/9 | In Progress|  |
 | 4. VolSurfaceLab | 0/TBD | Not started | - |
 | 5. DeFiRegimeNet | 0/TBD | Not started | - |

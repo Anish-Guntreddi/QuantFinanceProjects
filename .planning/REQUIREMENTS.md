@@ -35,9 +35,9 @@
 - [x] **MCR-01**: Macro data layer loads FRED series via fredapi when an API key is present, and falls back to a deterministic synthetic macro generator (default path; used by all tests)
 - [x] **MCR-02**: Every macro series carries an explicit release-lag so the strategy only sees data as of its publication date (point-in-time correctness, unit-tested)
 - [x] **MCR-03**: Market feature layer computes realized vol, momentum, drawdown, and rolling correlation regime indicators from asset prices
-- [ ] **MCR-04**: Regime models (HMM and GMM) produce causal regime sequences via rolling re-fit (filtered, not smoothed states); a test proves regime at t is unchanged by appending future data
-- [ ] **MCR-05**: Regime labels are aligned across re-fits (states ordered by economically meaningful quantity); persistence diagnostics (transition matrix, dwell times) reported
-- [ ] **MCR-06**: Allocation layer maps regimes to portfolio weights across equities/bonds/commodities/cash and rebalances through qbacktest with costs
+- [x] **MCR-04**: Regime models (HMM and GMM) produce causal regime sequences via rolling re-fit (filtered, not smoothed states); a test proves regime at t is unchanged by appending future data
+- [x] **MCR-05**: Regime labels are aligned across re-fits (states ordered by economically meaningful quantity); persistence diagnostics (transition matrix, dwell times) reported
+- [x] **MCR-06**: Allocation layer maps regimes to portfolio weights across equities/bonds/commodities/cash and rebalances through qbacktest with costs
 - [ ] **MCR-07**: Strategy is benchmarked against 60/40, equal weight, and risk parity over identical periods with identical costs
 - [ ] **MCR-08**: Walk-forward evaluation with out-of-sample regime stability analysis; one-command runner produces the research report
 
@@ -118,9 +118,9 @@
 | MCR-01 | Phase 3 — MacroRegime | Complete |
 | MCR-02 | Phase 3 — MacroRegime | Complete |
 | MCR-03 | Phase 3 — MacroRegime | Complete |
-| MCR-04 | Phase 3 — MacroRegime | Pending |
-| MCR-05 | Phase 3 — MacroRegime | Pending |
-| MCR-06 | Phase 3 — MacroRegime | Pending |
+| MCR-04 | Phase 3 — MacroRegime | Complete |
+| MCR-05 | Phase 3 — MacroRegime | Complete |
+| MCR-06 | Phase 3 — MacroRegime | Complete |
 | MCR-07 | Phase 3 — MacroRegime | Pending |
 | MCR-08 | Phase 3 — MacroRegime | Pending |
 | VSL-01 | Phase 4 — VolSurfaceLab | Pending |

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: "Completed 03-macroregime-03-PLAN.md (causal market features: realized vol, momentum, drawdown, rolling corr)"
-last_updated: "2026-06-11T00:16:54.511Z"
+stopped_at: Completed 03-macroregime-05-PLAN.md (TargetWeightPortfolio, TargetWeightStrategy, regime weights YAML)
+last_updated: "2026-06-11T00:19:24.366Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 26
-  completed_plans: 20
+  completed_plans: 22
   percent: 33
 ---
 
@@ -70,6 +70,8 @@ Progress: [███░░░░░░░] 33%
 | Phase 03-macroregime P01 | 25 | 2 tasks | 20 files |
 | Phase 03-macroregime P02 | 5 | 2 tasks | 4 files |
 | Phase 03-macroregime P03 | 6 | 2 tasks | 3 files |
+| Phase 03-macroregime P04 | 6 | 2 tasks | 5 files |
+| Phase 03-macroregime P05 | 6 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -126,6 +128,11 @@ Recent decisions affecting current work:
 - [Phase 03-macroregime]: no ffill in load_panel: frequency alignment deferred to plan 03-07 pipeline — ffill must happen AFTER lag
 - [Phase 03-macroregime]: rolling_corr warm-up is window+1 (not window+2): first valid corr at bar window, shift pushes to bar window+1; corrected from plan docstring
 - [Phase 03-macroregime]: pct_change(fill_method=None) + shift(1) is the locked causal feature pattern for all market features
+- [Phase 03-macroregime]: CausalRegimeDetector: predict(X[:t+1])[-1] is the ONLY safe HMM causal pattern; refit schedule is pure function of t (never len(X)) — oracle invariant by construction
+- [Phase 03-macroregime]: align_regime_labels returns inverse permutation: np.argsort(np.argsort(means[:,dim])) — double argsort maps raw->rank (not single argsort which gives rank->raw)
+- [Phase 03-macroregime]: transition_matrix unvisited rows = uniform 1/K (not zero/NaN) to keep matrix row-stochastic for all downstream consumers
+- [Phase 03-macroregime]: TargetWeightPortfolio overrides generate_orders only — on_fill/invariant inherited from qbacktest unchanged (locked: qbacktest never modified)
+- [Phase 03-macroregime]: TargetWeightStrategy tracks _last_emitted signed weight (not direction): |new-last|>1e-9 re-emission closes PrecomputedWeightsStrategy direction-only gap
 
 ### Pending Todos
 
@@ -139,6 +146,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-11T00:16:54.509Z
-Stopped at: Completed 03-macroregime-03-PLAN.md (causal market features: realized vol, momentum, drawdown, rolling corr)
+Last session: 2026-06-11T00:19:24.359Z
+Stopped at: Completed 03-macroregime-05-PLAN.md (TargetWeightPortfolio, TargetWeightStrategy, regime weights YAML)
 Resume file: None
