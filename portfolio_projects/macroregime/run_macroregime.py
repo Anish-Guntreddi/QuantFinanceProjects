@@ -170,15 +170,20 @@ def main(argv: list[str] | None = None) -> int:
     from macroregime.evaluation import regime_stability_report, k_sensitivity
     from macroregime.data.loader_base import SyntheticMacroLoader
     from macroregime.features.market import build_market_features
-    import numpy as np
 
-    # Build raw feature matrices (same as pipeline uses)
+    # Build feature matrices with the SAME preprocessing the pipeline applies
+    # (drop all-NaN publication gaps → ffill post-lag → dropna → expanding
+    # z-score). A plain dropna() on the raw panel would keep only rows where
+    # all four series published simultaneously — a much sparser, different
+    # matrix than the regime models actually see.
+    from macroregime.pipeline import _expanding_zscore
+
     loader = SyntheticMacroLoader(generator=gen, seed=args.seed)
-    macro_df = loader.load_panel().dropna()
-    X_monthly = macro_df.values
+    macro_df = loader.load_panel().dropna(how="all").ffill().dropna()
+    X_monthly = _expanding_zscore(macro_df).values
 
     mkt_df = build_market_features(asset_ohlcv).dropna()
-    X_daily = mkt_df.values
+    X_daily = _expanding_zscore(mkt_df).values
 
     stability = regime_stability_report(X_monthly, X_daily, k=args.k, quick=args.quick)
     logger.info(

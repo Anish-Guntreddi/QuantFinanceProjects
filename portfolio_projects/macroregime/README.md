@@ -162,12 +162,14 @@ Results below are from `python run_macroregime.py --quick --seed 42`.
 
 | Strategy | Gross Sharpe | Net Sharpe | Net CI Low | Net CI High | Sortino | MaxDD | Turnover |
 |----------|-------------|-----------|-----------|------------|---------|-------|----------|
-| Regime | 0.300 | 0.294 | -0.319 | 0.888 | 0.475 | -0.084 | 0.178 |
-| 60/40 | 0.560 | 0.559 | -0.121 | 1.180 | 0.904 | -0.118 | 0.033 |
+| Regime | 0.235 | 0.226 | -0.418 | 0.862 | 0.334 | -0.404 | 1.094 |
+| 60/40 | 0.023 | 0.022 | -0.594 | 0.656 | 0.032 | -0.298 | 0.108 |
 | EqualWeight | 0.087 | 0.086 | -0.529 | 0.649 | 0.136 | -0.291 | 0.097 |
-| RiskParity | 0.087 | 0.086 | -0.529 | 0.649 | 0.136 | -0.291 | 0.097 |
+| RiskParity | 1.004 | 0.981 | 0.335 | 1.661 | 1.120 | -0.027 | 0.209 |
 
 Net Sharpe CIs are 95% bootstrap (1000 resamples, percentile method). The wide CIs reflect the short 10-year quick-run window.
+
+**Honest reading of this table**: on this synthetic panel, inverse-vol risk parity dominates (net Sharpe 0.981) because the DGP's lowest-volatility asset (CASH) has a persistently favorable risk-adjusted drift, and risk parity concentrates there up to the 0.70 position cap. The regime strategy (net 0.226) beats 60/40 and equal weight but does not beat risk parity, and carries higher turnover (1.09×/yr) and a deeper drawdown. All four strategies run through the identical engine path with identical costs; no overlapping CIs are claimed as significant. Walk-forward OOS net Sharpe for the regime strategy is 0.103 across 16 windows (train 504 bars / test 126 bars, quick mode).
 
 ### Figures
 
@@ -203,25 +205,25 @@ K was **not** selected by maximizing Sharpe (this would be an anti-feature: it w
 
 | K | Mean Dwell R0 | Mean Dwell R1 | Mean Dwell R2+ | Agreement vs K=3 |
 |---|--------------|--------------|---------------|-----------------|
-| 2 | 130.8 | 369.4 | — | 47.0% |
-| 3 | 390.7 | 147.2 | 146.8 | 100.0% |
+| 2 | 113.4 | 124.3 | — | 59.6% |
+| 3 | 59.7 | 63.9 | 105.5 | 100.0% |
 
-The 47% agreement between K=2 and K=3 (after max-overlap mapping) reflects the fact that K=2 merges two K=3 states into one — structurally expected behavior, not instability.
+The 59.6% agreement between K=2 and K=3 (after max-overlap mapping) reflects the fact that K=2 merges two K=3 states into one — structurally expected behavior, not instability.
 
 ### HMM vs GMM Stability (Quick Run)
 
-- **HMM/GMM label agreement (daily)**: 88.3% — the two backends produce similar regime sequences on this DGP.
-- **Distribution drift (L1, first vs second half)**: 1.89 — moderate non-stationarity in the synthetic DGP is expected (the Markov process visits all 4 states but the ergodic distribution is not perfectly uniform).
+- **HMM/GMM label agreement (daily, aligned)**: 86.0% — the two backends produce similar regime sequences on this DGP. (Feature matrices use the same preprocessing the pipeline applies: post-lag ffill + expanding z-score.)
+- **Distribution drift (L1, first vs second half)**: 0.81 — moderate non-stationarity in the synthetic DGP is expected (the Markov process visits all 4 states but the ergodic distribution is not perfectly uniform).
 
 HMM and GMM market dwell times:
 
 | State | HMM | GMM |
 |-------|-----|-----|
-| R0 | 1265.0 | 312.5 |
-| R1 | 105.2 | 65.4 |
-| R2 | 121.6 | 102.8 |
+| R0 | 118.0 | 51.8 |
+| R1 | 76.1 | 62.0 |
+| R2 | 83.4 | 50.6 |
 
-The large R0 HMM dwell time (1265 bars ≈ 5 years) reflects a long contraction-like period in the synthetic DGP that HMM identifies as a single persistent state while GMM segments it further.
+HMM dwell times are uniformly longer than GMM's — the transition-matrix prior in the HMM enforces persistence, while the GMM labels each bar independently and re-switches more freely. This is the expected structural difference between the two backends, and is the reason HMM is the default for allocation (fewer spurious regime flips → lower turnover).
 
 ---
 
