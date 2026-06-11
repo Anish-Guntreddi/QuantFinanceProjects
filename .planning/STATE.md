@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-macroregime-07-PLAN.md (MacroRegimePipeline, evaluation, walk-forward)
-last_updated: "2026-06-11T13:42:26.015Z"
+stopped_at: Completed 03-macroregime-08-PLAN.md (runner, ReportBuilder, README)
+last_updated: "2026-06-11T14:05:28.433Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 26
-  completed_plans: 24
+  completed_plans: 25
   percent: 33
 ---
 
@@ -73,6 +73,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 03-macroregime P04 | 6 | 2 tasks | 5 files |
 | Phase 03-macroregime P05 | 6 | 2 tasks | 5 files |
 | Phase 03-macroregime P07 | 12 | 2 tasks | 4 files |
+| Phase 03-macroregime P08 | 12 | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -138,6 +139,8 @@ Recent decisions affecting current work:
 - [Phase 03-macroregime]: Two separate CausalRegimeDetector instances for macro and market: mixing monthly + daily features into one matrix creates frequency-alignment artifacts and is semantically wrong
 - [Phase 03-macroregime]: K sensitivity by Sharpe forbidden (anti-feature): selecting K to maximize Sharpe overfits regime model to backtest period
 - [Phase 03-macroregime]: Regime reuse across walk-forward windows is safe: CausalRegimeDetector oracle guarantee proves label at t is window-invariant
+- [Phase 03-macroregime]: build_all receives asset_ohlcv as explicit arg: PipelineResults is frozen, asset_ohlcv not stored in it — runner re-generates from same seed
+- [Phase 03-macroregime]: summary.md written to parent(output_dir): test expects tmp_path/figures/*.png AND tmp_path/summary.md (not tmp_path/figures/summary.md)
 
 ### Pending Todos
 
@@ -151,6 +154,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-11T13:42:26.012Z
-Stopped at: Completed 03-macroregime-07-PLAN.md (MacroRegimePipeline, evaluation, walk-forward)
+Last session: 2026-06-11T14:05:28.431Z
+Stopped at: Completed 03-macroregime-08-PLAN.md (runner, ReportBuilder, README)
 Resume file: None
