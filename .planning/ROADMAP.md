@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: QBacktest** - Build the pip-installable event-driven backtesting engine that all other projects depend on (completed 2026-06-10)
 - [x] **Phase 2: AlphaRank** - Build the ML cross-sectional equity ranking pipeline using QBacktest as the portfolio execution layer (completed 2026-06-10)
-- [ ] **Phase 3: MacroRegime** - Build the regime-switching macro asset allocation system with point-in-time FRED data and HMM/GMM regime detection
+- [x] **Phase 3: MacroRegime** - Build the regime-switching macro asset allocation system with point-in-time FRED data and HMM/GMM regime detection (completed 2026-06-11)
 - [ ] **Phase 4: VolSurfaceLab** - Build the options volatility research system with IV surface fitting, RV forecasting, and standalone strategy P&L
 - [ ] **Phase 5: DeFiRegimeNet** - Build the hybrid ML + econometric regime detection system for DeFi/crypto markets
 
@@ -78,7 +78,7 @@ Plans:
   3. Regime diagnostics output includes transition matrix, mean dwell times per regime, and regime-label alignment documentation (states ordered by economically meaningful quantity) — visible in the research report
   4. Walk-forward backtest through qbacktest shows regime-conditional strategy versus 60/40, equal weight, and risk parity benchmarks over identical periods with identical cost assumptions; net-of-cost Sharpe with bootstrap CIs reported for all four strategies
   5. One-command runner (`python run_pipeline.py`) produces the research report; codex leakage audit (FRED release-lag focus) passes with no unresolved findings
-**Plans:** 8/9 plans executed
+**Plans:** 9/9 plans complete
 
 Plans:
 - [ ] 03-01-PLAN.md — Package skeleton, Wave-0 test stubs, SyntheticMacroGenerator (4-state Markov DGP) (wave 1)
@@ -128,6 +128,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. QBacktest | 8/9 | Complete    | 2026-06-10 |
 | 2. AlphaRank | 7/8 | Complete    | 2026-06-10 |
-| 3. MacroRegime | 8/9 | In Progress|  |
+| 3. MacroRegime | 9/9 | Complete   | 2026-06-11 |
 | 4. VolSurfaceLab | 0/TBD | Not started | - |
 | 5. DeFiRegimeNet | 0/TBD | Not started | - |

@@ -67,7 +67,7 @@
 - [x] **QUAL-01**: Every project has a pytest suite that passes deterministically (seeded RNG fixtures) and runs offline with no network or API keys
 - [x] **QUAL-02**: Every project has README with research question, data description, methodology, how-to-run, and results summary with figures
 - [x] **QUAL-03**: Every backtest/strategy result reports net-of-cost performance beside gross, with statistical significance (bootstrap CI or t-stats)
-- [ ] **QUAL-04**: Codex read-only review passes per phase (correctness + dedicated leakage audit of each data pipeline); findings triaged and resolved before phase completion
+- [x] **QUAL-04**: Codex read-only review passes per phase (correctness + dedicated leakage audit of each data pipeline); findings triaged and resolved before phase completion
 - [x] **QUAL-05**: Shared conventions: src layout, pyproject.toml, configs in YAML, per-project requirements.txt, figures under reports/figures/
 
 ## v2 Requirements
@@ -141,7 +141,7 @@
 | QUAL-01 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-02 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-03 | Phase 1 (established); recurs in Phases 2-5 | Complete |
-| QUAL-04 | Phase 1 (established); recurs in Phases 2-5 | Pending |
+| QUAL-04 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-05 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 
 **Coverage:**
