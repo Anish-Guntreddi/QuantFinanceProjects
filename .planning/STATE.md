@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-macroregime-01-PLAN.md (package skeleton, SyntheticMacroGenerator)
-last_updated: "2026-06-11T00:08:23.002Z"
+stopped_at: "Completed 03-macroregime-02-PLAN.md (PIT macro data layer: loader_base, fred_loader)"
+last_updated: "2026-06-11T00:16:20.955Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 26
-  completed_plans: 18
+  completed_plans: 20
   percent: 33
 ---
 
@@ -68,6 +68,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02-alpharank P06 | 18 | 2 tasks | 10 files |
 | Phase 02-alpharank P07 | 11 | 3 tasks | 5 files |
 | Phase 03-macroregime P01 | 25 | 2 tasks | 20 files |
+| Phase 03-macroregime P02 | 5 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -120,6 +121,8 @@ Recent decisions affecting current work:
 - [Phase 03-macroregime]: TRANSITION_MATRIX ergodicity: Stagflation->Recovery path added (0.01) to guarantee all 4 regimes visited; initial matrix had 0-prob path causing state dropout
 - [Phase 03-macroregime]: SyntheticMacroPanel convention: observation-date macro panel only; release-lag application is MacroDataLoader's responsibility (plan 03-02)
 - [Phase 03-macroregime]: No pct_change in macroregime package: cumulative cumprod for OHLCV construction avoids FutureWarning-as-error in CI
+- [Phase 03-macroregime]: attrs cleared on Series copy before pd.concat: DatetimeIndex in attrs causes ValueError; cleared on copy, original Series retains attrs
+- [Phase 03-macroregime]: no ffill in load_panel: frequency alignment deferred to plan 03-07 pipeline — ffill must happen AFTER lag
 
 ### Pending Todos
 
@@ -133,6 +136,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-11T00:08:22.999Z
-Stopped at: Completed 03-macroregime-01-PLAN.md (package skeleton, SyntheticMacroGenerator)
+Last session: 2026-06-11T00:16:20.951Z
+Stopped at: Completed 03-macroregime-02-PLAN.md (PIT macro data layer: loader_base, fred_loader)
 Resume file: None

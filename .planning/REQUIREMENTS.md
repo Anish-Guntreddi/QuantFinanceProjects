@@ -33,7 +33,7 @@
 ### MacroRegime — Regime-Switching Asset Allocation (MCR)
 
 - [x] **MCR-01**: Macro data layer loads FRED series via fredapi when an API key is present, and falls back to a deterministic synthetic macro generator (default path; used by all tests)
-- [ ] **MCR-02**: Every macro series carries an explicit release-lag so the strategy only sees data as of its publication date (point-in-time correctness, unit-tested)
+- [x] **MCR-02**: Every macro series carries an explicit release-lag so the strategy only sees data as of its publication date (point-in-time correctness, unit-tested)
 - [ ] **MCR-03**: Market feature layer computes realized vol, momentum, drawdown, and rolling correlation regime indicators from asset prices
 - [ ] **MCR-04**: Regime models (HMM and GMM) produce causal regime sequences via rolling re-fit (filtered, not smoothed states); a test proves regime at t is unchanged by appending future data
 - [ ] **MCR-05**: Regime labels are aligned across re-fits (states ordered by economically meaningful quantity); persistence diagnostics (transition matrix, dwell times) reported
@@ -116,7 +116,7 @@
 | ALR-08 | Phase 2 — AlphaRank | Complete |
 | ALR-09 | Phase 2 — AlphaRank | Complete |
 | MCR-01 | Phase 3 — MacroRegime | Complete |
-| MCR-02 | Phase 3 — MacroRegime | Pending |
+| MCR-02 | Phase 3 — MacroRegime | Complete |
 | MCR-03 | Phase 3 — MacroRegime | Pending |
 | MCR-04 | Phase 3 — MacroRegime | Pending |
 | MCR-05 | Phase 3 — MacroRegime | Pending |
