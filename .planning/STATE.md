@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 04-volsurfacelab-07-PLAN.md (Runner + README research report)
-last_updated: "2026-06-11T16:30:18.007Z"
+stopped_at: Completed 04-volsurfacelab-08-PLAN.md (Quality gate — API freeze, codex audit)
+last_updated: "2026-06-11T16:46:39.361Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 34
-  completed_plans: 33
+  completed_plans: 34
   percent: 33
 ---
 
@@ -82,6 +82,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 04-volsurfacelab P05 | 5 | 2 tasks | 2 files |
 | Phase 04-volsurfacelab P06 | 6 | 2 tasks | 4 files |
 | Phase 04-volsurfacelab P07 | 8 | 2 tasks | 3 files |
+| Phase 04-volsurfacelab P08 | 11 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -170,6 +171,9 @@ Recent decisions affecting current work:
 - [Phase 04-volsurfacelab]: summary.md location: output_dir.parent (beside figures/); matches locked Phase 3 macroregime decision
 - [Phase 04-volsurfacelab]: importlib.util.spec_from_file_location for runner import: no sys.path hacks in test, mirrors macroregime locked pattern
 - [Phase 04-volsurfacelab]: main() catches Exception returning 1; argparse SystemExit propagated directly for test_runner_bad_args to assert on exit code 2
+- [Phase 04-volsurfacelab]: volsurfacelab __all__ frozen at 34 symbols: version, Chain(5), IV(3), SVI(7), Forecast(7), Strategy(7), Pipeline(3), Lazy(2)
+- [Phase 04-volsurfacelab]: theta convention corrected: vollib.theta() divides by 365 (per-calendar-day); theta_daily = vollib_theta * (365/252) for business-day; theta_daily is reporting-only, not in P&L
+- [Phase 04-volsurfacelab]: no-arb gate extended to block strategy entry: pipeline filters iv_frame to validated_maturities before ChainData — excluded slices cannot drive entry_iv or P&L
 
 ### Pending Todos
 
@@ -183,6 +187,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-11T16:30:18.005Z
-Stopped at: Completed 04-volsurfacelab-07-PLAN.md (Runner + README research report)
+Last session: 2026-06-11T16:46:39.358Z
+Stopped at: Completed 04-volsurfacelab-08-PLAN.md (Quality gate — API freeze, codex audit)
 Resume file: None
