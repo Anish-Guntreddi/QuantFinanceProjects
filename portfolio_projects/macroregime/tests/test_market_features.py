@@ -54,7 +54,7 @@ def test_feature_nan_warmup():
     - realized_vol(window=21): 22 leading NaNs (1 for pct_change + 21 rolling + 1 shift)
     - momentum(lookback=63): 64 leading NaNs (63 pct_change + 1 shift)
     - drawdown: 1 leading NaN (shift only — cummax valid from bar 0)
-    - rolling_corr(window=63): 65 leading NaNs (1 return + 63 rolling + 1 shift)
+    - rolling_corr(window=63): 64 leading NaNs (window + 1: first valid corr at bar 63, shift pushes to bar 64)
     """
     from macroregime.features.market import drawdown, momentum, realized_vol, rolling_corr
 
@@ -84,11 +84,12 @@ def test_feature_nan_warmup():
     assert dd_nans == 1, f"drawdown expected 1 leading NaN, got {dd_nans}"
     assert not dd.iloc[1:].isna().any(), "drawdown has unexpected NaN after warmup"
 
-    # rolling_corr: 1 NaN from pct_change, rolling(63) needs 63 returns,
-    # then shift(1). Total = 65.
+    # rolling_corr: pct_change gives NaN at bar 0; rolling(63) needs 63
+    # return values so first valid corr is at bar 63 (0-indexed); shift(1)
+    # pushes it to bar 64.  Total leading NaNs = 64 = window + 1.
     rc_nans = rc.isna().sum()
-    assert rc_nans == 65, f"rolling_corr expected 65 leading NaNs, got {rc_nans}"
-    assert not rc.iloc[65:].isna().any(), "rolling_corr has unexpected NaN after warmup"
+    assert rc_nans == 64, f"rolling_corr expected 64 leading NaNs, got {rc_nans}"
+    assert not rc.iloc[64:].isna().any(), "rolling_corr has unexpected NaN after warmup"
 
 
 # ---------------------------------------------------------------------------
