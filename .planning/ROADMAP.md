@@ -127,7 +127,18 @@ Plans:
   3. ML classifiers (logistic, XGBoost) are evaluated against HMM/GMM baselines using purged/embargoed CV — same protocol as AlphaRank; comparison table with accuracy and log-loss appears in the report
   4. Per-token diagnostics include Markov transition matrix, dwell times, and regime-count (k) sensitivity analysis; cross-token regime correlation heatmap appears in the research report
   5. One-command runner (`python run_pipeline.py`) produces a publication-style report covering abstract, data, methodology, results, robustness, and limitations; codex leakage audit (crypto data quality + label separation focus) passes with no unresolved findings
-**Plans**: TBD
+**Plans:** 9 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Package skeleton, CryptoGenerator DGP (24/7, fat tails, vol clustering), data-quality validation, Wave-0 stubs + live AST quarantine guard (wave 1)
+- [ ] 05-02-PLAN.md — Quarantined forward-looking labels + causal feature module with perturbation oracle (wave 2)
+- [ ] 05-03-PLAN.md — Per-token CausalRegimeDetector wrapper + diagnostics/k-sensitivity reuse from macroregime (wave 2)
+- [ ] 05-04-PLAN.md — Logistic/XGBoost classifier wrappers + RegimeCVEvaluator with embargo >= H invariant (wave 2)
+- [ ] 05-05-PLAN.md — Per-token GARCH/HAR/EGARCH forecasting via volsurfacelab reuse + StudentsT robustness (wave 2)
+- [ ] 05-06-PLAN.md — Cross-token Cramér's V regime correlation analytics (wave 2)
+- [ ] 05-07-PLAN.md — Pipeline assembly (frozen PipelineResults) + ReportBuilder figures and summary.md (wave 3)
+- [ ] 05-08-PLAN.md — run_pipeline.py runner + publication-style README research report (wave 4)
+- [ ] 05-09-PLAN.md — Quality gate: API freeze, strict suite x2, codex audit (label separation + crypto data quality) (wave 5)
 
 ## Progress
 
@@ -140,4 +151,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. AlphaRank | 7/8 | Complete    | 2026-06-10 |
 | 3. MacroRegime | 9/9 | Complete   | 2026-06-11 |
 | 4. VolSurfaceLab | 8/8 | Complete   | 2026-06-11 |
-| 5. DeFiRegimeNet | 0/TBD | Not started | - |
+| 5. DeFiRegimeNet | 0/9 | Planned | - |
