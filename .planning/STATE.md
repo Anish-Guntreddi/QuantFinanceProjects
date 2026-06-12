@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 05-defiregimenet-02-PLAN.md (Labels + causal features)
-last_updated: "2026-06-12T00:29:02.895Z"
+stopped_at: Completed 05-defiregimenet-03-PLAN.md (Per-token causal regime detector + diagnostics)
+last_updated: "2026-06-12T00:36:50.345Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 43
-  completed_plans: 36
+  completed_plans: 37
   percent: 33
 ---
 
@@ -84,6 +84,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 04-volsurfacelab P07 | 8 | 2 tasks | 3 files |
 | Phase 04-volsurfacelab P08 | 11 | 2 tasks | 5 files |
 | Phase 05-defiregimenet P02 | 38 | 2 tasks | 4 files |
+| Phase 05-defiregimenet P03 | 5 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -178,6 +179,8 @@ Recent decisions affecting current work:
 - [Phase 05-defiregimenet]: DeFiRegimeNet label encoding LOCKED: state = bull_flag*2 + high_vol_flag (0=bear/low, 1=bear/high, 2=bull/low, 3=bull/high); matches DGP true_states convention
 - [Phase 05-defiregimenet]: Expanding median vol threshold in make_regime_labels: causal w.r.t. label-estimation order; expanding (not global) to avoid look-ahead in threshold
 - [Phase 05-defiregimenet]: std < 1e-14 guard in expanding_zscore (not == 0.0): matches alpharank icir convention; floating-point constant arrays produce std ~1e-18 not exactly 0
+- [Phase 05-defiregimenet]: defiregimenet regime/detector.py: feature matrix construction inlined in tests to stay file-disjoint from features.crypto (parallel wave-2 plan)
+- [Phase 05-defiregimenet]: anti-feature guard test reads diagnostics.py source as text (case-insensitive); 'sharpe' must not appear in diagnostics source including comments
 
 ### Pending Todos
 
@@ -191,6 +194,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-12T00:29:02.893Z
-Stopped at: Completed 05-defiregimenet-02-PLAN.md (Labels + causal features)
+Last session: 2026-06-12T00:36:50.342Z
+Stopped at: Completed 05-defiregimenet-03-PLAN.md (Per-token causal regime detector + diagnostics)
 Resume file: None

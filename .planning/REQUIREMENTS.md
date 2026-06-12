@@ -56,10 +56,10 @@
 
 - [ ] **DFR-01**: Multi-token dataset layer with deterministic synthetic crypto generator (default; 24/7 calendar, fat tails, vol clustering) and optional ccxt/public-API real-data path with data-quality validation (volume sanity, gap handling)
 - [x] **DFR-02**: Regime labeling framework: bull/bear × high/low-vol labels constructed from forward-looking definitions for evaluation only, kept strictly separate from causal features
-- [ ] **DFR-03**: Econometric models: HMM and GMM regime detection with causal rolling-fit sequences and label alignment (reusing MacroRegime patterns); Markov transition diagnostics per token
+- [x] **DFR-03**: Econometric models: HMM and GMM regime detection with causal rolling-fit sequences and label alignment (reusing MacroRegime patterns); Markov transition diagnostics per token
 - [ ] **DFR-04**: ML classifiers (logistic, XGBoost) predict next-period regime from lagged features; evaluated against the econometric models with purged/embargoed CV
 - [ ] **DFR-05**: GARCH-family volatility forecasting per token with QLIKE evaluation vs HAR baseline
-- [ ] **DFR-06**: Per-token diagnostics plus cross-token regime correlation analysis; regime-count (k) sensitivity analysis
+- [x] **DFR-06**: Per-token diagnostics plus cross-token regime correlation analysis; regime-count (k) sensitivity analysis
 - [ ] **DFR-07**: One-command runner produces a publication-style research report (abstract, data, methodology, results, robustness, limitations)
 
 ### Cross-Cutting Quality (QUAL)
@@ -133,10 +133,10 @@
 | VSL-08 | Phase 4 — VolSurfaceLab | Complete |
 | DFR-01 | Phase 5 — DeFiRegimeNet | Pending |
 | DFR-02 | Phase 5 — DeFiRegimeNet | Complete |
-| DFR-03 | Phase 5 — DeFiRegimeNet | Pending |
+| DFR-03 | Phase 5 — DeFiRegimeNet | Complete |
 | DFR-04 | Phase 5 — DeFiRegimeNet | Pending |
 | DFR-05 | Phase 5 — DeFiRegimeNet | Pending |
-| DFR-06 | Phase 5 — DeFiRegimeNet | Pending |
+| DFR-06 | Phase 5 — DeFiRegimeNet | Complete |
 | DFR-07 | Phase 5 — DeFiRegimeNet | Pending |
 | QUAL-01 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-02 | Phase 1 (established); recurs in Phases 2-5 | Complete |
