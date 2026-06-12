@@ -1,0 +1,50 @@
+{
+  "project_id": "intraday_08_regime_detection",
+  "title": "Regime Detection & Allocation",
+  "short_description": "HMM and clustering-based regime detection with dynamic strategy allocation and Hurst exponent analysis",
+  "long_description": "HMM and clustering-based regime detection with dynamic strategy allocation and Hurst exponent analysis",
+  "category": "research_intraday_strategies",
+  "subcategory": "Regime Detection",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "regime-detection",
+    "hmm",
+    "clustering",
+    "hurst-exponent",
+    "dynamic-allocation"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 60,
+      "max": 504,
+      "default": 252,
+      "step": 21
+    }
+  ],
+  "tags": [
+    "regime-detection",
+    "hmm",
+    "clustering",
+    "hurst-exponent",
+    "dynamic-allocation"
+  ],
+  "github_path": "research_intraday_strategies/08_regime_detection_allocation",
+  "notebook_path": "research_intraday_strategies/08_regime_detection_allocation/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "cached_sweep",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": -0.0174
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nDetects market regimes to dynamically switch between momentum and mean-reversion strategies:\n\n1. **HMM Regime Classification**: 3-state Gaussian HMM fit to [daily_return, log(realized_vol)] features. States correspond empirically to: Bull trending, Bear/crisis, Sideways/choppy.\n2. **K-Means Clustering**: Rolling `lookback_period`-day returns/vol windows projected onto 2D PCA, then clustered. Labels assigned post-hoc by annualized return within each cluster.\n3. **Hurst Exponent Analysis**: Computed via rescaled range (R/S) analysis:\n   - H < 0.5: mean-reverting (activate MR strategies)\n   - H \u2248 0.5: random walk (reduce position)\n   - H > 0.5: trending (activate momentum strategies)\n\n## Strategy Allocation\n\nThe regime allocator runs both a Momentum and a Mean Reversion strategy simultaneously but weights their signals:\n```\nfinal_signal = w_momentum(regime) \u00d7 s_momentum + w_reversion(regime) \u00d7 s_reversion\n```\nWeights `w(regime)` learned from 5-year walk-forward calibration.\n\n## Metric Methodology\n\n- **Regime classification accuracy**: Validated by post-hoc labeling of regimes from subsequent return behavior.\n- **Hurst stability**: Distribution of 60-day rolling Hurst values; validates that detected mean-reversion periods have H < 0.5.\n- **Strategy switching Sharpe**: Compared to static momentum-only and MR-only baselines.\n- **Regime transition costs**: Extra turnover from switching strategies at regime changes."
+}

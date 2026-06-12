@@ -1,0 +1,48 @@
+{
+  "project_id": "intraday_03_stat_arb",
+  "title": "Intraday Statistical Arbitrage",
+  "short_description": "Cointegration-based intraday pairs trading with Engle-Granger and Johansen tests and dynamic hedge ratios",
+  "long_description": "Cointegration-based intraday pairs trading with Engle-Granger and Johansen tests and dynamic hedge ratios",
+  "category": "research_intraday_strategies",
+  "subcategory": "Statistical Arbitrage",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "statistical-arbitrage",
+    "pairs-trading",
+    "cointegration",
+    "intraday"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 20,
+      "max": 252,
+      "default": 60,
+      "step": 10
+    }
+  ],
+  "tags": [
+    "statistical-arbitrage",
+    "pairs-trading",
+    "cointegration",
+    "intraday"
+  ],
+  "github_path": "research_intraday_strategies/03_statistical_arbitrage",
+  "notebook_path": "research_intraday_strategies/03_statistical_arbitrage/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.9471
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nApplies statistical arbitrage at intraday granularity using 5-minute bars, exploiting temporary mispricings within a trading day that revert before close:\n\n1. **Pair formation**: Weekly cointegration test on 5-min closing prices over 60-bar rolling window.\n2. **Spread z-score**: `z = (spread \u2212 \u03bc_spread) / \u03c3_spread` where spread = `Y \u2212 \u03b2\u00b7X`.\n3. **Intraday mean reversion**: Only enter positions in the first 3 hours; always flat by 3:45 PM to avoid overnight gap risk.\n\n## Engle-Granger vs. Johansen\n\n- **EG test**: Fast pairwise screen; identifies the dependent variable (higher ADF p-value gets treated as Y).\n- **Johansen test**: Used for baskets of 3+ stocks; determines the number of cointegrating vectors and the hedge ratios.\n\n## Dynamic Hedge Ratio\n\nThe hedge ratio updates each 30-minute bar using a Kalman filter:\n```\nState: \u03b2_t = \u03b2_{t-1} + w_t       (random walk on hedge ratio)\nObs:   Y_t = \u03b2_t \u00b7 X_t + v_t     (spread observation)\n```\n\nThis allows the strategy to track non-stationary cointegration relationships without frequent re-estimation.\n\n## Metric Methodology\n\n- **Pair half-life**: Estimated OU half-life at rebalance; pairs with half-life > 60 bars are removed.\n- **Spread Sharpe**: Per-spread PnL Sharpe; measures signal quality independent of pair selection.\n- **Gross vs. net Sharpe**: Comparison showing the impact of transaction costs on this high-turnover strategy."
+}

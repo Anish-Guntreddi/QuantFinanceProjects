@@ -1,0 +1,50 @@
+{
+  "project_id": "intraday_07_ml_strategy",
+  "title": "Machine Learning Trading Strategy",
+  "short_description": "LSTM and Transformer forecasting with 50+ features, embargoed CV, probability calibration, and feature selection",
+  "long_description": "LSTM and Transformer forecasting with 50+ features, embargoed CV, probability calibration, and feature selection",
+  "category": "research_intraday_strategies",
+  "subcategory": "Machine Learning",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "machine-learning",
+    "lstm",
+    "transformer",
+    "feature-selection",
+    "calibration"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback_period",
+      "label": "Lookback Period",
+      "type": "slider",
+      "min": 20,
+      "max": 120,
+      "default": 60,
+      "step": 10
+    }
+  ],
+  "tags": [
+    "machine-learning",
+    "lstm",
+    "transformer",
+    "feature-selection",
+    "calibration"
+  ],
+  "github_path": "research_intraday_strategies/07_machine_learning_strategy",
+  "notebook_path": "research_intraday_strategies/07_machine_learning_strategy/notebooks/",
+  "requires_gpu": true,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "cached_sweep",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 1.9768
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nA full production-grade ML trading pipeline with rigorous validation:\n\n**Feature engineering (50+ features)**:\n- Price: multi-period returns, EWMA vols, realized skewness/kurtosis, autocorrelation.\n- Technical: RSI, MACD, ATR, Bollinger %B, ADX, Stochastic.\n- Microstructure: bid-ask spread, volume imbalance, VWAP deviation.\n- Cross-sectional: sector relative return, beta-adjusted return.\n\n**Model stack**:\n- LSTM (bidirectional, 2-layer, attention-pooled)\n- Transformer encoder (4 layers, 8 heads, d_model = `lookback_period`)\n- Ensemble via calibrated probability averaging.\n\n## Embargoed Cross-Validation\n\nUses purged K-Fold (L\u00f3pez de Prado, 2018):\n- Remove samples within `lookback_period` days of the validation boundary\n- This prevents information leakage from overlapping feature windows\n\n```\n[Train fold 1] [GAP] [Val fold 1] [GAP] [Train fold 2] [GAP] [Val fold 2] ...\n```\n\n## Feature Selection\n\nSHAP (SHapley Additive exPlanations) values computed on the validation set identify the most important features per fold. Features with mean |SHAP| below threshold are removed before final training.\n\n## Metric Methodology\n\n- **Out-of-sample IC**: Spearman correlation of predicted scores vs. realized returns, averaged across OOS folds.\n- **Strategy Sharpe**: Backtest using top/bottom decile signals with realistic costs.\n- **Brier score**: Calibration quality of probability outputs.\n- **Feature stability**: Fraction of top-10 SHAP features consistent across CV folds."
+}

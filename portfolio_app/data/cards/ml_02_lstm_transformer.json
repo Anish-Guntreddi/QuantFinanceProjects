@@ -1,0 +1,59 @@
+{
+  "project_id": "ml_02_lstm_transformer",
+  "title": "LSTM & Transformer Forecasting",
+  "short_description": "Advanced time series forecasting with attention-based LSTM and Transformer, embargoed CV, and calibrated probability outputs",
+  "long_description": "Advanced time series forecasting with attention-based LSTM and Transformer, embargoed CV, and calibrated probability outputs",
+  "category": "ai_ml_trading",
+  "subcategory": "Forecasting",
+  "asset_class": "Equities",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "lstm",
+    "transformer",
+    "attention",
+    "embargo-cv",
+    "calibration"
+  ],
+  "interactive_params": [
+    {
+      "name": "lookback",
+      "label": "Lookback Window",
+      "type": "slider",
+      "min": 20,
+      "max": 120,
+      "default": 60,
+      "step": 10
+    },
+    {
+      "name": "hidden_dim",
+      "label": "Hidden Dimension",
+      "type": "slider",
+      "min": 64,
+      "max": 512,
+      "default": 256,
+      "step": 64
+    }
+  ],
+  "tags": [
+    "lstm",
+    "transformer",
+    "attention",
+    "embargo-cv",
+    "calibration"
+  ],
+  "github_path": "ai_ml_trading/02_lstm_transformer_forecasting",
+  "notebook_path": "ai_ml_trading/02_lstm_transformer_forecasting/notebooks/",
+  "requires_gpu": true,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "cached_sweep",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": -0.4256
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nTwo architectures compete on a 5-day forward return prediction task:\n\n**LSTM with Attention**:\n- 2-layer bidirectional LSTM (hidden_dim units each direction)\n- Self-attention layer over the LSTM output sequence\n- Linear head predicting 5-day return as a probability (up/down/neutral)\n\n**Transformer (Encoder-only)**:\n- 4 multi-head attention layers (8 heads), d_model = hidden_dim\n- Positional encoding via learned embeddings (not sinusoidal)\n- CLS token aggregation for classification\n\n## Features (50+)\n\nPrice-derived: returns at 1/5/10/21/63 days, EWMA vols, realized skewness, Parkinson range vol.\nVolume: OBV, volume z-score, VWAP deviation.\nTechnical: RSI, MACD histogram, Bollinger %B, ADX, ATR.\nMacro: VIX level and change, credit spread, yield curve slope.\n\n## Embargoed Cross-Validation\n\nPurged K-Fold CV (L\u00f3pez de Prado, 2018): a gap of `lookback` days is removed between train and validation folds to prevent information leakage through overlapping return windows.\n\n## Calibration\n\nRaw softmax probabilities are recalibrated using isotonic regression on a held-out calibration set, ensuring that predicted P(up) = 0.7 corresponds to ~70% empirical up-move frequency.\n\n## Metric Methodology\n\n- **Log-loss**: Primary training objective; measures calibration quality.\n- **Directional accuracy**: Fraction of predictions where forecast direction matches realized 5-day return sign.\n- **Information coefficient (IC)**: Spearman correlation between predicted rank and realized return rank, measured monthly.\n- **Sharpe**: Backtest Sharpe from a simple long-if-p(up)>0.6, short-if-p(down)>0.6 strategy."
+}

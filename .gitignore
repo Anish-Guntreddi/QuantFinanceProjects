@@ -90,6 +90,9 @@ data/
 !**/src/**/data/
 !**/src/**/data/**
 **/src/**/data/**/__pycache__/
+# ...and the portfolio app's JSON data is content, not data artifacts
+!portfolio_app/data/
+!portfolio_app/data/**
 *.csv
 *.parquet
 *.h5
@@ -130,6 +133,8 @@ saved_models/
 logs/
 outputs/
 results/
+!portfolio_app/data/results/
+!portfolio_app/data/results/**
 reports/*.html
 reports/*.pdf
 runs/

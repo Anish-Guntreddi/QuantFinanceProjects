@@ -1,0 +1,49 @@
+{
+  "project_id": "hft_07_latency_arb",
+  "title": "Latency Arbitrage Simulator",
+  "short_description": "Educational multi-venue feed simulation showing how latency creates arbitrage windows with stale quote injection",
+  "long_description": "Educational multi-venue feed simulation showing how latency creates arbitrage windows with stale quote injection",
+  "category": "HFT_strategy_projects",
+  "subcategory": "Arbitrage",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python",
+    "C++"
+  ],
+  "key_techniques": [
+    "latency-arbitrage",
+    "simulation",
+    "educational",
+    "multi-venue"
+  ],
+  "interactive_params": [
+    {
+      "name": "latency_advantage_us",
+      "label": "Latency Advantage (us)",
+      "type": "slider",
+      "min": 1,
+      "max": 100,
+      "default": 10,
+      "step": 1
+    }
+  ],
+  "tags": [
+    "latency-arbitrage",
+    "simulation",
+    "educational",
+    "multi-venue"
+  ],
+  "github_path": "HFT_strategy_projects/07_latency_arb_simulator",
+  "notebook_path": "HFT_strategy_projects/07_latency_arb_simulator/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": true,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.5786
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nAn educational simulation demonstrating how co-location and network latency differences create tradeable arbitrage windows. The simulator injects stale quotes into a slower virtual exchange while a faster participant sees the true price.\n\n```\nStale quote age = latency_advantage_us \u2212 processing_time_us\nRevenue window = age \u00d7 |true_mid \u2212 stale_quote| / (bid\u2212ask spread)\n```\n\n## Simulation Architecture\n\nTwo simulated venues: Fast (0 latency) and Slow (`latency_advantage_us` \u00b5s behind). The fast participant:\n1. Observes true mid-price on the fast feed.\n2. Detects that the slow venue quote is stale (more than `stale_threshold` \u00b5s old).\n3. Lifts the stale offer on the slow venue (buying cheap) and immediately sells at the fair value on the fast venue.\n\n## Educational Insights\n\nThe simulation quantifies:\n- How frequently stale quotes appear as a function of latency gap\n- The relationship between latency advantage and capture rate\n- Regulatory context: how co-location requirements reduce these windows\n\n## Metric Methodology\n\n- **Arb frequency**: Number of stale-quote events per second as a function of `latency_advantage_us`.\n- **Average capture**: Expected PnL per arb event accounting for probabilistic arrival.\n- **Sharpe**: Annualized from per-event PnL, treating each arb event as independent."
+}

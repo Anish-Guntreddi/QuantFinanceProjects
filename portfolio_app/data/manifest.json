@@ -1,0 +1,244 @@
+{
+  "generated_at": "2026-03-05T05:05:42.552937",
+  "total_projects": 34,
+  "projects": [
+    {
+      "id": "hft_01_adaptive_market_making",
+      "category": "HFT_strategy_projects",
+      "card_path": "cards/hft_01_adaptive_market_making.json",
+      "results_path": "results/hft_01_adaptive_market_making.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "hft_02_order_book_scalping",
+      "category": "HFT_strategy_projects",
+      "card_path": "cards/hft_02_order_book_scalping.json",
+      "results_path": "results/hft_02_order_book_scalping.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "hft_03_queue_position",
+      "category": "HFT_strategy_projects",
+      "card_path": "cards/hft_03_queue_position.json",
+      "results_path": "results/hft_03_queue_position.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "hft_04_cross_exchange_arb",
+      "category": "HFT_strategy_projects",
+      "card_path": "cards/hft_04_cross_exchange_arb.json",
+      "results_path": "results/hft_04_cross_exchange_arb.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "hft_05_trade_imbalance",
+      "category": "HFT_strategy_projects",
+      "card_path": "cards/hft_05_trade_imbalance.json",
+      "results_path": "results/hft_05_trade_imbalance.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "hft_06_iceberg_detection",
+      "category": "HFT_strategy_projects",
+      "card_path": "cards/hft_06_iceberg_detection.json",
+      "results_path": "results/hft_06_iceberg_detection.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "hft_07_latency_arb",
+      "category": "HFT_strategy_projects",
+      "card_path": "cards/hft_07_latency_arb.json",
+      "results_path": "results/hft_07_latency_arb.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "hft_08_smart_order_router",
+      "category": "HFT_strategy_projects",
+      "card_path": "cards/hft_08_smart_order_router.json",
+      "results_path": "results/hft_08_smart_order_router.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "hft_09_rl_market_maker",
+      "category": "HFT_strategy_projects",
+      "card_path": "cards/hft_09_rl_market_maker.json",
+      "results_path": "results/hft_09_rl_market_maker.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "ml_01_regime_detection",
+      "category": "ai_ml_trading",
+      "card_path": "cards/ml_01_regime_detection.json",
+      "results_path": "results/ml_01_regime_detection.json",
+      "simulation_tier": "cached_sweep"
+    },
+    {
+      "id": "ml_02_lstm_transformer",
+      "category": "ai_ml_trading",
+      "card_path": "cards/ml_02_lstm_transformer.json",
+      "results_path": "results/ml_02_lstm_transformer.json",
+      "simulation_tier": "cached_sweep"
+    },
+    {
+      "id": "ml_03_rl_market_making",
+      "category": "ai_ml_trading",
+      "card_path": "cards/ml_03_rl_market_making.json",
+      "results_path": "results/ml_03_rl_market_making.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "research_01_factor_toolkit",
+      "category": "core_research_backtesting",
+      "card_path": "cards/research_01_factor_toolkit.json",
+      "results_path": "results/research_01_factor_toolkit.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "research_02_event_backtester",
+      "category": "core_research_backtesting",
+      "card_path": "cards/research_02_event_backtester.json",
+      "results_path": "results/research_02_event_backtester.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "research_03_stat_arb",
+      "category": "core_research_backtesting",
+      "card_path": "cards/research_03_stat_arb.json",
+      "results_path": "results/research_03_stat_arb.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "research_04_vol_surface",
+      "category": "core_research_backtesting",
+      "card_path": "cards/research_04_vol_surface.json",
+      "results_path": "results/research_04_vol_surface.json",
+      "simulation_tier": "cached_sweep"
+    },
+    {
+      "id": "engines_01_lob_simulator",
+      "category": "market_microstructure_engines",
+      "card_path": "cards/engines_01_lob_simulator.json",
+      "results_path": "results/engines_01_lob_simulator.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "engines_02_feed_handler",
+      "category": "market_microstructure_engines",
+      "card_path": "cards/engines_02_feed_handler.json",
+      "results_path": "results/engines_02_feed_handler.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "exec_01_lob_simulator",
+      "category": "market_microstructure_execution",
+      "card_path": "cards/exec_01_lob_simulator.json",
+      "results_path": "results/exec_01_lob_simulator.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "exec_02_execution_algos",
+      "category": "market_microstructure_execution",
+      "card_path": "cards/exec_02_execution_algos.json",
+      "results_path": "results/exec_02_execution_algos.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "exec_03_feed_handler",
+      "category": "market_microstructure_execution",
+      "card_path": "cards/exec_03_feed_handler.json",
+      "results_path": "results/exec_03_feed_handler.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "intraday_01_momentum",
+      "category": "research_intraday_strategies",
+      "card_path": "cards/intraday_01_momentum.json",
+      "results_path": "results/intraday_01_momentum.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "intraday_02_mean_reversion",
+      "category": "research_intraday_strategies",
+      "card_path": "cards/intraday_02_mean_reversion.json",
+      "results_path": "results/intraday_02_mean_reversion.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "intraday_03_stat_arb",
+      "category": "research_intraday_strategies",
+      "card_path": "cards/intraday_03_stat_arb.json",
+      "results_path": "results/intraday_03_stat_arb.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "intraday_04_momentum_value",
+      "category": "research_intraday_strategies",
+      "card_path": "cards/intraday_04_momentum_value.json",
+      "results_path": "results/intraday_04_momentum_value.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "intraday_05_options",
+      "category": "research_intraday_strategies",
+      "card_path": "cards/intraday_05_options.json",
+      "results_path": "results/intraday_05_options.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "intraday_06_execution_tca",
+      "category": "research_intraday_strategies",
+      "card_path": "cards/intraday_06_execution_tca.json",
+      "results_path": "results/intraday_06_execution_tca.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "intraday_07_ml_strategy",
+      "category": "research_intraday_strategies",
+      "card_path": "cards/intraday_07_ml_strategy.json",
+      "results_path": "results/intraday_07_ml_strategy.json",
+      "simulation_tier": "cached_sweep"
+    },
+    {
+      "id": "intraday_08_regime_detection",
+      "category": "research_intraday_strategies",
+      "card_path": "cards/intraday_08_regime_detection.json",
+      "results_path": "results/intraday_08_regime_detection.json",
+      "simulation_tier": "cached_sweep"
+    },
+    {
+      "id": "intraday_09_portfolio_construction",
+      "category": "research_intraday_strategies",
+      "card_path": "cards/intraday_09_portfolio_construction.json",
+      "results_path": "results/intraday_09_portfolio_construction.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "risk_01_portfolio_optimization",
+      "category": "risk_engineering",
+      "card_path": "cards/risk_01_portfolio_optimization.json",
+      "results_path": "results/risk_01_portfolio_optimization.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "risk_02_reproducibility",
+      "category": "risk_engineering",
+      "card_path": "cards/risk_02_reproducibility.json",
+      "results_path": "results/risk_02_reproducibility.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "risk_03_timeseries_storage",
+      "category": "risk_engineering",
+      "card_path": "cards/risk_03_timeseries_storage.json",
+      "results_path": "results/risk_03_timeseries_storage.json",
+      "simulation_tier": "precomputed"
+    },
+    {
+      "id": "risk_04_cpp_utilities",
+      "category": "risk_engineering",
+      "card_path": "cards/risk_04_cpp_utilities.json",
+      "results_path": "results/risk_04_cpp_utilities.json",
+      "simulation_tier": "precomputed"
+    }
+  ]
+}

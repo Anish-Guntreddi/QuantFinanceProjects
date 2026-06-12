@@ -1,0 +1,29 @@
+{
+  "project_id": "risk_03_timeseries_storage",
+  "timestamp": "2026-03-09T02:50:27.531958",
+  "type": "infrastructure_benchmark",
+  "metrics": {
+    "storage_benchmarks": {
+      "CSV": {
+        "write_s": 6.142490099999122,
+        "read_s": 1.0082682999782264,
+        "size_mb": 219.595579
+      },
+      "Parquet": {
+        "write_s": 0.48272730002645403,
+        "read_s": 0.25194739998551086,
+        "size_mb": 95.670685
+      },
+      "HDF5": {
+        "write_s": 0.3098724000155926,
+        "read_s": 0.09753219998674467,
+        "size_mb": 81.484458
+      },
+      "Feather": {
+        "write_s": 0.05113010003697127,
+        "read_s": 0.03353810001863167,
+        "size_mb": 89.19169
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "project_id": "ml_01_regime_detection",
+  "title": "Regime Detection & Dynamic Allocation",
+  "short_description": "Multi-model regime detection (HMM, Markov-switching, clustering) with meta-policy dynamic strategy allocation",
+  "long_description": "Multi-model regime detection (HMM, Markov-switching, clustering) with meta-policy dynamic strategy allocation",
+  "category": "ai_ml_trading",
+  "subcategory": "Regime",
+  "asset_class": "Multi-asset",
+  "frequency": "Daily",
+  "data_source": "yfinance",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "regime-detection",
+    "hmm",
+    "markov-switching",
+    "dynamic-allocation"
+  ],
+  "interactive_params": [
+    {
+      "name": "num_regimes",
+      "label": "Number of Regimes",
+      "type": "slider",
+      "min": 2,
+      "max": 6,
+      "default": 4,
+      "step": 1
+    },
+    {
+      "name": "lookback_days",
+      "label": "Lookback (days)",
+      "type": "slider",
+      "min": 60,
+      "max": 504,
+      "default": 252,
+      "step": 21
+    }
+  ],
+  "tags": [
+    "regime-detection",
+    "hmm",
+    "markov-switching",
+    "dynamic-allocation"
+  ],
+  "github_path": "ai_ml_trading/01_regime_detection_allocation",
+  "notebook_path": "ai_ml_trading/01_regime_detection_allocation/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "cached_sweep",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.5381
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nIdentifies market regimes (bull, bear, high-vol, low-vol, trending, mean-reverting) using three parallel models whose outputs are combined via a meta-policy:\n\n1. **Hidden Markov Model (HMM)**: Fits a Gaussian HMM to daily returns + volatility features. Viterbi decoding assigns each day to the most likely regime state.\n2. **Markov-Switching Regression (Hamilton 1989)**: Two-state model for mean and variance; probability smoothed with Kim's algorithm.\n3. **K-Means / GMM Clustering**: Returns, volatility, skewness, and correlation to SPY over rolling `lookback_days` window are clustered into `num_regimes` groups.\n\n## Meta-Policy\n\nEach model outputs a regime probability vector. The meta-policy computes a weighted vote:\n```\nregime_t = argmax(w_HMM \u00b7 p_HMM + w_MS \u00b7 p_MS + w_KM \u00b7 p_KM)\n```\nWeights are learned via a walk-forward regression minimizing out-of-sample Sharpe loss.\n\n## Dynamic Allocation\n\nPer detected regime, a fixed allocation table maps regimes to strategy weights:\n- Bull trending: overweight momentum (+20% equity)\n- High volatility: overweight hedges, underweight equities\n- Mean-reverting: activate pairs/reversion strategies\n\n## Metric Methodology\n\n- **Regime purity**: Fraction of within-regime days where the assigned strategy outperforms the benchmark.\n- **Transition accuracy**: How often a detected regime change precedes a measurable return regime shift within 5 days.\n- **Sharpe**: Computed on the dynamically allocated portfolio vs. buy-and-hold SPY."
+}

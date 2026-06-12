@@ -1,0 +1,50 @@
+{
+  "project_id": "ml_03_rl_market_making",
+  "title": "Deep RL Market Making",
+  "short_description": "DQN, PPO, and SAC agents for limit order book market making with reward shaping and multi-agent training",
+  "long_description": "DQN, PPO, and SAC agents for limit order book market making with reward shaping and multi-agent training",
+  "category": "ai_ml_trading",
+  "subcategory": "Reinforcement Learning",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "reinforcement-learning",
+    "dqn",
+    "ppo",
+    "sac",
+    "market-making"
+  ],
+  "interactive_params": [
+    {
+      "name": "inventory_penalty",
+      "label": "Inventory Penalty",
+      "type": "slider",
+      "min": 0.001,
+      "max": 0.1,
+      "default": 0.01,
+      "step": 0.001
+    }
+  ],
+  "tags": [
+    "reinforcement-learning",
+    "dqn",
+    "ppo",
+    "sac",
+    "market-making"
+  ],
+  "github_path": "ai_ml_trading/03_rl_market_making",
+  "notebook_path": "ai_ml_trading/03_rl_market_making/notebooks/",
+  "requires_gpu": true,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 0.8244
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nThree RL algorithms are benchmarked on the same LOB environment to understand the tradeoff between sample efficiency and asymptotic performance:\n\n- **DQN (Deep Q-Network)**: Discretizes the action space into 9 quote positions. Uses experience replay (buffer size 100k) and target network (soft update \u03c4=0.005).\n- **PPO (Proximal Policy Optimization)**: Continuous action space (bid offset, ask offset \u2208 [\u22125, +5] ticks). Clip ratio \u03b5=0.2, GAE \u03bb=0.95.\n- **SAC (Soft Actor-Critic)**: Maximum-entropy framework; automatically tunes temperature \u03b1 for entropy regularization.\n\n## Reward Shaping\n\n```\nr = realized_spread \u00d7 fills \u2212 \u03b3\u00b7inventory\u00b2 \u2212 \u03bb\u00b7(|q_bid \u2212 fair_bid| + |q_ask \u2212 fair_ask|)\n```\n\nThe third term penalizes deviation from the Avellaneda-Stoikov fair quote, providing a shaped curriculum that accelerates early learning.\n\n## Multi-Agent Extension\n\nA secondary adversarial agent (informed trader) is trained simultaneously, creating a non-stationary environment that forces the market maker to learn robustness.\n\n## Metric Methodology\n\n- **Sample efficiency**: Cumulative reward at N=10k, 50k, 200k training steps for each algorithm.\n- **Sharpe ratio**: Annualized from the live evaluation rollouts (25 episodes, greedy policy).\n- **Inventory penalty contribution**: Fraction of negative reward attributable to inventory holding vs. adverse fills.\n- **Convergence**: Episode rolling Sharpe standard deviation < 0.1 is the convergence criterion."
+}

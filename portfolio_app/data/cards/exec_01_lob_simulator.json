@@ -1,0 +1,46 @@
+{
+  "project_id": "exec_01_lob_simulator",
+  "title": "Limit Order Book Simulator (Execution)",
+  "short_description": "LOB simulator focused on execution quality analysis with realistic fill modeling and market dynamics",
+  "long_description": "LOB simulator focused on execution quality analysis with realistic fill modeling and market dynamics",
+  "category": "market_microstructure_execution",
+  "subcategory": "Order Book",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "order-book",
+    "simulation",
+    "execution-quality"
+  ],
+  "interactive_params": [
+    {
+      "name": "num_events",
+      "label": "Number of Events",
+      "type": "slider",
+      "min": 1000,
+      "max": 100000,
+      "default": 10000,
+      "step": 1000
+    }
+  ],
+  "tags": [
+    "order-book",
+    "simulation",
+    "execution-quality"
+  ],
+  "github_path": "market_microstructure_execution/01_limit_order_book_simulator",
+  "notebook_path": "market_microstructure_execution/01_limit_order_book_simulator/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 2.1899
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nAn execution-focused LOB simulator that models order book dynamics from the perspective of an executing agent:\n\nThe simulator generates synthetic order book states and simulates how a submitted order affects market prices and fill quality. The focus is on **execution quality analysis** rather than strategy alpha.\n\n**Market dynamics model**:\n- Mid-price follows geometric Brownian motion: `dS = \u03bcdt + \u03c3dW`\n- Spread is stochastic: log-spread follows mean-reverting OU process\n- Order book depth is sampled from historical depth distributions\n\n## Execution Quality Metrics\n\nFor each simulated execution, the following are computed:\n- **Fill rate**: Fraction of target quantity filled before time limit or price limit\n- **Fill cost**: Volume-weighted average fill price vs. arrival mid-price\n- **Market impact**: Post-fill mid-price drift attributed to the order\n\n## Scenario Analysis\n\nThe simulator runs executions across a grid of market conditions:\n- Varying liquidity (ADV buckets: 100k, 1M, 10M+ shares/day)\n- Varying volatility (low vol = \u03c3 < 1%, high vol = \u03c3 > 3%)\n- Varying urgency (fill within 1 min, 5 min, 30 min)\n\nThis produces a capacity/quality frontier that informs real-world order sizing decisions.\n\n## Metric Methodology\n\n- **Implementation Shortfall**: Mean and std across 1000 Monte Carlo execution paths.\n- **Fill probability vs. limit price**: Empirical CDF of fill prices for a given order size and time limit.\n- **Market impact coefficient**: Estimated \u03b3 from regressing price change on trade size."
+}

@@ -1,0 +1,48 @@
+{
+  "project_id": "exec_03_feed_handler",
+  "title": "Real-Time Feed Handler",
+  "short_description": "Ultra-low latency market data handler with UDP multicast, async processing, ring buffers, and risk checks",
+  "long_description": "Ultra-low latency market data handler with UDP multicast, async processing, ring buffers, and risk checks",
+  "category": "market_microstructure_execution",
+  "subcategory": "Feed Handler",
+  "asset_class": "Equities",
+  "frequency": "Tick-level",
+  "data_source": "synthetic",
+  "languages": [
+    "Python"
+  ],
+  "key_techniques": [
+    "feed-handler",
+    "udp-multicast",
+    "low-latency",
+    "async"
+  ],
+  "interactive_params": [
+    {
+      "name": "buffer_size",
+      "label": "Ring Buffer Size",
+      "type": "slider",
+      "min": 512,
+      "max": 65536,
+      "default": 4096,
+      "step": 512
+    }
+  ],
+  "tags": [
+    "feed-handler",
+    "udp-multicast",
+    "low-latency",
+    "async"
+  ],
+  "github_path": "market_microstructure_execution/03_realtime_feed_handler",
+  "notebook_path": "market_microstructure_execution/03_realtime_feed_handler/notebooks/",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 10,
+  "simulation_tier": "precomputed",
+  "headline_metric": {
+    "name": "Sharpe",
+    "value": 1.2578
+  },
+  "technical_details": "## Algorithm & Strategy Structure\n\nAn ultra-low-latency market data handler designed for real-time trading infrastructure:\n\n**Architecture**:\n- **UDP multicast reception**: Subscribes to market data multicast groups; uses `SO_RCVBUF` tuning and kernel bypass (DPDK-style socket options where available).\n- **Async processing**: asyncio event loop separates network I/O from data processing.\n- **Ring buffer**: Lock-free SPSC ring buffer of size `buffer_size` decouples reception from processing.\n- **Risk checks**: Pre-trade risk validation (position limits, order rate limits, price bands) runs inline on the processing path in < 1\u00b5s.\n\n## Pre-Trade Risk Checks\n\nEach incoming order trigger is validated against:\n1. **Fat-finger check**: Order price within \u00b15% of last trade\n2. **Position limit**: `|current_pos + order_qty| < max_position`\n3. **Rate limit**: Max 100 orders per second per symbol\n4. **Buying power**: Available capital > order_value \u00d7 1.2 (haircut)\n\nIf any check fails, the order is rejected and logged within the same microsecond.\n\n## Latency Benchmarking\n\nMeasured with RDTSC timestamps at:\n- Message arrival (NIC timestamp)\n- Message deserialization complete\n- Risk check complete\n- Order generation complete\n\nLatency = sum of all stages; reported as P50/P99/P999 nanoseconds.\n\n## Metric Methodology\n\n- **End-to-end latency**: NIC receive to order generation, in nanoseconds.\n- **Throughput**: Messages/second sustained under realistic market data rates (500k msg/sec).\n- **Risk check rejection rate**: Fraction of order triggers rejected by pre-trade checks.\n- **Buffer overflow events**: Number of times ring buffer became full, causing dropped messages."
+}
