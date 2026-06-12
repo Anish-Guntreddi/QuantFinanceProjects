@@ -81,7 +81,7 @@ class TestNoTrainTestDateOverlap:
         """For every CPCV split, train dates and test dates must be disjoint."""
         n_dates = 120  # small for speed
         idx = _make_daily_index(n_dates)
-        ev = RegimeCVEvaluator(n_folds=6, n_test_folds=2, purged_size=3,
+        ev = RegimeCVEvaluator(n_folds=6, n_test_folds=2, purged_size=5,
                                embargo_size=5, label_horizon=5)
         dummy_X = np.zeros((n_dates, 1))
         unique_dates = idx
@@ -279,3 +279,19 @@ class TestNoKFold:
             if "KFold" in text:
                 found_in.append(str(py_file.relative_to(src_root)))
         assert found_in == [], f"KFold found in: {found_in}"
+
+
+# ---------------------------------------------------------------------------
+# Purge invariant (added in top-tier review): purge must also be >= H
+# ---------------------------------------------------------------------------
+
+
+def test_purge_too_small_raises():
+    """A training sample fewer than H bars BEFORE a test block has a
+    forward-looking label spanning into the test block — the purge must be
+    >= label_horizon, not just the embargo."""
+    from defiregimenet.evaluation.cv_evaluator import RegimeCVEvaluator
+
+    with pytest.raises(ValueError, match="purged_size"):
+        RegimeCVEvaluator(n_folds=6, n_test_folds=2, purged_size=3,
+                          embargo_size=5, label_horizon=5)

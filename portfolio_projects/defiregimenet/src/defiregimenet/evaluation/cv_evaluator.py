@@ -81,6 +81,13 @@ class RegimeCVEvaluator:
                 f"If embargo < H, future regime labels contaminate training data through "
                 f"returns overlapping the training window (look-ahead leakage)."
             )
+        if purged_size < label_horizon:
+            raise ValueError(
+                f"purged_size ({purged_size}) must be >= label_horizon ({label_horizon}). "
+                f"A training sample fewer than H bars BEFORE a test block has a "
+                f"forward-looking label spanning into the test block — the purge "
+                f"must remove at least H bars on that side too."
+            )
         self.n_folds = n_folds
         self.n_test_folds = n_test_folds
         self.purged_size = purged_size
