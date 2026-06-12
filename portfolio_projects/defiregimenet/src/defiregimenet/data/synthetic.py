@@ -385,6 +385,15 @@ def validate_crypto_data(ohlcv: pd.DataFrame) -> list[str]:
     # Volume anomaly: volume > 20x rolling 30-bar median
     if "volume" in ohlcv.columns:
         volume = ohlcv["volume"]
+
+        # Per-bar non-positive volume check (isolated zero or negative bars)
+        nonpos_vol = volume <= 0
+        if nonpos_vol.any():
+            n_nonpos = int(nonpos_vol.sum())
+            msg = f"volume anomaly: {n_nonpos} bar(s) with non-positive volume (<= 0)"
+            warnings.warn(msg, UserWarning, stacklevel=2)
+            messages.append(msg)
+
         rolling_med = volume.rolling(window=30, min_periods=1).median()
         spike_mask = volume > 20.0 * rolling_med
         if spike_mask.any():
