@@ -78,16 +78,20 @@ def test_target_date_labeling(small_crypto_panel):
         "(labeled split_idx+1, uses data through split_idx)"
     )
 
-    # Anti-leakage oracle: perturbing at a mid-OOS target bar does NOT change its own forecast
-    # (A forecast labeled t was made at t-1, using data only through t-1)
-    mid_target = 5  # pick a few steps into OOS
+    # Anti-leakage oracle: perturbing at a mid-OOS TARGET bar does NOT change that bar's own
+    # forecast. Forecast labeled `returns.index[split_idx + 1 + mid_target]` was made at
+    # origin `split_idx + mid_target`, using data through split_idx + mid_target - 1 only.
+    # So perturbing returns at the TARGET bar (split_idx + 1 + mid_target) must leave
+    # fcst.iloc[mid_target] unchanged (the perturbation only affects LATER forecasts).
+    mid_target = 3  # pick a few steps into OOS
     ret2 = ret.copy()
-    ret2.iloc[split_idx + mid_target] += 0.5  # perturb at target bar
+    target_bar_pos = split_idx + 1 + mid_target  # the TARGET bar itself (not origin)
+    ret2.iloc[target_bar_pos] += 0.5  # perturb AT the target bar
     fcst2 = garch_oos_forecast(ret2, vol="GARCH", split_idx=split_idx)
-    # The forecast labeled at index mid_target must not change (it was made before that bar)
+    # The forecast LABELED at mid_target must not change (it was made at origin = target-1)
     assert fcst2.iloc[mid_target] == fcst.iloc[mid_target], (
-        "Perturbing returns at target bar t should NOT change the forecast labeled t "
-        "(causality violated — look-ahead bias)"
+        "Perturbing returns AT the target bar t should NOT change the forecast labeled t "
+        "(forecast uses only data through t-1 — if this fails, look-ahead bias is present)"
     )
 
 
