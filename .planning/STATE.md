@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 05-defiregimenet-04-PLAN.md (Classifier wrappers + CV evaluator)
-last_updated: "2026-06-12T00:40:40.419Z"
+stopped_at: Completed 05-defiregimenet-06-PLAN.md (Cross-token Cramér's V analytics)
+last_updated: "2026-06-12T00:45:16.707Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 43
-  completed_plans: 38
+  completed_plans: 39
   percent: 33
 ---
 
@@ -86,6 +86,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 05-defiregimenet P02 | 38 | 2 tasks | 4 files |
 | Phase 05-defiregimenet P03 | 5 | 2 tasks | 4 files |
 | Phase 05-defiregimenet P04 | 15 | 2 tasks | 5 files |
+| Phase 05-defiregimenet P06 | 8 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -185,6 +186,8 @@ Recent decisions affecting current work:
 - [Phase 05-defiregimenet]: XGBRegimeClassifier default max_depth=4 (depth=3 gave exactly 0.300 accuracy on seeded panel, failing strict >0.30 threshold)
 - [Phase 05-defiregimenet]: labels_to_probas: eps directly on off-target classes (not normalised form); target gets 1-(n_states-1)*eps
 - [Phase 05-defiregimenet]: .gitignore negation added for **/src/**/models/ to un-ignore Python source model subpackages (mirrors data/ exception)
+- [Phase 05-defiregimenet]: cramers_v uses scipy chi2_contingency with k=min(reduced_rows,reduced_cols) after zero-marginal drop; V clipped to [0,1]
+- [Phase 05-defiregimenet]: DGP integration test uses inline rolling-vol x return-sign proxy (no detector import) to respect parallel-plan boundary; V>0.5 on detected sequences deferred to 05-07
 
 ### Pending Todos
 
@@ -198,6 +201,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-12T00:40:40.417Z
-Stopped at: Completed 05-defiregimenet-04-PLAN.md (Classifier wrappers + CV evaluator)
+Last session: 2026-06-12T00:45:16.705Z
+Stopped at: Completed 05-defiregimenet-06-PLAN.md (Cross-token Cramér's V analytics)
 Resume file: None
