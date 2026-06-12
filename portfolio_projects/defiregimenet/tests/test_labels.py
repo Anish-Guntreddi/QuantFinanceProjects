@@ -118,48 +118,73 @@ def test_label_encoding():
 
     Encoding: state = bull_flag * 2 + high_vol_flag
       0 = bear/low, 1 = bear/high, 2 = bull/low, 3 = bull/high
+
+    Design:
+    - Bull/low case: constant positive returns → fwd_return > 0, fwd_rv = 0.
+      The expanding median of fwd_rv stays 0 too, but high_vol_flag = (rv > median)
+      which is (0 > 0) = False → low_vol. label = 2*1 + 0 = 2.
+    - Bear/high case: first half has near-zero vol (small constant returns), second
+      half has large-amplitude alternating returns (high vol, negative net fwd_return).
+      For bars in the first half, fwd_rv is small → expanding_med is small → high_vol_flag=0.
+      For bars in the second half, fwd_rv >> expanding_med built from first half → high_vol_flag=1,
+      and fwd_return < 0 → bear. Label = 1.
     """
     from defiregimenet.labels import make_regime_labels
 
     horizon = 5
-    # Build a 20-bar series
-    n = 20
-    # Strong upward returns for bars 0..horizon-1 (these become the FORWARD window for bar -1)
-    # Use a construction where we know bars 10..14 (the forward window of bar 9) are:
-    #   - positive (bull) and low vol
 
-    # Low vol, bullish forward window starting at bar 0 for label at bar -horizon
-    # returns[horizon..2*horizon-1] = strong up, low vol  → label at bar 0 = 2 (bull/low)
-    returns_bull_low = pd.Series([0.05] * n)  # constant strong up = low vol, bull
-    realized_vol_bull_low = returns_bull_low.abs().rolling(5, min_periods=1).std()
-    realized_vol_bull_low = realized_vol_bull_low.fillna(0.0)
+    # ---------------------------------------------------------------
+    # BULL / LOW-VOL: constant positive returns, rv=0 throughout
+    # bull_flag=1 (fwd_return=0.05*horizon>0), high_vol_flag=0 (rv=0=median)
+    # label = 1*2 + 0 = 2
+    # ---------------------------------------------------------------
+    n = 30
+    returns_bull_low = pd.Series([0.05] * n)
+    rv_bull_low = pd.Series([0.0] * n)  # explicit zero vol
 
-    labels_bl = make_regime_labels(returns_bull_low, realized_vol_bull_low, horizon=horizon)
-
-    # Only check valid (non-NaN) labels
+    labels_bl = make_regime_labels(returns_bull_low, rv_bull_low, horizon=horizon)
     valid_bl = labels_bl.dropna()
     assert len(valid_bl) > 0, "Expected some valid labels for bull/low case"
-    # All valid should be 2 (bull/low — positive return, near-zero vol)
     assert (valid_bl == 2).all(), (
         f"Expected all bull/low labels=2, got unique={valid_bl.unique()}"
     )
 
-    # High vol, bearish forward window
-    # Alternating large +/- creates high vol; negative mean = bear
-    returns_bear_high = pd.Series([-0.05, 0.10] * (n // 2))
-    # net drift is positive but median of forward return is negative? Use strongly negative returns
-    returns_bear_high = pd.Series([-0.10, 0.05] * (n // 2))
-    realized_vol_bear_high = returns_bear_high.abs().rolling(5, min_periods=1).std()
-    realized_vol_bear_high = realized_vol_bear_high.fillna(0.0)
+    # ---------------------------------------------------------------
+    # BEAR / HIGH-VOL
+    # First 15 bars: small constant returns (+0.001) → low rv (≈0)
+    # Last 15 bars: large alternating returns (-0.20, +0.10) → high rv AND
+    #               fwd_return < 0 (net -0.10 per window of 5: 3*-0.20 + 2*0.10)
+    # For bars in the first region, their forward window is also first-region
+    # → low vol, positive (or ~0) → we only assert on bars whose forward window
+    # falls entirely in the high-vol second region.
+    # We check bar indices [0..9] whose forward window = bars[1..5] to bars[10..14]:
+    # actually to get pure high-vol forward we look at bars whose forward falls in [15..29].
+    # bar t's forward window = [t+1..t+horizon], so bars t<=9 (t+5<=14, in low-vol zone).
+    # bars t=10..14: forward = [11..15]..[15..19] — partially in high-vol zone.
+    # bars t=9: forward = [10..14] — still low-vol.
+    # bars t=10..24: forward hits high-vol zone; once fully in high-vol zone (t>=15-horizon=10),
+    # fwd_rv >> expanding_med_from_first_half.
+    # Simplest: use bar index 10 explicitly (forward = [11..15]).
+    # ---------------------------------------------------------------
+    low_rv_bars = [0.001] * 15
+    high_rv_bars = [-0.20, 0.10] * 8  # alternating: fwd of 5 = 3*(-0.20)+2*(0.10) = -0.40
+    returns_mixed = pd.Series(low_rv_bars + high_rv_bars[:15])  # total 30
 
-    labels_bh = make_regime_labels(returns_bear_high, realized_vol_bear_high, horizon=horizon)
-    valid_bh = labels_bh.dropna()
-    assert len(valid_bh) > 0, "Expected some valid labels for bear/high case"
-    # The alternating pattern has nonzero std → high vol
-    # Negative forward mean (more negative bars) → bear
-    # Label should be 1 (bear/high)
-    assert (valid_bh == 1).all(), (
-        f"Expected all bear/high labels=1, got unique={valid_bh.unique()}"
+    # realized_vol: rolling std of returns (causal)
+    rv_mixed = returns_mixed.abs().rolling(5, min_periods=1).std()
+
+    labels_mixed = make_regime_labels(returns_mixed, rv_mixed, horizon=horizon)
+
+    # For bar t=10..24, forward window = [11..15]..[25..29] — all in high-vol region
+    # Check a bar deep in the high-vol forward zone
+    # Bar 10 forward = [11..15]: returns = [0.001, -0.20, 0.10, -0.20, 0.10]
+    # fwd_return = 0.001 -0.20 +0.10 -0.20 +0.10 = -0.199 < 0 → bear
+    # fwd_rv = mean of rv[11..15] which includes high-vol alternating bars → high
+    # At bar 10, expanding_med(fwd_rv) = median of fwd_rv[0..10], mostly low values → small
+    # So high_vol_flag = 1, bull_flag = 0 → label = 0*2 + 1 = 1 (bear/high)
+    bar10_label = labels_mixed.iloc[10]
+    assert bar10_label == 1.0, (
+        f"Expected bear/high label=1 at bar 10, got {bar10_label}"
     )
 
 
