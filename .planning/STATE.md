@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 05-defiregimenet-05-PLAN.md (Per-token vol forecast + Student-t variant)
-last_updated: "2026-06-12T00:46:59.292Z"
+stopped_at: Completed 05-defiregimenet-07-PLAN.md (Pipeline + ReportBuilder)
+last_updated: "2026-06-12T01:09:51.243Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 43
-  completed_plans: 40
+  completed_plans: 41
   percent: 33
 ---
 
@@ -88,6 +88,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 05-defiregimenet P04 | 15 | 2 tasks | 5 files |
 | Phase 05-defiregimenet P06 | 8 | 2 tasks | 2 files |
 | Phase 05-defiregimenet P05 | 15 | 2 tasks | 2 files |
+| Phase 05-defiregimenet P07 | 17 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -191,6 +192,8 @@ Recent decisions affecting current work:
 - [Phase 05-defiregimenet]: DGP integration test uses inline rolling-vol x return-sign proxy (no detector import) to respect parallel-plan boundary; V>0.5 on detected sequences deferred to 05-07
 - [Phase 05-defiregimenet]: per_token_forecast_comparison is a pure delegation loop — no arch calls in the primary path; garch_studentst_variance uses analytic GARCH recursion seeded from training terminal state (not res.forecast)
 - [Phase 05-defiregimenet]: Causality oracle corrected: perturbing AT the target bar (returns.index[split_idx+1+k]) must not change fcst.iloc[k]; perturbing the ORIGIN bar (split_idx+k) does change fcst.iloc[k] (target-date labeling invariant)
+- [Phase 05-defiregimenet]: Joint market-regime detection: cross-sectional mean features -> single CausalRegimeDetector shared across all tokens; resolves 4-state permutation ambiguity; cross_token_v off-diagonal V > 0.5 confirmed
+- [Phase 05-defiregimenet]: n_years=2 (int) in quick mode: float 1.5 caused pd.date_range FutureWarning (non-integer periods deprecated)
 
 ### Pending Todos
 
@@ -204,6 +207,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-12T00:46:59.289Z
-Stopped at: Completed 05-defiregimenet-05-PLAN.md (Per-token vol forecast + Student-t variant)
+Last session: 2026-06-12T01:09:51.241Z
+Stopped at: Completed 05-defiregimenet-07-PLAN.md (Pipeline + ReportBuilder)
 Resume file: None

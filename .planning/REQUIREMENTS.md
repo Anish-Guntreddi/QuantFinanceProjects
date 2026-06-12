@@ -60,7 +60,7 @@
 - [x] **DFR-04**: ML classifiers (logistic, XGBoost) predict next-period regime from lagged features; evaluated against the econometric models with purged/embargoed CV
 - [x] **DFR-05**: GARCH-family volatility forecasting per token with QLIKE evaluation vs HAR baseline
 - [x] **DFR-06**: Per-token diagnostics plus cross-token regime correlation analysis; regime-count (k) sensitivity analysis
-- [ ] **DFR-07**: One-command runner produces a publication-style research report (abstract, data, methodology, results, robustness, limitations)
+- [x] **DFR-07**: One-command runner produces a publication-style research report (abstract, data, methodology, results, robustness, limitations)
 
 ### Cross-Cutting Quality (QUAL)
 
@@ -137,7 +137,7 @@
 | DFR-04 | Phase 5 — DeFiRegimeNet | Complete |
 | DFR-05 | Phase 5 — DeFiRegimeNet | Complete |
 | DFR-06 | Phase 5 — DeFiRegimeNet | Complete |
-| DFR-07 | Phase 5 — DeFiRegimeNet | Pending |
+| DFR-07 | Phase 5 — DeFiRegimeNet | Complete |
 | QUAL-01 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-02 | Phase 1 (established); recurs in Phases 2-5 | Complete |
 | QUAL-03 | Phase 1 (established); recurs in Phases 2-5 | Complete |
