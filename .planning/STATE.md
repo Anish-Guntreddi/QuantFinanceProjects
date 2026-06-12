@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 05-defiregimenet-06-PLAN.md (Cross-token Cramér's V analytics)
-last_updated: "2026-06-12T00:45:16.707Z"
+stopped_at: Completed 05-defiregimenet-05-PLAN.md (Per-token vol forecast + Student-t variant)
+last_updated: "2026-06-12T00:46:59.292Z"
 last_activity: 2026-06-10 — Roadmap and STATE initialized; requirements mapped to 5 phases
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 43
-  completed_plans: 39
+  completed_plans: 40
   percent: 33
 ---
 
@@ -87,6 +87,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 05-defiregimenet P03 | 5 | 2 tasks | 4 files |
 | Phase 05-defiregimenet P04 | 15 | 2 tasks | 5 files |
 | Phase 05-defiregimenet P06 | 8 | 2 tasks | 2 files |
+| Phase 05-defiregimenet P05 | 15 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -188,6 +189,8 @@ Recent decisions affecting current work:
 - [Phase 05-defiregimenet]: .gitignore negation added for **/src/**/models/ to un-ignore Python source model subpackages (mirrors data/ exception)
 - [Phase 05-defiregimenet]: cramers_v uses scipy chi2_contingency with k=min(reduced_rows,reduced_cols) after zero-marginal drop; V clipped to [0,1]
 - [Phase 05-defiregimenet]: DGP integration test uses inline rolling-vol x return-sign proxy (no detector import) to respect parallel-plan boundary; V>0.5 on detected sequences deferred to 05-07
+- [Phase 05-defiregimenet]: per_token_forecast_comparison is a pure delegation loop — no arch calls in the primary path; garch_studentst_variance uses analytic GARCH recursion seeded from training terminal state (not res.forecast)
+- [Phase 05-defiregimenet]: Causality oracle corrected: perturbing AT the target bar (returns.index[split_idx+1+k]) must not change fcst.iloc[k]; perturbing the ORIGIN bar (split_idx+k) does change fcst.iloc[k] (target-date labeling invariant)
 
 ### Pending Todos
 
@@ -201,6 +204,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-12T00:45:16.705Z
-Stopped at: Completed 05-defiregimenet-06-PLAN.md (Cross-token Cramér's V analytics)
+Last session: 2026-06-12T00:46:59.289Z
+Stopped at: Completed 05-defiregimenet-05-PLAN.md (Per-token vol forecast + Student-t variant)
 Resume file: None
