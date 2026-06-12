@@ -256,9 +256,12 @@ class TestLabelsToProbas:
         labels = np.array([0])
         eps = 1e-3
         probas = labels_to_probas(labels, n_states=4, eps=eps)
-        # Non-target classes should get eps, target should be ~1 - 3*eps
+        # Non-target classes should get eps, target should be 1 - (n_states-1)*eps
         assert probas[0, 0] > probas[0, 1]
-        assert probas[0, 1] == pytest.approx(eps / (1 + eps * 4), rel=1e-3)
+        # Off-target class gets exactly eps
+        assert probas[0, 1] == pytest.approx(eps, rel=1e-6)
+        # Target class gets 1 - (n_states-1)*eps
+        assert probas[0, 0] == pytest.approx(1.0 - (4 - 1) * eps, rel=1e-6)
 
 
 # ---------------------------------------------------------------------------
