@@ -1,0 +1,63 @@
+project_id: '05'
+title: "DeFiRegimeNet — Causal Regime Detection in Synthetic Cryptocurrency Markets"
+short_description: "A hybrid ML + econometric framework for per-token causal regime detection in synthetic DeFi markets with purged combinatorial cross-validation."
+category: "Crypto / DeFi"
+tags: ["regime-detection", "HMM", "CPCV", "crypto", "DeFi", "XGBoost", "Cramer-V", "causal"]
+demo_type: sim_crypto
+headline_metric:
+  name: "Classifier acc vs HMM"
+  value: "0.451 vs 0.260"
+technical_overview:
+  summary: >
+    DeFiRegimeNet applies independent causal Gaussian HMMs (one per token) to detect 4-state
+    market regimes (bear/bull × low/high vol) from per-token feature matrices (ret_lag1, rv_21,
+    mom_21, drawdown — all shift(1) + expanding z-scored). Logistic regression and XGBoost
+    classifiers are evaluated against HMM/GMM persistence baselines using Combinatorial Purged
+    Cross-Validation (CPCV) with embargo_size = purged_size = H = 5. Forward-looking labels
+    are quarantined — constructed only in defiregimenet.labels and consumed only in
+    defiregimenet.pipeline, never concatenated into feature matrices (enforced by AST quarantine
+    test). Cross-token association is measured via pairwise Cramér's V on independently detected
+    sequences; mean off-diagonal V = 0.329, above the ~0.15 independence floor but below 1.0
+    (30% idiosyncratic noise + label-permutation ambiguity). Volatility forecasting (HAR,
+    GARCH, EGARCH) follows the volsurfacelab methodology via shared forecast module.
+  pipeline:
+    - "CryptoGenerator produces 4-token GARCH(1,1) + Student-t(df=4) + Markov 4-state DGP with 70% market factor coupling"
+    - "build_feature_panel constructs causal features per token (shift(1) + expanding z-score) with (date, token) MultiIndex"
+    - "detect_regimes_per_token fits independent CausalRegimeDetector per token; K=4, min_train=60, refit_every=21"
+    - "make_regime_labels constructs forward H=5 labels (expanding vol threshold + forward trend); quarantined from feature matrices"
+    - "RegimeCVEvaluator runs CPCV(n_folds=6, n_test_folds=2, purge=5, embargo=5) on classifiers"
+    - "HMM/GMM baselines use full causal sequence without CV (favoring baselines — conservative direction)"
+    - "cross_token_regime_correlation computes pairwise Cramér's V from contingency tables on independently detected sequences"
+    - "per_token_forecast_comparison runs HAR/GARCH/EGARCH per token; QLIKE loss (Patton 2011)"
+methodology:
+  summary: >
+    Independent per-token detection is the honest experimental setting: cross-token V = 0.329
+    reflects what a practitioner gets from independent models. An earlier joint mean-feature
+    prototype gave V = 1.0 by construction — a vacuous result explicitly rejected. The CPCV
+    asymmetry favors baselines (no CV required for HMM/GMM), so classifier improvements are
+    conservative lower bounds. K selection by Sharpe is an anti-feature locked by source-level
+    assertion in diagnostics.py ('sharpe' string absent from module). GARCH labels use target-date
+    indexing (from volsurfacelab) to avoid squared-return leakage.
+  key_techniques:
+    - "Independent per-token CausalRegimeDetector: no cross-token information sharing"
+    - "AST quarantine: labels module imported only from pipeline, never from feature builders"
+    - "CPCV(6,2,purge=5,embargo=5): both purge and embargo >= H=5 (label horizon)"
+    - "Expanding vol threshold in make_regime_labels: causal (not full-sample) median"
+    - "Cramér's V on independent sequences: vacuity guard rejects joint-detector shortcut"
+    - "CausalRegimeDetector oracle: predict(X[:t+1])[-1] inherited from macroregime"
+    - "QLIKE volatility loss: L(h,rv) = rv/h - log(rv/h) - 1 via shared volsurfacelab module"
+    - "Anti-feature guard: K selection by Sharpe blocked by source-level assertion"
+correctness_guarantees:
+  - "AST label quarantine: forward-looking labels constructed only in defiregimenet.labels and consumed only in defiregimenet.pipeline — never concatenated into feature matrices (enforced by AST quarantine test)"
+  - "Embargo AND purge >= H: CPCV enforces embargo_size=purged_size=H=5, preventing any look-ahead contamination across train/test folds relative to the 5-bar forward label horizon"
+  - "Vacuity guard on cross-token V: joint mean-feature detection (which gives V=1.0 by construction) is explicitly rejected; independent per-token detectors produce honest V=0.329"
+  - "Honest independent detection: each token gets a fresh CausalRegimeDetector with no information shared across tokens — cross-token V measures genuine association, not detector artifact"
+  - "CausalRegimeDetector oracle (inherited): label at bar t = predict(X[:t+1])[-1], a pure function of features up to t"
+  - "Anti-feature lock: K selection by Sharpe blocked by source-level assertion in diagnostics.py (no 'sharpe' string in module)"
+dataset:
+  name: "Synthetic 4-token crypto panel (GARCH + Student-t + Markov)"
+  description: >
+    Four tokens (BTC, ETH, SOL, AVAX), 1095 daily bars each (3 years, 24/7 calendar), generated
+    by CryptoGenerator with GARCH(1,1) conditional vol clustering, Student-t(df=4) fat-tail
+    innovations, 4-state Markov regime (bull/bear × high/low vol), and 70% market factor coupling
+    (30% idiosyncratic). Seed=42, fully offline and deterministic.

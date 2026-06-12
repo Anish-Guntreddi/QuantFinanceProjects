@@ -1,0 +1,428 @@
+/* Precision Lab Theme — Dark Mode */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Primary */
+    --primary: #2dd4bf;
+    --primary-hover: #5eead4;
+    --primary-light: #042f2e;
+
+    /* Neutrals (dark) */
+    --bg: #0c0a09;
+    --bg-card: #1c1917;
+    --border: #292524;
+    --text-muted: #78716c;
+    --text-secondary: #a8a29e;
+    --text-primary: #e7e5e4;
+    --text-heading: #fafaf9;
+
+    /* Category Accents — Quant Finance */
+    --cat-backtesting: #60a5fa;
+    --cat-mlalpha: #fbbf24;
+    --cat-macro: #34d399;
+    --cat-options: #a78bfa;
+    --cat-crypto: #fb7185;
+
+    /* Data Viz Palette */
+    --viz-1: #60a5fa;
+    --viz-2: #fbbf24;
+    --viz-3: #34d399;
+    --viz-4: #a78bfa;
+    --viz-5: #fb7185;
+    --viz-6: #22d3ee;
+    --viz-7: #818cf8;
+    --viz-8: #facc15;
+
+    /* Typography */
+    --font-display: 'JetBrains Mono', monospace;
+    --font-body: 'Source Sans 3', sans-serif;
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 48px;
+    --radius: 3px;
+}
+
+/* Global */
+.stApp {
+    font-family: var(--font-body);
+    background-color: var(--bg) !important;
+    color: var(--text-primary);
+}
+
+[data-testid="stHeader"] {
+    background-color: var(--bg) !important;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Main content area */
+[data-testid="stMainBlockContainer"],
+[data-testid="stMain"],
+.main .block-container {
+    background-color: var(--bg) !important;
+    color: var(--text-primary);
+}
+
+/* Hide sidebar and auto-generated page navigation */
+[data-testid="stSidebar"],
+[data-testid="stSidebarNav"],
+section[data-testid="stSidebar"] {
+    display: none !important;
+}
+
+[data-testid="stSidebar"] .stMarkdown h1,
+[data-testid="stSidebar"] .stMarkdown h2,
+[data-testid="stSidebar"] .stMarkdown h3 {
+    color: var(--text-heading) !important;
+    font-family: var(--font-display);
+}
+
+[data-testid="stSidebar"] .stMarkdown p,
+[data-testid="stSidebar"] .stMarkdown li {
+    color: var(--text-secondary);
+}
+
+[data-testid="stSidebar"] .stRadio label {
+    color: var(--text-primary) !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox label,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] {
+    color: var(--text-primary) !important;
+}
+
+/* Headings */
+.stMarkdown h1 {
+    font-family: var(--font-display);
+    color: var(--text-heading) !important;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.stMarkdown h2, .stMarkdown h3, .stMarkdown h4 {
+    font-family: var(--font-display);
+    color: var(--text-heading) !important;
+    font-weight: 600;
+}
+
+.stMarkdown p, .stMarkdown li, .stMarkdown span {
+    color: var(--text-primary);
+}
+
+/* Metrics */
+[data-testid="stMetric"] {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+}
+
+[data-testid="stMetric"] [data-testid="stMetricLabel"] {
+    font-family: var(--font-body);
+    color: var(--text-secondary) !important;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    font-family: var(--font-display);
+    color: var(--primary) !important;
+    font-weight: 700;
+}
+
+/* Buttons */
+.stButton button {
+    font-family: var(--font-body);
+    font-weight: 600;
+    border-radius: var(--radius);
+    transition: all 200ms ease;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
+}
+
+.stButton button:hover {
+    background-color: var(--primary);
+    color: var(--bg);
+    transform: translateY(-1px);
+}
+
+/* Cards */
+.project-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+    transition: all 200ms ease;
+    cursor: pointer;
+    border-left: 4px solid var(--border);
+}
+
+.project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-color: #44403c;
+}
+
+.project-card.backtesting { border-left-color: var(--cat-backtesting); }
+.project-card.mlalpha { border-left-color: var(--cat-mlalpha); }
+.project-card.macro { border-left-color: var(--cat-macro); }
+.project-card.options { border-left-color: var(--cat-options); }
+.project-card.crypto { border-left-color: var(--cat-crypto); }
+
+.card-number {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xs);
+}
+
+.card-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: var(--space-sm);
+}
+
+.card-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    line-height: 1.5;
+}
+
+.card-metric {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.card-metric-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Category badges */
+.badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 2px;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-backtesting { background: #1e3a5f; color: var(--cat-backtesting); }
+.badge-mlalpha { background: #422006; color: var(--cat-mlalpha); }
+.badge-macro { background: #064e3b; color: var(--cat-macro); }
+.badge-options { background: #2e1065; color: var(--cat-options); }
+.badge-crypto { background: #4c0519; color: var(--cat-crypto); }
+
+/* Hero section */
+.hero-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-heading) !important;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: var(--space-sm);
+}
+
+.hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--text-secondary) !important;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* Tab styling */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0;
+    border-bottom: 2px solid var(--border);
+    background-color: transparent;
+}
+
+.stTabs [data-baseweb="tab"] {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding: var(--space-sm) var(--space-md);
+    background-color: transparent;
+}
+
+.stTabs [aria-selected="true"] {
+    color: var(--primary) !important;
+    border-bottom-color: var(--primary) !important;
+}
+
+/* Tab content panels */
+.stTabs [data-baseweb="tab-panel"] {
+    background-color: transparent;
+}
+
+/* Expanders */
+[data-testid="stExpander"] {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius);
+}
+
+[data-testid="stExpander"] summary {
+    color: var(--text-primary) !important;
+}
+
+/* Selectbox / input styling */
+[data-testid="stSelectbox"] label,
+[data-testid="stTextInput"] label,
+[data-testid="stTextArea"] label,
+[data-testid="stNumberInput"] label,
+[data-testid="stSlider"] label,
+[data-testid="stCheckbox"] label {
+    color: var(--text-primary) !important;
+}
+
+/* Code blocks */
+[data-testid="stCode"],
+.stCode {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+/* Info/warning/error boxes */
+[data-testid="stAlert"] {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border);
+}
+
+/* Dividers */
+[data-testid="stDivider"], hr {
+    border-color: var(--border) !important;
+}
+
+/* Tables (HTML from metrics_display) */
+table {
+    color: var(--text-primary) !important;
+}
+
+table th {
+    color: var(--text-heading) !important;
+    border-bottom-color: var(--primary) !important;
+}
+
+table td {
+    color: var(--text-primary) !important;
+    border-bottom-color: var(--border) !important;
+}
+
+/* Caption text */
+.stCaption, [data-testid="stCaptionContainer"] {
+    color: var(--text-muted) !important;
+}
+
+/* Progress bars */
+[data-testid="stProgress"] {
+    background-color: var(--border) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+/* Plotly chart container */
+.js-plotly-plot {
+    border-radius: var(--radius);
+}
+
+/* Responsive grid */
+@media (max-width: 768px) {
+    .hero-title { font-size: 1.8rem; }
+    .card-metric { font-size: 1.4rem; }
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeInUp 0.4s ease forwards;
+    opacity: 0;
+}
+
+.fade-in-1 { animation-delay: 0.05s; }
+.fade-in-2 { animation-delay: 0.1s; }
+.fade-in-3 { animation-delay: 0.15s; }
+.fade-in-4 { animation-delay: 0.2s; }
+.fade-in-5 { animation-delay: 0.25s; }
+.fade-in-6 { animation-delay: 0.3s; }
+.fade-in-7 { animation-delay: 0.35s; }
+.fade-in-8 { animation-delay: 0.4s; }
+.fade-in-9 { animation-delay: 0.45s; }
+.fade-in-10 { animation-delay: 0.5s; }
+.fade-in-11 { animation-delay: 0.55s; }
+.fade-in-12 { animation-delay: 0.6s; }
+
+/* Typing animation */
+.typing-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+    margin-top: 4px;
+}
+
+.typing-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.15rem;
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.typing-cursor {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.15rem;
+    color: var(--primary);
+    animation: blink 0.7s infinite;
+    margin-left: 1px;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}

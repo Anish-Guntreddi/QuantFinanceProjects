@@ -1,0 +1,41 @@
+project_id: '02'
+test_count: 46
+# HONESTY NOTICE: Results below are from a methodology showcase on SYNTHETIC data.
+# The alpha signal is deliberately planted. These are NOT real-world investment performance numbers.
+metrics:
+  mean_ic_best_model: 0.0326
+  icir_best_model: 0.165
+  nw_t_best_model: 0.795
+  gross_sharpe_best_model: 0.206
+  net_sharpe_best_model: 0.117
+tables:
+  ic_statistics:
+    title: "Model Comparison: OOS IC Statistics"
+    columns: ["Model", "Mean IC", "ICIR", "NW t-stat", "p-value", "N months"]
+    rows:
+      - ["equal_weight_composite", 0.0326, 0.165, 0.795, 0.435, 22]
+      - ["linear_regression", 0.0135, 0.062, 0.349, 0.730, 22]
+      - ["elastic_net", 0.0119, 0.054, 0.303, 0.765, 22]
+      - ["lgbm_regressor", 0.0242, 0.120, 0.683, 0.502, 22]
+  backtest_results:
+    title: "Backtest Results: Gross vs Net Performance"
+    columns: ["Model", "Gross Sharpe", "Net Sharpe", "Sharpe 95% CI", "Cost bps", "Turnover", "Max DD", "Trades"]
+    rows:
+      - ["equal_weight_composite", 0.206, 0.117, "[-0.96, 1.24]", 10.0, 0.282, -0.005, 21]
+      - ["linear_regression", -0.096, -0.208, "[-1.36, 0.82]", 10.0, 0.332, -0.006, 25]
+      - ["elastic_net", -0.096, -0.208, "[-1.36, 0.82]", 10.0, 0.332, -0.006, 25]
+      - ["lgbm_regressor", -0.498, -0.641, "[-1.73, 0.45]", 10.0, 0.421, -0.008, 32]
+  factor_attribution:
+    title: "Factor Attribution (LGBM Strategy)"
+    columns: ["Metric", "Value"]
+    rows:
+      - ["Alpha (monthly)", -0.00032]
+      - ["Alpha t-stat", -1.709]
+      - ["R-squared", 0.175]
+      - ["Beta (momentum)", 0.013]
+      - ["Beta (value)", 0.009]
+figures:
+  - "portfolio_projects/alpharank/reports/figures/ic_comparison.png"
+  - "portfolio_projects/alpharank/reports/figures/ic_decay.png"
+  - "portfolio_projects/alpharank/reports/figures/equity_curves.png"
+  - "portfolio_projects/alpharank/reports/figures/lgbm_tearsheet.png"

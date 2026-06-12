@@ -227,4 +227,4 @@ $RECYCLE.BIN/
 *.msix
 *.msm
 *.msp
-*.lnk
+*.lnk.playwright-mcp/
