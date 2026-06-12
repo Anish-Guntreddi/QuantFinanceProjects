@@ -118,6 +118,10 @@ data/
 *.pb
 *.tflite
 models/
+# ...but source subpackages named `models` inside src layouts are CODE, not saved model artifacts
+!**/src/**/models/
+!**/src/**/models/**
+**/src/**/models/**/__pycache__/
 checkpoints/
 saved_models/
 

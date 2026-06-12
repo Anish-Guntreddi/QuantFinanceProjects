@@ -34,7 +34,9 @@ def _make_features_and_labels(panel, token: str = "BTC", n_train: int = 600, n_t
     lag_vol = ret.rolling(5).std().shift(1)
 
     X = pd.DataFrame({"lag_ret": lag_ret, "lag_vol": lag_vol}).dropna()
-    y = panel.true_states.reindex(X.index).dropna()
+    # true_states is a numpy ndarray — wrap in a Series aligned to the token's DatetimeIndex
+    true_states_series = pd.Series(panel.true_states, index=ohlcv.index, name="true_state")
+    y = true_states_series.reindex(X.index).dropna()
     X = X.reindex(y.index)
 
     # Use first n_train rows for training, next n_test for OOS test
