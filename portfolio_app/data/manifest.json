@@ -1,7 +1,42 @@
 {
   "generated_at": "2026-03-05T05:05:42.552937",
-  "total_projects": 34,
+  "total_projects": 39,
   "projects": [
+    {
+      "id": "flagship_01_qbacktest",
+      "category": "portfolio_projects",
+      "card_path": "cards/flagship_01_qbacktest.json",
+      "results_path": "results/flagship_01_qbacktest.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "flagship_02_alpharank",
+      "category": "portfolio_projects",
+      "card_path": "cards/flagship_02_alpharank.json",
+      "results_path": "results/flagship_02_alpharank.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "flagship_03_macroregime",
+      "category": "portfolio_projects",
+      "card_path": "cards/flagship_03_macroregime.json",
+      "results_path": "results/flagship_03_macroregime.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "flagship_04_volsurfacelab",
+      "category": "portfolio_projects",
+      "card_path": "cards/flagship_04_volsurfacelab.json",
+      "results_path": "results/flagship_04_volsurfacelab.json",
+      "simulation_tier": "live"
+    },
+    {
+      "id": "flagship_05_defiregimenet",
+      "category": "portfolio_projects",
+      "card_path": "cards/flagship_05_defiregimenet.json",
+      "results_path": "results/flagship_05_defiregimenet.json",
+      "simulation_tier": "live"
+    },
     {
       "id": "hft_01_adaptive_market_making",
       "category": "HFT_strategy_projects",

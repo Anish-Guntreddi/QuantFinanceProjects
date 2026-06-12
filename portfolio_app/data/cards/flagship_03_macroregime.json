@@ -1,0 +1,60 @@
+{
+  "project_id": "flagship_03_macroregime",
+  "title": "MacroRegime — Regime-Switching Asset Allocation",
+  "short_description": "Dual-frequency HMM/GMM regime detection pipeline with causal filtered macro + market features, point-in-time publication lags, and regime-conditional asset allocation backtested via QBacktest.",
+  "long_description": "MacroRegimePipeline detects market regimes using causally-filtered HMM and GMM models on dual-frequency macro and daily market features. Regime labels are never forward-filled before lag application, preventing PIT leakage. The pipeline benchmarks against 60/40, equal-weight, and risk-parity strategies with identical cost parameters.",
+  "category": "portfolio_projects",
+  "subcategory": "Macro / Regime Models",
+  "asset_class": "Multi-asset (Equity, Bonds, Commodity, Cash)",
+  "frequency": "Daily rebalance, monthly macro updates",
+  "data_source": "Synthetic (seeded, offline)",
+  "languages": ["Python"],
+  "key_techniques": [
+    "causal-hmm",
+    "causal-gmm",
+    "dual-frequency-regime",
+    "pit-macro-lags",
+    "risk-parity",
+    "expanding-zscore",
+    "regime-conditional-allocation"
+  ],
+  "tags": [
+    "regime-switching",
+    "hmm",
+    "gmm",
+    "macro",
+    "asset-allocation",
+    "leakage-prevention"
+  ],
+  "github_path": "portfolio_projects/macroregime",
+  "notebook_path": "",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 30,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Regime Net Sharpe",
+    "value": 0.226
+  },
+  "interactive_params": [
+    {
+      "name": "stay_prob",
+      "label": "Regime stay probability",
+      "type": "slider",
+      "min": 0.7,
+      "max": 0.99,
+      "default": 0.92,
+      "step": 0.01
+    },
+    {
+      "name": "risk_weight_expansion",
+      "label": "Equity weight (expansion regime)",
+      "type": "slider",
+      "min": 0.3,
+      "max": 0.9,
+      "default": 0.6,
+      "step": 0.05
+    }
+  ],
+  "technical_details": "## Algorithm & Architecture\n\nMacroRegimePipeline implements a dual-frequency causal regime detection system:\n\n```\nPIT macro panel (lag applied by loader)\n  → expanding z-score standardization (NOT full-sample — prevents future mean/std leakage)\n  → CausalRegimeDetector (macro) → macro_regimes (publication-date indexed)\nDaily OHLCV → causal market features (each feature shift(1))\n  → expanding z-score standardization\n  → CausalRegimeDetector (daily) → market_regimes (daily)\nForward-fill macro regimes to daily AFTER lag application (Pitfall 5 safe)\n  → combine: macro takes precedence; market used before macro warm-up\n  → month_end_rebalance_dates → weight_schedule → run_strategy_backtest\n```\n\n## Causality Chain (Never Reorder)\n\n1. PIT macro panel — publication-date indexed with release lag applied by loader\n2. Expanding z-score on macro (no future mean/std)\n3. CausalRegimeDetector on macro matrix → macro_regimes\n4. Daily market features shifted by 1 bar\n5. Expanding z-score on daily features\n6. CausalRegimeDetector on daily matrix → market_regimes\n7. Forward-fill macro regimes AFTER lag application\n8. Combine (macro precedence) → weight schedule → backtest\n\n## Causal Filtered Regimes\n\n`CausalRegimeDetector` wraps hmmlearn/sklearn with a causal oracle guarantee: label at bar t depends only on features[:t+1]. Two separate instances are used for macro and daily — NEVER concatenated (different frequencies create alignment artifacts).\n\n**Label ordering rule**: Regime states ordered ascending by economic observable. State 0 = contraction/stress; State K-1 = expansion/risk-on. Implementation: `permutation = np.argsort(np.argsort(means[:, dim]))`\n\n## Strategy Comparison (from reports/summary.md)\n\n| Strategy | Gross Sharpe | Net Sharpe | Net CI | Sortino | MaxDD | Turnover |\n|----------|-------------|-----------|--------|---------|-------|----------|\n| Regime | 0.235 | 0.226 | [-0.418, 0.862] | 0.334 | -0.404 | 1.094 |\n| 60/40 | 0.023 | 0.022 | [-0.594, 0.656] | 0.032 | -0.298 | 0.108 |\n| EqualWeight | 0.087 | 0.086 | [-0.529, 0.649] | 0.136 | -0.291 | 0.097 |\n| RiskParity | 1.004 | 0.981 | [0.335, 1.661] | 1.120 | -0.027 | 0.209 |\n\n*HMM/GMM agreement (daily, aligned): 86.0%. K=3 selected by BIC / dwell-time interpretability, NOT by Sharpe (locked anti-feature: selecting K by Sharpe overfits the regime model to the backtest period).*\n\n## Oracle Test Suite (42 tests)\n\n- `test_causal_detector_no_lookahead`: Regime at t uses only features[:t+1]\n- `test_pit_lag_applied_before_ffill`: Forward-fill only occurs after lag application (Pitfall 5)\n- `test_weight_schedule_sum_to_one`: All weight schedules sum to 1.0 ± 1e-6\n- `test_benchmark_cost_parity`: All strategy backtests use identical cost parameters\n- `test_hmm_gmm_agreement`: Reports agreement percentage between models\n- `test_k_selection_not_by_sharpe`: Anti-feature assertion — K selected by BIC, not backtest performance"
+}

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 CATEGORY_COLORS: dict[str, str] = {
+    "portfolio_projects": "#ec4899",
     "HFT_strategy_projects": "#f59e0b",
     "ai_ml_trading": "#3b82f6",
     "core_research_backtesting": "#8b5cf6",

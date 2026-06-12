@@ -1,0 +1,70 @@
+{
+  "project_id": "flagship_04_volsurfacelab",
+  "title": "VolSurfaceLab — Options Volatility Research",
+  "short_description": "Options volatility surface research: SVI calibration with no-arb gate g(k)≥0, IV round-trip <1e-6, HAR/GARCH/EGARCH RV forecast comparison via QLIKE/DM tests, and VRP delta-hedged straddle strategy.",
+  "long_description": "VolSurfaceLab calibrates SVI smiles to synthetic option chains (honest IV path only — no true_iv oracle), validates no-butterfly-arbitrage via g(k)≥0, compares realized volatility forecasts via QLIKE loss and Diebold-Mariano test, and runs a short-VRP straddle strategy with delta hedging.",
+  "category": "portfolio_projects",
+  "subcategory": "Options / Volatility",
+  "asset_class": "Options on synthetic equity",
+  "frequency": "Daily",
+  "data_source": "Synthetic (seeded, offline)",
+  "languages": ["Python"],
+  "key_techniques": [
+    "svi-calibration",
+    "no-arb-gate",
+    "iv-solver",
+    "qlike-loss",
+    "diebold-mariano",
+    "vrp-strategy",
+    "delta-hedging",
+    "har-garch-egarch"
+  ],
+  "tags": [
+    "options",
+    "volatility",
+    "svi",
+    "implied-vol",
+    "vrp",
+    "no-arbitrage"
+  ],
+  "github_path": "portfolio_projects/volsurfacelab",
+  "notebook_path": "",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 15,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "EGARCH QLIKE",
+    "value": 1.138657
+  },
+  "interactive_params": [
+    {
+      "name": "svi_b",
+      "label": "SVI b (vol of vol)",
+      "type": "slider",
+      "min": 0.01,
+      "max": 0.3,
+      "default": 0.08,
+      "step": 0.01
+    },
+    {
+      "name": "svi_rho",
+      "label": "SVI rho (skew)",
+      "type": "slider",
+      "min": -0.9,
+      "max": 0.0,
+      "default": -0.3,
+      "step": 0.05
+    },
+    {
+      "name": "svi_sigma",
+      "label": "SVI sigma (ATM curvature)",
+      "type": "slider",
+      "min": 0.1,
+      "max": 0.9,
+      "default": 0.3,
+      "step": 0.05
+    }
+  ],
+  "technical_details": "## Algorithm & Architecture\n\nVolSurfaceLab implements a five-stage pipeline:\n\n```\nSyntheticChainGenerator → solve_chain_iv (honest path) → fit_svi_slice + validate\n  → compare_forecasts (HAR/GARCH/EGARCH) → run_vrp_strategy\n```\n\n## Honest IV Path Discipline\n\nThe pipeline calls `solve_chain_iv` on **option prices** to recover IVs. `chain.options['true_iv']` is a ground-truth oracle for TESTS ONLY — it must never be used as a pipeline input. Using `true_iv` directly would bypass the market microstructure (bid/ask spread, tick size) that creates the IV surface estimation problem — equivalent to using future realized vol in a forecast model.\n\n## SVI Calibration & No-Arb Gate\n\nThe SVI parametrization per slice: `w(k) = a + b*(rho*(k-m) + sqrt((k-m)^2 + sigma^2))` where w = total variance, k = log-moneyness.\n\n**No-butterfly-arbitrage condition** — g(k) ≥ 0 everywhere:\n```\ng(k) = (1 - k*w'/(2w))^2 - (w'^2/4)*(1/w + 1/4) + w''/2\n```\nAny fitted slice with min g(k) < 0 is rejected (excluded from surface). IV round-trip error < 1e-6 (solve_chain_iv then re-price with BSM).\n\n**Fitted SVI Parameters (T=0.25, 0.5, 1.0):**\n\n| T | a | b | rho | m | sigma | SSE |\n|---|---|---|-----|---|-------|-----|\n| 0.25 | -0.0084 | 0.0800 | -0.300 | 0.000 | 0.300 | 9.9e-15 |\n| 0.50 | 0.0002 | 0.0800 | -0.300 | 0.000 | 0.300 | 2.9e-15 |\n| 1.00 | 0.0160 | 0.0800 | -0.300 | 0.000 | 0.300 | 1.9e-14 |\n\n## RV Forecast Comparison\n\n| Model | QLIKE | MSE | DM stat vs EGARCH |\n|-------|-------|-----|-------------------|\n| HAR | 1.163740 | 2.14e-08 | 1.683 (p=0.092) |\n| GARCH | 1.144398 | 2.10e-08 | 1.716 (p=0.086) |\n| EGARCH | 1.138657 | 2.08e-08 | — |\n\n*QLIKE loss: L(h, rv) = rv/h - log(rv/h) - 1. Lower is better. DM test: H0 = equal predictive accuracy.*\n\n## VRP Strategy: Short Straddle\n\n- **Position**: Short ATM straddle (shortest maturity)\n- **Gross total P&L**: $40.04 | **Net total P&L**: $36.67 | **Total costs**: $3.38\n- **Mean VRP** (IV² - RV, ann.): 0.042202\n- **N trading days**: 750\n- Delta hedging: continuous approximation with constant gamma at entry IV\n\n## Oracle Test Suite (110 tests)\n\n- `test_iv_round_trip`: `|solve_chain_iv(BSM_price) - true_iv| < 1e-6`\n- `test_no_arb_gate`: All validated slices have min g(k) ≥ 0\n- `test_true_iv_not_used_in_pipeline`: AST scan confirms no `true_iv` reference in pipeline path\n- `test_qlike_lower_is_better`: QLIKE ordering consistent with model quality\n- `test_dm_test_statistic`: DM test p-values computed correctly\n- `test_vrp_net_leq_gross`: Net PnL ≤ Gross PnL at every bar"
+}

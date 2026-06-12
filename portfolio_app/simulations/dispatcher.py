@@ -59,6 +59,11 @@ def _get_mm_sim():
     return run_market_making_sim
 
 
+def _get_flagship_sims():
+    from . import flagship_sims
+    return flagship_sims
+
+
 # ---------------------------------------------------------------------------
 # Helper: shorthand builders for common engine patterns
 # ---------------------------------------------------------------------------
@@ -131,6 +136,47 @@ def _mm(**fixed) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 _DISPATCH_MAP: dict[str, dict[str, Any]] = {
+    # ═══════════════════════════════════════════════════════════════════
+    # Flagship research systems → flagship_sims.py
+    # ═══════════════════════════════════════════════════════════════════
+    "flagship_01_qbacktest": {
+        "engine": lambda **kw: _get_flagship_sims().run_qbacktest_sim(**kw),
+        "translate": lambda p: {
+            "ma_fast": int(p.get("ma_fast", 20)),
+            "ma_slow": int(p.get("ma_slow", 50)),
+            "cost_bps": float(p.get("cost_bps", 10.0)),
+        },
+    },
+    "flagship_02_alpharank": {
+        "engine": lambda **kw: _get_flagship_sims().run_alpharank_sim(**kw),
+        "translate": lambda p: {
+            "ic_strength": float(p.get("ic_strength", 0.06)),
+            "n_assets": int(p.get("n_assets", 50)),
+        },
+    },
+    "flagship_03_macroregime": {
+        "engine": lambda **kw: _get_flagship_sims().run_macroregime_sim(**kw),
+        "translate": lambda p: {
+            "stay_prob": float(p.get("stay_prob", 0.92)),
+            "risk_weight_expansion": float(p.get("risk_weight_expansion", 0.60)),
+        },
+    },
+    "flagship_04_volsurfacelab": {
+        "engine": lambda **kw: _get_flagship_sims().run_volsurfacelab_sim(**kw),
+        "translate": lambda p: {
+            "svi_b": float(p.get("svi_b", 0.08)),
+            "svi_rho": float(p.get("svi_rho", -0.30)),
+            "svi_sigma": float(p.get("svi_sigma", 0.30)),
+        },
+    },
+    "flagship_05_defiregimenet": {
+        "engine": lambda **kw: _get_flagship_sims().run_defiregimenet_sim(**kw),
+        "translate": lambda p: {
+            "t_dof": float(p.get("t_dof", 4.0)),
+            "market_factor_weight": float(p.get("market_factor_weight", 0.70)),
+        },
+    },
+
     # ═══════════════════════════════════════════════════════════════════
     # HFT strategies → market_making_sim
     # ═══════════════════════════════════════════════════════════════════

@@ -75,6 +75,7 @@ def get_project_ids() -> list[str]:
 
 
 CATEGORY_DISPLAY_NAMES = {
+    "portfolio_projects": "Flagship Research Systems",
     "HFT_strategy_projects": "HFT Strategies",
     "ai_ml_trading": "AI/ML Trading",
     "core_research_backtesting": "Core Research & Backtesting",
@@ -85,6 +86,7 @@ CATEGORY_DISPLAY_NAMES = {
 }
 
 CATEGORY_ICONS = {
+    "portfolio_projects": "\U0001f3db\ufe0f",
     "HFT_strategy_projects": "\u26a1",
     "ai_ml_trading": "\U0001f9e0",
     "core_research_backtesting": "\U0001f52c",
@@ -95,6 +97,7 @@ CATEGORY_ICONS = {
 }
 
 CATEGORY_ORDER = [
+    "portfolio_projects",
     "HFT_strategy_projects",
     "ai_ml_trading",
     "core_research_backtesting",

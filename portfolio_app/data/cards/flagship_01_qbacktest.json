@@ -1,0 +1,66 @@
+{
+  "project_id": "flagship_01_qbacktest",
+  "title": "QBacktest — Event-Driven Backtesting Engine",
+  "short_description": "Provably honest backtesting library with structural T+1 fill invariants, accounting invariants (1e-6 tolerance), walk-forward isolation, and bootstrap Sharpe confidence intervals.",
+  "long_description": "QBacktest is a Python backtesting library built around four correctness invariants that structurally prevent look-ahead bias. The engine enforces T+1 fills, verifiable accounting invariants, per-fold walk-forward isolation, and deterministic reproducibility. Serves as the shared execution backbone for all five flagship projects.",
+  "category": "portfolio_projects",
+  "subcategory": "Backtesting Infrastructure",
+  "asset_class": "Equities (synthetic)",
+  "frequency": "Daily",
+  "data_source": "Synthetic (seeded, offline)",
+  "languages": ["Python"],
+  "key_techniques": [
+    "event-driven-engine",
+    "t1-fill-oracle",
+    "accounting-invariant",
+    "walk-forward-isolation",
+    "bootstrap-sharpe-ci"
+  ],
+  "tags": [
+    "event-driven",
+    "backtest",
+    "leakage-prevention",
+    "correctness-invariants",
+    "ma-crossover"
+  ],
+  "github_path": "portfolio_projects/qbacktest",
+  "notebook_path": "",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 3,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Net Sharpe",
+    "value": 1.0164
+  },
+  "interactive_params": [
+    {
+      "name": "ma_fast",
+      "label": "Fast MA (bars)",
+      "type": "slider",
+      "min": 5,
+      "max": 50,
+      "default": 20,
+      "step": 5
+    },
+    {
+      "name": "ma_slow",
+      "label": "Slow MA (bars)",
+      "type": "slider",
+      "min": 20,
+      "max": 100,
+      "default": 50,
+      "step": 10
+    },
+    {
+      "name": "cost_bps",
+      "label": "Cost (bps)",
+      "type": "slider",
+      "min": 0,
+      "max": 50,
+      "default": 10,
+      "step": 5
+    }
+  ],
+  "technical_details": "## Algorithm & Architecture\n\nQBacktest is a four-event pipeline backtesting engine:\n\n```\nMarketEvent → SignalEvent → OrderEvent → FillEvent\n```\n\n**Loop order per bar (T+1 fill enforcement):**\n1. `_flush_pending_orders()` — fill buffered orders at T+1 open (runs BEFORE data cursor advances)\n2. `data_handler.update_bars()` — advance cursor, emit MarketEvents\n3. Drain EventQueue: MARKET → signals + MTM; SIGNAL → orders; ORDER → buffer; FILL → accounting\n\n## Four Correctness Invariants\n\n| Invariant | Mechanism |\n|-----------|----------|\n| **T+1 fill** | `_flush_pending_orders()` runs *before* `update_bars()` — structurally impossible to fill on signal bar |\n| **Accounting** | `cash + book_value == initial_capital + cumulative_PnL` verifiable after any fill |\n| **Walk-forward isolation** | Separate `HistoricalDataHandler` instances per fold — no shared mutable state |\n| **Determinism** | Per-symbol seeded RNG; byte-identical equity curves across runs |\n\n## Leakage Discipline\n\nThe T+1 fill oracle is the primary correctness guarantee. The simulation reports both **gross Sharpe** (no costs) and **net Sharpe** (after slippage + commission), with 95% bootstrap confidence intervals (1000 resamples). The CI width directly reflects the statistical uncertainty of the strategy — a wide CI is an honest signal of insufficient data, not a defect.\n\n## Demo Strategy: MA Crossover (20/50)\n\n- **Fast SMA:** 20 bars, **Slow SMA:** 50 bars\n- **LONG** when fast crosses above slow; **EXIT** on reverse cross\n- Cost model: `FixedSlippage(bps=10)` + `PercentageCommission(rate=0.001)`\n- Data: `SyntheticOHLCVGenerator` — 3 symbols (AAPL, MSFT, GOOG), 504 bars, seed=42, GBM with μ=0.0002, σ=0.015\n\n## Oracle Test Suite (101 tests)\n\n- `test_t1_fill_invariant`: Verifies no order fills on its own bar by replaying a known sequence\n- `test_accounting_invariant`: `check_accounting_invariant()` asserted after every fill\n- `test_walk_forward_isolation`: Confirms per-fold `HistoricalDataHandler` has no cross-fold state\n- `test_determinism`: Two independent runs produce byte-identical equity arrays\n- Bootstrap CI tests: Verifies CI contains the point estimate and width > 0\n\n## Metrics Reported\n\n- **Gross Sharpe / Net Sharpe**: Annualized risk-adjusted return before/after costs\n- **Sortino**: Downside-deviation Sharpe\n- **Max Drawdown**: Peak-to-trough equity decline\n- **Sharpe 95% CI**: Bootstrap confidence interval — `[sharpe_ci_low, sharpe_ci_high]`\n- **Hit Rate**: Fraction of profitable trades\n- **Turnover**: Annualized two-way portfolio turnover"
+}

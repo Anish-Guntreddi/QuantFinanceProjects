@@ -1,0 +1,60 @@
+{
+  "project_id": "flagship_05_defiregimenet",
+  "title": "DeFiRegimeNet — Hybrid Crypto Regime Detection",
+  "short_description": "Causal per-token HMM regime detection on synthetic crypto panel data with GARCH(1,1)/Student-t DGP, purged combinatorial CV for classifier evaluation, and cross-token Cramér's V association analysis.",
+  "long_description": "DeFiRegimeNet detects per-token regimes with independent causal Gaussian HMMs, compares logistic regression and XGBoost classifiers against HMM/GMM baselines using CPCV, and evaluates cross-token regime association via Cramér's V. Target labels use GARCH-based volatility forecasting with AST label quarantine.",
+  "category": "portfolio_projects",
+  "subcategory": "Crypto / Regime Detection",
+  "asset_class": "Synthetic cryptocurrency (BTC, ETH, SOL, AVAX)",
+  "frequency": "Daily (24/7 crypto)",
+  "data_source": "Synthetic (seeded, offline)",
+  "languages": ["Python"],
+  "key_techniques": [
+    "causal-hmm",
+    "purged-combinatorial-cv",
+    "garch-student-t",
+    "cramers-v",
+    "target-date-labeling",
+    "ast-label-quarantine",
+    "independent-per-token-detection"
+  ],
+  "tags": [
+    "crypto",
+    "regime-detection",
+    "hmm",
+    "xgboost",
+    "cross-token",
+    "leakage-prevention"
+  ],
+  "github_path": "portfolio_projects/defiregimenet",
+  "notebook_path": "",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 45,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "Logistic Accuracy",
+    "value": 0.4506
+  },
+  "interactive_params": [
+    {
+      "name": "t_dof",
+      "label": "Student-t degrees of freedom",
+      "type": "slider",
+      "min": 2.5,
+      "max": 30.0,
+      "default": 4.0,
+      "step": 0.5
+    },
+    {
+      "name": "market_factor_weight",
+      "label": "Market factor weight",
+      "type": "slider",
+      "min": 0.0,
+      "max": 1.0,
+      "default": 0.7,
+      "step": 0.05
+    }
+  ],
+  "technical_details": "## Algorithm & Architecture\n\nDeFiRegimeNet implements a four-stage causal regime detection pipeline:\n\n```\nCryptoGenerator (GARCH+Student-t DGP)\n  → per-token causal HMM (independent, one per token)\n  → make_regime_labels (target-date labeling, horizon H=5)\n  → CPCV classifier evaluation (logistic, XGBoost)\n  → cross-token Cramér's V association matrix\n```\n\n## Data Generating Process\n\n- **Generator**: `CryptoGenerator(seed=42, n_years=3, tokens=['BTC','ETH','SOL','AVAX'])`\n- **Vol model**: GARCH(1,1) vol clustering per token\n- **Innovations**: Student-t fat-tails (df=4)\n- **Regime DGP**: Markov 4-state with market_factor_weight=0.70\n- **N bars**: 1095 per token (daily, 24/7)\n\n## Causality Guarantees\n\n**CausalRegimeDetector** wraps Gaussian HMM with a causal oracle: label at t depends only on features[:t+1]. Features: ret_lag1, rv_21, mom_21, drawdown — all shift(1) then expanding z-scored (expanding z-score prevents future mean/std leakage).\n\n**Target-date labeling** with GARCH (AST label quarantine): Forward-looking 4-state regime labels at horizon H=5 are constructed via `make_regime_labels`. The forward horizon window is NEVER used as a training feature — the AST scanner quarantines any reference to forward-looking target construction from the feature pipeline.\n\n## Purged Combinatorial CV (CPCV)\n\n- Embargo size = purge size = H = 5 bars\n- No train-sample label bleeds into test fold\n- HMM/GMM baselines use the full causal sequence WITHOUT CV (asymmetry favors baselines — conservative/honest)\n\n## Model Results\n\n| Model | Accuracy | Log-loss | Notes |\n|-------|----------|----------|-------|\n| HMM | 0.2595 | 5.1158 | Persistence baseline (no CPCV) |\n| GMM | 0.3129 | 4.7474 | Persistence baseline (no CPCV) |\n| Logistic | 0.4506 | 1.0280 | CPCV — purged/embargoed |\n| XGBoost | 0.4322 | 1.0862 | CPCV — purged/embargoed |\n\n## Cross-Token Cramér's V\n\nMean off-diagonal V = **0.329** — independently detected per-token sequences show genuine cross-token association. >0.3 indicates shared-factor recovery; <0.15 would indicate independence; 1.0 would indicate a degenerate shared-sequence shortcut.\n\n```\n         BTC    ETH    SOL    AVAX\nBTC    1.000  0.456  0.253  0.355\nETH    0.456  1.000  0.235  0.382\nSOL    0.253  0.235  1.000  0.289\nAVAX   0.355  0.382  0.289  1.000\n```\n\n30% idiosyncratic noise and label-permutation ambiguity limit recovery of the planted 70% market factor — an honest measure of how hard shared-regime detection is in practice.\n\n## Oracle Test Suite (98 tests)\n\n- `test_causal_hmm_no_lookahead`: Per-token regime at t uses only features[:t+1]\n- `test_embargo_purge_geq_horizon`: Both embargo_size and purge_size ≥ H\n- `test_ast_label_quarantine`: AST scan confirms no forward-horizon data in feature pipeline\n- `test_target_date_labeling`: Labels reference target date t+H, not signal date t\n- `test_cramers_v_symmetry`: V[i,j] == V[j,i] and diagonal == 1.0\n- `test_baseline_asymmetry_direction`: HMM log-loss > logistic log-loss (baselines disadvantaged by no-CV is honest)"
+}

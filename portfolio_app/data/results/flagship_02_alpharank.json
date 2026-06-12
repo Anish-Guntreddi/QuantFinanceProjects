@@ -1,0 +1,45 @@
+{
+  "project_id": "flagship_02_alpharank",
+  "timestamp": "2026-06-12T00:00:00",
+  "backtest_period": {
+    "start": "2018-01-31",
+    "end": "2023-10-31"
+  },
+  "benchmark": "Long-short equal-weight decile",
+  "metrics": {
+    "sharpe_ratio": 0.117,
+    "max_drawdown": -0.005,
+    "total_trades": 21
+  },
+  "category_specific_metrics": {
+    "equal_weight_composite_ic": 0.0326,
+    "equal_weight_composite_icir": 0.165,
+    "equal_weight_composite_nw_tstat": 0.795,
+    "equal_weight_composite_gross_sharpe": 0.206,
+    "equal_weight_composite_net_sharpe": 0.117,
+    "linear_regression_ic": 0.0135,
+    "linear_regression_icir": 0.062,
+    "linear_regression_gross_sharpe": -0.096,
+    "linear_regression_net_sharpe": -0.208,
+    "elastic_net_ic": 0.0119,
+    "elastic_net_icir": 0.054,
+    "elastic_net_gross_sharpe": -0.096,
+    "elastic_net_net_sharpe": -0.208,
+    "lgbm_ic": 0.0242,
+    "lgbm_icir": 0.12,
+    "lgbm_gross_sharpe": -0.498,
+    "lgbm_net_sharpe": -0.641,
+    "cost_bps": 10.0,
+    "n_oos_months": 22,
+    "planted_alpha_momentum_ic_target": 0.06,
+    "planted_alpha_value_ic_target": 0.04,
+    "sharpe_ci_ew_composite": "[-0.96, 1.24]",
+    "note": "Synthetic planted-alpha data \u2014 methodology showcase, not real-world performance"
+  },
+  "monthly_returns": {},
+  "equity_curve": {
+    "dates": [],
+    "values": []
+  },
+  "parameter_sensitivity": []
+}

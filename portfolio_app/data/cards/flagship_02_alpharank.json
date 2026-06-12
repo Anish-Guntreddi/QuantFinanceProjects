@@ -1,0 +1,59 @@
+{
+  "project_id": "flagship_02_alpharank",
+  "title": "AlphaRank — ML Cross-Sectional Equity Ranking",
+  "short_description": "ML pipeline evaluating four ranking models (equal-weight composite, linear regression, elastic net, LightGBM) on synthetic cross-sectional data with purged combinatorial CV and T+1 fills.",
+  "long_description": "AlphaRank evaluates whether ML models can recover planted cross-sectional alpha from lagged factor features, and whether that recovery survives transaction costs. Uses CombinatorialPurgedCV to prevent label leakage, QBacktest for T+1 fills, and honest planted-alpha disclosure.",
+  "category": "portfolio_projects",
+  "subcategory": "Factor Research / ML",
+  "asset_class": "Equities (synthetic cross-section)",
+  "frequency": "Monthly rebalance, daily execution",
+  "data_source": "Synthetic (seeded, offline)",
+  "languages": ["Python"],
+  "key_techniques": [
+    "purged-combinatorial-cv",
+    "ic-icir-analysis",
+    "planted-alpha",
+    "decile-long-short",
+    "lightgbm-ranking",
+    "elastic-net",
+    "t1-fill-oracle"
+  ],
+  "tags": [
+    "cross-sectional",
+    "factor-research",
+    "ml-ranking",
+    "ic-analysis",
+    "leakage-prevention"
+  ],
+  "github_path": "portfolio_projects/alpharank",
+  "notebook_path": "",
+  "requires_gpu": false,
+  "has_cpp": false,
+  "estimated_runtime_seconds": 60,
+  "simulation_tier": "live",
+  "headline_metric": {
+    "name": "EW Composite IC",
+    "value": 0.0326
+  },
+  "interactive_params": [
+    {
+      "name": "ic_strength",
+      "label": "Planted IC strength",
+      "type": "slider",
+      "min": 0.0,
+      "max": 0.3,
+      "default": 0.06,
+      "step": 0.01
+    },
+    {
+      "name": "n_assets",
+      "label": "Universe size (assets)",
+      "type": "slider",
+      "min": 10,
+      "max": 100,
+      "default": 50,
+      "step": 10
+    }
+  ],
+  "technical_details": "## Algorithm & Architecture\n\nAlphaRank is a cross-sectional ML factor research pipeline with explicit leakage-prevention at every stage:\n\n```\nSyntheticPanel → FeaturePanel → CPCV split → Model train → IC evaluation → DecileBacktest\n```\n\n## Planted Alpha (Honesty Disclosure)\n\nThe alpha signal is **deliberately planted** — this is a methodology showcase:\n\n```python\nalpha_coeff = IC_target * sigma_noise / sqrt(1 - IC_target^2)\nmonthly_return[t, i] = alpha_mom * mom_loading[i] + alpha_val * val_loading[i] + noise\n```\n\n| Factor | IC Target | Role |\n|--------|-----------|------|\n| Momentum (12m−1m) | 0.06 | Planted — models should recover |\n| Value (book-to-market) | 0.04 | Planted — models should recover |\n| Reversal, Volatility, Quality, Liquidity | 0.00 | Negative controls |\n\n## Leakage-Prevention Stack\n\n1. **Purged Combinatorial CV (CPCV)**: Embargo window = purge window = forward horizon H=5 bars. No train-sample label bleeds into the test fold.\n2. **Lagged features**: All features are `shift(1)` before model fit — no contemporaneous signal\n3. **T+1 fills via QBacktest**: Signal on bar T → order queued → fill at T+1 open price\n4. **Delist handling**: OHLCV frames truncated at delist month; no survivorship NaN rows.\n\n## Models Evaluated\n\n| Model | Mean IC | ICIR | NW t-stat | Gross Sharpe | Net Sharpe |\n|-------|---------|------|-----------|-------------|------------|\n| equal_weight_composite | 0.0326 | 0.165 | 0.795 | 0.206 | 0.117 |\n| linear_regression | 0.0135 | 0.062 | 0.349 | -0.096 | -0.208 |\n| elastic_net | 0.0119 | 0.054 | 0.303 | -0.096 | -0.208 |\n| lgbm_regressor | 0.0242 | 0.120 | 0.683 | -0.498 | -0.641 |\n\n*NW t-stat = Newey-West autocorrelation-corrected IC t-statistic. ICIR = IC_mean / IC_std.*\n\n## Metric Methodology\n\n- **IC**: Spearman rank correlation between model scores and next-period returns, computed monthly out-of-sample\n- **ICIR**: IC mean / IC std — primary factor quality signal; > 0.3 indicates robust signal\n- **Decile spread**: Long top-decile, short bottom-decile, equal-weighted, monthly rebalance\n- **Sharpe CI**: Bootstrap 95% CI on annualized net Sharpe\n\n## Oracle Test Suite (46 tests)\n\n- `test_feature_leakage`: `FeatureLeakageValidator` asserts no future data in training features\n- `test_purge_embargo_boundary`: Verifies CPCV gaps are at least H bars\n- `test_ic_is_spearman`: Asserts IC uses rank correlation, not Pearson\n- `test_t1_fill`: Confirms decile backtest fills at next bar's open\n- `test_planted_alpha_recoverable`: EW composite IC > 0 on in-sample data (sanity check)"
+}
