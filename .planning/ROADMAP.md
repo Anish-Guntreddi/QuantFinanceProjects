@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: AlphaRank** - Build the ML cross-sectional equity ranking pipeline using QBacktest as the portfolio execution layer (completed 2026-06-10)
 - [x] **Phase 3: MacroRegime** - Build the regime-switching macro asset allocation system with point-in-time FRED data and HMM/GMM regime detection (completed 2026-06-11)
 - [x] **Phase 4: VolSurfaceLab** - Build the options volatility research system with IV surface fitting, RV forecasting, and standalone strategy P&L (completed 2026-06-11)
-- [ ] **Phase 5: DeFiRegimeNet** - Build the hybrid ML + econometric regime detection system for DeFi/crypto markets
+- [x] **Phase 5: DeFiRegimeNet** - Build the hybrid ML + econometric regime detection system for DeFi/crypto markets (completed 2026-06-12)
 
 ## Phase Details
 
@@ -127,7 +127,7 @@ Plans:
   3. ML classifiers (logistic, XGBoost) are evaluated against HMM/GMM baselines using purged/embargoed CV — same protocol as AlphaRank; comparison table with accuracy and log-loss appears in the report
   4. Per-token diagnostics include Markov transition matrix, dwell times, and regime-count (k) sensitivity analysis; cross-token regime correlation heatmap appears in the research report
   5. One-command runner (`python run_pipeline.py`) produces a publication-style report covering abstract, data, methodology, results, robustness, and limitations; codex leakage audit (crypto data quality + label separation focus) passes with no unresolved findings
-**Plans:** 8/9 plans executed
+**Plans:** 9/9 plans complete
 
 Plans:
 - [ ] 05-01-PLAN.md — Package skeleton, CryptoGenerator DGP (24/7, fat tails, vol clustering), data-quality validation, Wave-0 stubs + live AST quarantine guard (wave 1)
@@ -151,4 +151,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. AlphaRank | 7/8 | Complete    | 2026-06-10 |
 | 3. MacroRegime | 9/9 | Complete   | 2026-06-11 |
 | 4. VolSurfaceLab | 8/8 | Complete   | 2026-06-11 |
-| 5. DeFiRegimeNet | 8/9 | In Progress|  |
+| 5. DeFiRegimeNet | 9/9 | Complete   | 2026-06-12 |
