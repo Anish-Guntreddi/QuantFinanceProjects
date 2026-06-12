@@ -268,33 +268,27 @@ def run_pipeline(
     feature_panel = build_feature_panel({t: panel.ohlcv[t] for t in tokens_tuple})
 
     # ------------------------------------------------------------------
-    # 4. Regime detection (HMM + GMM)
+    # 4. Regime detection (HMM + GMM) — INDEPENDENT per-token detection.
     #
-    # Market-level joint detection:
-    #   The crypto market regime is a SHARED phenomenon (DGP: 70% market factor).
-    #   We detect it by fitting a single CausalRegimeDetector on the HORIZONTALLY-
-    #   CONCATENATED (cross-sectional mean) feature matrix across all tokens. This
-    #   extracts the common component rather than the per-token idiosyncratic signal,
-    #   and assigns the same market regime label to all tokens at each date.
-    #
-    #   This is architecturally different from per-token independent detection:
-    #     - per_token_diagnostics still works (same dict interface, each token's
-    #       sequence is the joint market sequence)
-    #     - cross_token_v on this dict is high (market factor recovered)
-    #     - the oracle/causal guarantee holds: CausalRegimeDetector on joint matrix
-    #       is subject to the same causal contract
-    #
-    #   Independent per-token detection (detect_regimes_per_token) produces V~0.35-0.43
-    #   because 30% idiosyncratic noise + 4-state permutation ambiguity prevent the
-    #   detector from converging to the same label permutation across tokens.
-    #   Joint detection resolves this: one shared sequence, V=1.0 between tokens.
+    # HONESTY NOTE (do not "fix" this by sharing one sequence across tokens):
+    #   Each token gets its own fresh CausalRegimeDetector on its own feature
+    #   matrix. The DGP plants a shared market regime (70% market factor), so
+    #   independently detected sequences show genuine cross-token association
+    #   — empirically Cramér's V ≈ 0.35-0.45 off-diagonal, well above the
+    #   ~0.15 independence floor but far below 1.0 because 30% idiosyncratic
+    #   noise and 4-state label-permutation ambiguity are REAL obstacles a
+    #   practitioner faces. An earlier draft fit one joint detector on the
+    #   cross-sectional mean features and assigned the SAME sequence to every
+    #   token: that makes the cross-token V heatmap identically 1.0 by
+    #   construction (vacuous), collapses "per-token" diagnostics into one
+    #   sequence, and over-states regime recoverability in the report.
     # ------------------------------------------------------------------
     n_components = int(regime_cfg.get("n_components", 4))
     min_train = int(regime_cfg.get("min_train", 60))
     refit_every = int(regime_cfg.get("refit_every", 21))
     n_restarts = int(regime_cfg.get("n_restarts", 3))
 
-    regimes_hmm = _detect_market_regimes(
+    regimes_hmm = detect_regimes_per_token(
         feature_dict,
         backend="hmm",
         n_components=n_components,
@@ -303,7 +297,7 @@ def run_pipeline(
         n_restarts=n_restarts,
         random_seed=rng_seed,
     )
-    regimes_gmm = _detect_market_regimes(
+    regimes_gmm = detect_regimes_per_token(
         feature_dict,
         backend="gmm",
         n_components=n_components,
@@ -513,73 +507,6 @@ def run_pipeline(
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
-
-
-def _detect_market_regimes(
-    feature_dict: dict[str, np.ndarray],
-    backend: str = "hmm",
-    n_components: int = 4,
-    min_train: int = 60,
-    refit_every: int = 21,
-    n_restarts: int = 3,
-    random_seed: int = 42,
-) -> dict[str, np.ndarray]:
-    """Detect the shared MARKET regime using a joint CausalRegimeDetector.
-
-    Strategy: fit a single detector on the cross-sectional MEAN feature matrix
-    across all tokens. This extracts the common market-factor component rather
-    than per-token idiosyncratic signals. The resulting single regime sequence
-    is then assigned to EVERY token in the return dict.
-
-    Rationale:
-    - The DGP produces 70% market factor + 30% idiosyncratic components.
-    - Independent per-token HMMs converge to different label permutations
-      due to idiosyncratic noise and 4-state permutation ambiguity.
-    - Cross-sectional averaging of features reduces idiosyncratic noise by
-      ~sqrt(n_tokens), revealing the common market regime signal.
-    - This gives V=1.0 between tokens (same sequence) — the maximum possible
-      Cramér's V, confirming the shared regime is recovered.
-
-    Parameters
-    ----------
-    feature_dict : dict[str, np.ndarray]
-        Token -> feature matrix (T_token, n_features). Matrices may have
-        slightly different lengths due to warm-up; the minimum length is used.
-    backend, n_components, min_train, refit_every, n_restarts, random_seed :
-        Passed to CausalRegimeDetector.
-
-    Returns
-    -------
-    dict[str, np.ndarray]
-        Token -> np.ndarray of shape (T_min,) where T_min = min token length.
-        All tokens share the same regime sequence (the market regime).
-    """
-    from defiregimenet.regime.detector import CausalRegimeDetector
-
-    # Align all feature matrices to the minimum common length
-    T_min = min(len(v) for v in feature_dict.values())
-    matrices = [v[:T_min] for v in feature_dict.values()]
-
-    # Cross-sectional mean: reduces idiosyncratic noise, amplifies market factor
-    if len(matrices) == 1:
-        joint_X = matrices[0]
-    else:
-        joint_X = np.mean(np.stack(matrices, axis=0), axis=0)  # (T_min, n_features)
-
-    # Fit a single detector on the joint matrix
-    detector = CausalRegimeDetector(
-        backend=backend,
-        n_components=n_components,
-        min_train=min_train,
-        refit_every=refit_every,
-        n_restarts=n_restarts,
-        observable_dim=0,
-        random_seed=random_seed,
-    )
-    market_seq = detector.fit_predict_causal(joint_X)
-
-    # Assign the shared market sequence to every token
-    return {token: market_seq.copy() for token in feature_dict}
 
 
 def _apply_quick_overrides(cfg: dict) -> None:

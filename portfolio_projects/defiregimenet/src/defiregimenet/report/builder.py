@@ -536,14 +536,16 @@ class ReportBuilder:
             "## Abstract\n",
             "",
             "This report presents the results of the DeFiRegimeNet causal regime detection "
-            "pipeline applied to synthetic cryptocurrency panel data. We detect a shared "
-            "latent market regime using a Gaussian HMM fitted to the cross-sectional mean "
-            "feature matrix, compare logistic regression and XGBoost classifiers against "
-            "HMM/GMM baselines using purged combinatorial cross-validation (CPCV), and "
-            "evaluate volatility forecasting models (HAR, GARCH, EGARCH) via QLIKE loss. "
-            "The shared market regime is recovered with high cross-token Cramér's V "
-            f"(mean off-diagonal = {mean_v_str}), confirming the 70% market factor "
-            "dominates the idiosyncratic token component.",
+            "pipeline applied to synthetic cryptocurrency panel data. We detect per-token "
+            "regimes with INDEPENDENT causal Gaussian HMMs (one per token), compare "
+            "logistic regression and XGBoost classifiers against HMM/GMM baselines using "
+            "purged combinatorial cross-validation (CPCV), and evaluate volatility "
+            "forecasting models (HAR, GARCH, EGARCH) via QLIKE loss. Independently "
+            "detected sequences show genuine cross-token association — mean off-diagonal "
+            f"Cramér's V = {mean_v_str}, above the ~0.15 independence floor but well "
+            "below 1.0: 30% idiosyncratic noise and label-permutation ambiguity limit "
+            "recovery of the planted 70% market factor, an honest measure of how hard "
+            "shared-regime detection is in practice.",
             "",
             "## Data\n",
             "",
@@ -605,7 +607,9 @@ class ReportBuilder:
         lines.append(_df_to_markdown(r.cross_token_v, float_fmt=".3f"))
         lines += [
             "",
-            f"Mean off-diagonal V: **{mean_v_str}** (> 0.5: shared market regime recovered)",
+            f"Mean off-diagonal V: **{mean_v_str}** — independently detected per-token "
+            "sequences; > 0.3 indicates genuine shared-factor recovery (independence "
+            "floor ~0.15; 1.0 would indicate a degenerate shared-sequence shortcut)",
             "",
             "## Robustness\n",
             "",

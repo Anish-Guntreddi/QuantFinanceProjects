@@ -134,11 +134,17 @@ class TestPipelineEmbargoInvariant:
 
 
 class TestCrossTokenVStrengthDetectedRegimes:
-    """Off-diagonal Cramér's V on detected HMM regime sequences must exceed 0.5.
+    """Cross-token association of INDEPENDENTLY detected regimes is genuine.
 
-    The shared latent market factor (DGP: 70% common) must be recoverable
-    by the detector itself, not just by noisy observable proxies (05-06).
-    This is the strong companion to 05-06's conservative V > 0.3 proxy test.
+    The DGP plants a shared market regime (70% market factor). Each token's
+    detector is fit independently, so off-diagonal Cramér's V measures real
+    recovery of the shared factor through 30% idiosyncratic noise and 4-state
+    label-permutation ambiguity. Empirically this lands ~0.35-0.45 — well
+    above the ~0.15 independence floor, far below 1.0.
+
+    VACUITY GUARD: an earlier implementation assigned one jointly-detected
+    sequence to every token, making V identically 1.0 by construction. The
+    second assertion rejects that: per-token sequences must actually differ.
     """
 
     def test_offdiagonal_mean_above_threshold(self, quick_results):
@@ -150,9 +156,22 @@ class TestCrossTokenVStrengthDetectedRegimes:
         n = len(tokens)
         off_diag = [cv.iloc[i, j] for i in range(n) for j in range(n) if i != j]
         mean_v = np.mean(off_diag)
-        assert mean_v > 0.5, (
-            f"Off-diagonal mean Cramér's V on detected HMM sequences = {mean_v:.4f} (<= 0.5). "
-            "The shared market regime is not recovered by the detector."
+        assert mean_v > 0.3, (
+            f"Off-diagonal mean Cramér's V on detected HMM sequences = {mean_v:.4f} (<= 0.3). "
+            "The shared market regime is not recovered by independent per-token detectors."
+        )
+
+    def test_sequences_are_independently_detected(self, quick_results):
+        regimes = quick_results.regimes_hmm
+        tokens = list(regimes)
+        if len(tokens) < 2:
+            pytest.skip("Need at least 2 tokens")
+        a, b = regimes[tokens[0]], regimes[tokens[1]]
+        m = min(len(a), len(b))
+        assert not np.array_equal(a[:m], b[:m]), (
+            "Per-token regime sequences are identical — detection is sharing one "
+            "joint sequence across tokens, which makes the cross-token V heatmap "
+            "vacuously 1.0 and collapses per-token diagnostics."
         )
 
 
